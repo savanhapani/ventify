@@ -19,6 +19,8 @@ import logo from "../assets/logo.png";
 import hero from "../assets/hero.svg";
 import { howItWorks } from "../assets/data/data";
 import color from "../styles/colors";
+import { useNavigate } from "react-router";
+import { useState } from "react";
 
 const Header = () => {
   return (
@@ -92,13 +94,28 @@ const HowItWorks = () => {
 };
 
 export default function HomePage() {
+  const [studentRollNo, setStudentRollNo] = useState("");
   const toast = useToast();
+  const navigate = useNavigate();
 
   const getLoginLink = () => {
+    if (!studentRollNo) {
+      toast({
+        title: "Error",
+        description: "Please enter your Roll Number.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        variant: "solid",
+        position: "bottom",
+        colorScheme: "red",
+      });
+      return;
+    }
     // login
     toast({
       title: "Link Sent",
-      description: "We sent you the login link, check your inbox.",
+      description: `We have sent you the login link at ${studentRollNo}@daiict.ac.in. Please check your inbox.`,
       status: "success",
       duration: 5000,
       isClosable: true,
@@ -106,6 +123,8 @@ export default function HomePage() {
       colorScheme: "purple",
       position: "bottom",
     });
+
+    navigate("/confessions");
   };
   return (
     <Box>
@@ -141,7 +160,9 @@ export default function HomePage() {
             variant="outline"
             type="number"
             autoFocus
+            onChange={(e) => setStudentRollNo(e.target.value)}
           />
+
           <InputRightAddon paddingRight="0">
             <Text>@daiict.ac.in</Text>
             <Button
