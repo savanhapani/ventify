@@ -147,12 +147,19 @@ export default function HomePage() {
             <Button
               textTransform="capitalize"
               variant="solid"
+              width="140px"
               backgroundColor={color.primary}
               color="#fff"
               marginLeft="15px"
               onClick={getLoginLink}
               borderTopLeftRadius="0"
               borderBottomLeftRadius="0"
+              isLoading={false}
+              loadingText="sending link"
+              _hover={{
+                bg: color.hover,
+                color: "#fff",
+              }}
             >
               get login link
             </Button>
