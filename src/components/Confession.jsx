@@ -10,6 +10,9 @@ import {
   Text,
   IconButton,
   Button,
+  InputGroup,
+  Input,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import { HamburgerIcon, StarIcon, ChatIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
@@ -19,6 +22,7 @@ const Confession = (props) => {
   const { confession, category, comments } = props;
 
   const visibleComments = comments?.slice(0, 3);
+  const totalComments = comments?.length;
 
   return (
     <Card
@@ -55,30 +59,48 @@ const Confession = (props) => {
       </CardBody>
 
       <CardFooter flexDirection="column">
-        <Flex alignItems="center" justifyContent="space-between" width="100%">
+        <Flex alignItems="center" justifyContent="space-between">
           <Button flex="1" variant="ghost" leftIcon={<StarIcon />}>
-            10 Like
-          </Button>
-          <Button flex="1" variant="ghost" leftIcon={<ChatIcon />}>
-            5 Comment
+            10 Likes
           </Button>
         </Flex>
 
-        {comments?.length > 0 && (
-          <Box>
+        <Box marginTop="10px">
+          <InputGroup size="sm">
+            <Input
+              placeholder="Add a comment..."
+              variant="flushed"
+              focusBorderColor={color.primary}
+            />
+
+            <InputRightAddon backgroundColor="transparent" border="none">
+              <IconButton
+                aria-label="Add Comment"
+                icon={<ChatIcon />}
+                colorScheme="purple"
+                variant="ghost"
+              />
+            </InputRightAddon>
+          </InputGroup>
+        </Box>
+
+        {totalComments > 0 && (
+          <Box marginTop="10px">
             {visibleComments.map((item) => (
               <Comment {...item} key={item.id} />
             ))}
 
-            <Button
-              colorScheme="purple"
-              variant="link"
-              textTransform="capitalize"
-              size="sm"
-              marginTop="20px"
-            >
-              view all comments
-            </Button>
+            {totalComments > 3 && (
+              <Button
+                colorScheme="purple"
+                variant="link"
+                textTransform="capitalize"
+                size="sm"
+                marginTop="20px"
+              >
+                view all {totalComments} comments
+              </Button>
+            )}
           </Box>
         )}
       </CardFooter>
