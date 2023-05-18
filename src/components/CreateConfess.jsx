@@ -37,7 +37,7 @@ function CreateConfess(props) {
           <ModalBody>
             <Box>
               <Textarea
-                placeholder="Here is a sample placeholder"
+                placeholder="Write your confession here..."
                 focusBorderColor={color.primary}
                 variant="outline"
                 size="md"

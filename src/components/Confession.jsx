@@ -11,34 +11,36 @@ import {
   IconButton,
   Button,
 } from "@chakra-ui/react";
-import {
-  HamburgerIcon,
-  StarIcon,
-  ChatIcon,
-  ExternalLinkIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, StarIcon, ChatIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
+import Comment from "./Comment";
 
-const Confession = ({ confession }) => {
+const Confession = (props) => {
+  const { confession, category, comments } = props;
+
+  const visibleComments = comments?.slice(0, 3);
+
   return (
     <Card
       maxW="sm"
       colorScheme="blackAlpha"
       variant="elevated"
       backgroundColor="#fff"
+      height="fit-content"
     >
       <CardHeader>
-        <Flex spacing="4">
-          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Tag size="lg" variant="solid" backgroundColor={color.primary}>
-              2018
-            </Tag>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Tag size="lg" variant="solid" backgroundColor={color.primary}>
+            2018
+          </Tag>
 
-            <Box>
-              <Heading size="sm">Canteen</Heading>
-              <Text>10m ago</Text>
-            </Box>
-          </Flex>
+          <Box flex="1" paddingLeft="20px">
+            <Heading size="sm" as="h3" textTransform="capitalize">
+              {category}
+            </Heading>
+            <Text>10m ago</Text>
+          </Box>
+
           <IconButton
             variant="ghost"
             colorScheme="gray"
@@ -47,17 +49,38 @@ const Confession = ({ confession }) => {
           />
         </Flex>
       </CardHeader>
+
       <CardBody>
         <Text>{confession}</Text>
       </CardBody>
 
-      <CardFooter justify="space-between" flexWrap="wrap">
-        <Button flex="1" variant="ghost" leftIcon={<StarIcon />}>
-          10 Like
-        </Button>
-        <Button flex="1" variant="ghost" leftIcon={<ChatIcon />}>
-          5 Comment
-        </Button>
+      <CardFooter flexDirection="column">
+        <Flex alignItems="center" justifyContent="space-between" width="100%">
+          <Button flex="1" variant="ghost" leftIcon={<StarIcon />}>
+            10 Like
+          </Button>
+          <Button flex="1" variant="ghost" leftIcon={<ChatIcon />}>
+            5 Comment
+          </Button>
+        </Flex>
+
+        {comments?.length > 0 && (
+          <Box>
+            {visibleComments.map((item) => (
+              <Comment {...item} key={item.id} />
+            ))}
+
+            <Button
+              colorScheme="purple"
+              variant="link"
+              textTransform="capitalize"
+              size="sm"
+              marginTop="20px"
+            >
+              view all comments
+            </Button>
+          </Box>
+        )}
       </CardFooter>
     </Card>
   );
