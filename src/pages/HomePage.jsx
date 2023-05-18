@@ -49,7 +49,7 @@ const HowItWork = (props) => {
         variant="filled"
         padding="30px 70px"
         marginTop="50px"
-        width="60vw"
+        width="70vw"
       >
         <Image
           objectFit="contain"
