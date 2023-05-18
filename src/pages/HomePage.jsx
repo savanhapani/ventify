@@ -14,6 +14,7 @@ import {
   Stack,
   VStack,
   useToast,
+  Divider,
 } from "@chakra-ui/react";
 import logo from "../assets/logo.png";
 import hero from "../assets/hero.svg";
@@ -29,8 +30,9 @@ const Header = () => {
         objectFit="contain"
         src={logo}
         alt="Ventify"
-        width="20vw"
+        width="18vw"
         minWidth="200px"
+        maxWidth="300px"
         marginLeft="10px"
       />
     </Box>
@@ -129,6 +131,7 @@ export default function HomePage() {
   return (
     <Box>
       <Header />
+      <Divider orientation="horizontal" />
 
       <Center marginTop="50px">
         <Heading

@@ -1,16 +1,68 @@
-import { Flex, Container } from "@chakra-ui/react";
+import {
+  Flex,
+  Container,
+  Box,
+  Image,
+  Button,
+  useDisclosure,
+  Divider,
+} from "@chakra-ui/react";
 import { confessions } from "../assets/data/data";
 import Confession from "../components/Confession";
+import logo from "../assets/logo.png";
+import color from "../styles/colors";
+import { AddIcon } from "@chakra-ui/icons";
+import CreateConfess from "../components/CreateConfess";
+
+const Header = (props) => {
+  const { onOpen } = props;
+  return (
+    <Flex alignItems="center" justifyContent="space-between">
+      <Image
+        objectFit="contain"
+        src={logo}
+        alt="Ventify"
+        width="18vw"
+        minWidth="200px"
+        maxWidth="300px"
+        marginLeft="10px"
+      />
+      <Button
+        textTransform="capitalize"
+        backgroundColor={color.primary}
+        color="#fff"
+        colorScheme="purple"
+        marginRight="50px"
+        borderRadius="50px"
+        rightIcon={<AddIcon boxSize="13px" />}
+        _hover={{
+          bg: color.hover,
+          color: "#fff",
+        }}
+        onClick={onOpen}
+      >
+        confess
+      </Button>
+    </Flex>
+  );
+};
 
 function ConfessionsPage() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
-    <Container maxW="70vw" centerContent>
-      <Flex wrap="wrap" gap="5" justifyContent="center">
-        {confessions.map((item) => (
-          <Confession {...item} key={item.id} />
-        ))}
-      </Flex>
-    </Container>
+    <Box>
+      <Header onOpen={onOpen} />
+      <Divider orientation="horizontal" />
+      <Container maxW="90vw" centerContent marginTop="60px">
+        <Flex wrap="wrap" gap="5" justifyContent="center">
+          {confessions.map((item) => (
+            <Confession {...item} key={item.id} />
+          ))}
+        </Flex>
+      </Container>
+      <CreateConfess isOpen={isOpen} onClose={onClose} />
+    </Box>
   );
 }
 

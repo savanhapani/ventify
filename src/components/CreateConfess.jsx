@@ -6,28 +6,23 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
   Button,
   Textarea,
-  TagLabel,
-  TagCloseButton,
-  Tag,
+  Select,
   Box,
   Stack,
 } from "@chakra-ui/react";
-import { ArrowForwardIcon, CloseIcon } from "@chakra-ui/icons";
 import { confessCategories } from "../assets/data/data";
+import color from "../styles/colors";
 
 import { useRef } from "react";
 
-function CreateConfess() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+function CreateConfess(props) {
+  const { isOpen, onClose } = props;
   const initialRef = useRef(null);
 
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
-
       <Modal
         initialFocusRef={initialRef}
         isOpen={isOpen}
@@ -43,50 +38,52 @@ function CreateConfess() {
             <Box>
               <Textarea
                 placeholder="Here is a sample placeholder"
-                colorScheme="teal"
-                focusBorderColor="teal"
-                variant="filled"
+                focusBorderColor={color.primary}
+                variant="outline"
                 size="md"
+                rows="5"
+                resize="none"
                 ref={initialRef}
               />
             </Box>
             <Box marginTop="10px">
-              {confessCategories.map((item) => (
-                <Tag
-                  size="lg"
-                  key={item.id}
-                  variant="solid"
-                  backgroundColor="#7FFFD4"
-                  color="#000"
-                  marginRight="10px"
-                  marginTop="10px"
-                  textTransform="capitalize"
-                >
-                  <TagLabel>{item.title}</TagLabel>
-                  <TagCloseButton />
-                </Tag>
-              ))}
+              <Select
+                placeholder="Select Category"
+                focusBorderColor={color.primary}
+                variant="filled"
+                textTransform="capitalize"
+              >
+                {confessCategories.map((item) => (
+                  <option value={item.title} key={item.id}>
+                    {item.title}
+                  </option>
+                ))}
+              </Select>
             </Box>
           </ModalBody>
 
           <ModalFooter>
             <Stack direction="row">
               <Button
-                rightIcon={<CloseIcon />}
-                variant="solid"
-                backgroundColor="#F88379"
-                onClick={onClose}
+                colorScheme="red"
+                variant="outline"
+                textTransform="capitalize"
+                borderRadius="50px"
               >
                 Cancel
               </Button>
 
               <Button
-                rightIcon={<ArrowForwardIcon />}
-                variant="solid"
-                backgroundColor="#15F4EE"
-                color="#000"
+                backgroundColor={color.primary}
+                color="#fff"
+                textTransform="capitalize"
+                borderRadius="50px"
+                _hover={{
+                  bg: color.hover,
+                  color: "#fff",
+                }}
               >
-                Confess
+                confess
               </Button>
             </Stack>
           </ModalFooter>
