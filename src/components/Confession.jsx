@@ -17,6 +17,7 @@ import {
   ChatIcon,
   ExternalLinkIcon,
 } from "@chakra-ui/icons";
+import color from "../styles/colors";
 
 const Confession = ({ confession }) => {
   return (
@@ -29,7 +30,7 @@ const Confession = ({ confession }) => {
       <CardHeader>
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Tag size="lg" variant="solid" backgroundColor="rgb(118,73,226)">
+            <Tag size="lg" variant="solid" backgroundColor={color.primary}>
               2018
             </Tag>
 
@@ -56,9 +57,6 @@ const Confession = ({ confession }) => {
         </Button>
         <Button flex="1" variant="ghost" leftIcon={<ChatIcon />}>
           5 Comment
-        </Button>
-        <Button flex="1" variant="ghost" leftIcon={<ExternalLinkIcon />}>
-          Share
         </Button>
       </CardFooter>
     </Card>
