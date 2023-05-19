@@ -31,8 +31,9 @@ const Header = (props) => {
         <Button
           textTransform="capitalize"
           variant="solid"
+          size="md"
           colorScheme="purple"
-          marginRight="50px"
+          marginRight="20px"
           borderRadius="50px"
           rightIcon={<AddIcon boxSize="13px" />}
           onClick={onOpen}
