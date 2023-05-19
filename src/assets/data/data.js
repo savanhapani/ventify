@@ -46,16 +46,6 @@ const confessions = [
     category: confessCategories[0].title,
     comments: [
       {
-        id: "1",
-        batchYear: 2018,
-        comment: "No way!!! 😜",
-      },
-      {
-        id: "2",
-        batchYear: 2018,
-        comment: "Great",
-      },
-      {
         id: "3",
         batchYear: 2018,
         comment: "Really cool",
@@ -130,6 +120,26 @@ const confessions = [
         id: "6",
         batchYear: 2018,
         comment: "😂",
+      },
+      {
+        id: "7",
+        batchYear: 2018,
+        comment: "No way!!! 😜",
+      },
+      {
+        id: "8",
+        batchYear: 2018,
+        comment: "Great",
+      },
+      {
+        id: "9",
+        batchYear: 2018,
+        comment: "Really cool",
+      },
+      {
+        id: "10",
+        batchYear: 2018,
+        comment: "I'm wondering who posted it!!!",
       },
     ],
   },

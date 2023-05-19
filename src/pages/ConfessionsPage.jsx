@@ -56,7 +56,12 @@ function ConfessionsPage() {
   return (
     <Box>
       <Header onOpen={onOpen} />
-      <Container maxW="90vw" centerContent marginTop="60px">
+      <Container
+        maxW="90vw"
+        centerContent
+        marginTop="60px"
+        marginBottom="100px"
+      >
         <Flex wrap="wrap" gap="5" justifyContent="center">
           {confessions.map((item) => (
             <Confession {...item} key={item.id} />
