@@ -44,7 +44,9 @@ function ConfessionModal(props) {
                 <Heading size="md" as="h3" textTransform="capitalize">
                   {category}
                 </Heading>
-                <Text fontSize="md">10m ago</Text>
+                <Text fontSize="sm" fontWeight="400">
+                  10m ago
+                </Text>
               </Box>
 
               <ModalCloseButton size="lg" />

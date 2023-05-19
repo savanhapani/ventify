@@ -47,7 +47,7 @@ const Confession = (props) => {
               <Heading size="sm" as="h3" textTransform="capitalize">
                 {category}
               </Heading>
-              <Text>10m ago</Text>
+              <Text fontSize="sm">10m ago</Text>
             </Box>
 
             <IconButton
