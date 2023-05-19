@@ -10,9 +10,9 @@ import {
 import { confessions } from "../assets/data/data";
 import Confession from "../components/Confession";
 import logo from "../assets/logo.png";
-import color from "../styles/colors";
 import { AddIcon } from "@chakra-ui/icons";
 import CreateConfess from "../components/CreateConfess";
+import { useState } from "react";
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -30,16 +30,11 @@ const Header = (props) => {
         />
         <Button
           textTransform="capitalize"
-          backgroundColor={color.primary}
-          color="#fff"
+          variant="solid"
           colorScheme="purple"
           marginRight="50px"
           borderRadius="50px"
           rightIcon={<AddIcon boxSize="13px" />}
-          _hover={{
-            bg: color.hover,
-            color: "#fff",
-          }}
           onClick={onOpen}
         >
           confess
@@ -51,6 +46,7 @@ const Header = (props) => {
 };
 
 function ConfessionsPage() {
+  const [confession, setConfession] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -68,7 +64,12 @@ function ConfessionsPage() {
           ))}
         </Flex>
       </Container>
-      <CreateConfess isOpen={isOpen} onClose={onClose} />
+      <CreateConfess
+        isOpen={isOpen}
+        onClose={onClose}
+        confession={confession}
+        setConfession={setConfession}
+      />
     </Box>
   );
 }

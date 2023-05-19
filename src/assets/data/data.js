@@ -141,6 +141,56 @@ const confessions = [
         batchYear: 2018,
         comment: "I'm wondering who posted it!!!",
       },
+      {
+        id: "1",
+        batchYear: 2018,
+        comment: "No way!!! 😜",
+      },
+      {
+        id: "12",
+        batchYear: 2018,
+        comment: "Great",
+      },
+      {
+        id: "13",
+        batchYear: 2018,
+        comment: "Really cool",
+      },
+      {
+        id: "14",
+        batchYear: 2018,
+        comment: "I'm wondering who posted it!!!",
+      },
+      {
+        id: "15",
+        batchYear: 2018,
+        comment: "LOL",
+      },
+      {
+        id: "16",
+        batchYear: 2018,
+        comment: "😂",
+      },
+      {
+        id: "17",
+        batchYear: 2018,
+        comment: "No way!!! 😜",
+      },
+      {
+        id: "18",
+        batchYear: 2018,
+        comment: "Great",
+      },
+      {
+        id: "19",
+        batchYear: 2018,
+        comment: "Really cool",
+      },
+      {
+        id: "20",
+        batchYear: 2018,
+        comment: "I'm wondering who posted it!!!",
+      },
     ],
   },
   {

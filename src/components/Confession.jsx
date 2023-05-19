@@ -31,7 +31,7 @@ const Confession = (props) => {
   return (
     <>
       <Card
-        maxW="sm"
+        maxW="400px"
         colorScheme="blackAlpha"
         variant="elevated"
         backgroundColor="#fff"
