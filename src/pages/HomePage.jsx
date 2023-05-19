@@ -13,7 +13,6 @@ import {
   CardBody,
   Stack,
   VStack,
-  useToast,
   Divider,
 } from "@chakra-ui/react";
 import logo from "../assets/logo.png";
@@ -22,6 +21,7 @@ import { howItWorks } from "../assets/data/data";
 import color from "../styles/colors";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import useToastMessage from "../hooks/useToastMessage";
 
 const Header = () => {
   return (
@@ -100,34 +100,29 @@ const HowItWorks = () => {
 
 export default function HomePage() {
   const [studentRollNo, setStudentRollNo] = useState("");
-  const toast = useToast();
+
+  const { showToastMessage } = useToastMessage();
   const navigate = useNavigate();
 
   const getLoginLink = () => {
     if (!studentRollNo) {
-      toast({
-        title: "Error",
-        description: "Please enter your Roll Number.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        variant: "solid",
-        position: "bottom",
-        colorScheme: "red",
-      });
+      showToastMessage(
+        "Error",
+        "Please enter your Roll Number.",
+        "error",
+        "red"
+      );
+
       return;
     }
     // login
-    toast({
-      title: "Link Sent",
-      description: `We have sent you the login link at ${studentRollNo}@daiict.ac.in. Please check your inbox.`,
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-      variant: "solid",
-      colorScheme: "purple",
-      position: "bottom",
-    });
+
+    showToastMessage(
+      "Link Sent",
+      `We have sent you the login link at ${studentRollNo}@daiict.ac.in. Please check your inbox.`,
+      "success",
+      "purple"
+    );
 
     navigate("/confessions");
   };
