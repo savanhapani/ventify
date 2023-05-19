@@ -11,14 +11,17 @@ import {
   Select,
   Box,
   Stack,
+  FormControl,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import color from "../styles/colors";
-
 import { useRef } from "react";
 
+const CONFESSION_CHAR_LIMIT = 280;
+
 function CreateConfess(props) {
-  const { isOpen, onClose } = props;
+  const { isOpen, onClose, confession, setConfession } = props;
   const initialRef = useRef(null);
 
   return (
@@ -36,17 +39,25 @@ function CreateConfess(props) {
         <ModalCloseButton />
         <ModalBody>
           <Box>
-            <Textarea
-              placeholder="Write your confession here..."
-              focusBorderColor={color.primary}
-              variant="outline"
-              size="md"
-              rows="5"
-              resize="none"
-              ref={initialRef}
-            />
+            <FormControl>
+              <Textarea
+                placeholder="Write your confession here..."
+                focusBorderColor={color.primary}
+                variant="outline"
+                size="md"
+                rows="5"
+                maxLength={280}
+                resize="none"
+                ref={initialRef}
+                onChange={(e) => setConfession(e.target.value)}
+                value={confession}
+              />
+              <FormHelperText>
+                {confession.length}/{CONFESSION_CHAR_LIMIT}
+              </FormHelperText>
+            </FormControl>
           </Box>
-          <Box marginTop="10px">
+          <Box marginTop="20px">
             <Select
               placeholder="Select Category"
               focusBorderColor={color.primary}
