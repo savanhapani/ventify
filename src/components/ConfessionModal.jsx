@@ -30,7 +30,7 @@ function ConfessionModal(props) {
         onClose={onClose}
         motionPreset="slideInBottom"
         closeOnOverlayClick={false}
-        size="full"
+        size={{ base: "full", sm: "3xl" }}
       >
         <ModalOverlay />
         <ModalContent>
@@ -80,8 +80,9 @@ function ConfessionModal(props) {
             <Box
               marginBottom="10px"
               width="100%"
-              overflowY="auto"
+              overflowY={{ base: "", sm: "auto" }}
               marginTop="20px"
+              maxHeight={{ base: "", sm: "40vh" }}
             >
               {comments?.map((item) => (
                 <Comment {...item} key={item.id} />

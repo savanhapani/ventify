@@ -28,7 +28,7 @@ function CreateConfess(props) {
       onClose={onClose}
       motionPreset="slideInBottom"
       closeOnOverlayClick={false}
-      size="lg"
+      size={{ base: "full", sm: "lg" }}
     >
       <ModalOverlay />
       <ModalContent>
@@ -75,14 +75,10 @@ function CreateConfess(props) {
             </Button>
 
             <Button
-              backgroundColor={color.primary}
-              color="#fff"
+              variant="solid"
+              colorScheme="purple"
               textTransform="capitalize"
               borderRadius="50px"
-              _hover={{
-                bg: color.hover,
-                color: "#fff",
-              }}
             >
               confess
             </Button>

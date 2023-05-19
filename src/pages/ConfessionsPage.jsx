@@ -30,16 +30,11 @@ const Header = (props) => {
         />
         <Button
           textTransform="capitalize"
-          backgroundColor={color.primary}
-          color="#fff"
+          variant="solid"
           colorScheme="purple"
           marginRight="50px"
           borderRadius="50px"
           rightIcon={<AddIcon boxSize="13px" />}
-          _hover={{
-            bg: color.hover,
-            color: "#fff",
-          }}
           onClick={onOpen}
         >
           confess
