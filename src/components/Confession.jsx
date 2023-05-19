@@ -96,7 +96,7 @@ const Confession = (props) => {
                 variant="link"
                 textTransform="capitalize"
                 size="sm"
-                marginTop="20px"
+                marginTop="15px"
               >
                 view all {totalComments} comments
               </Button>

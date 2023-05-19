@@ -25,17 +25,20 @@ import { useState } from "react";
 
 const Header = () => {
   return (
-    <Box>
-      <Image
-        objectFit="contain"
-        src={logo}
-        alt="Ventify"
-        width="18vw"
-        minWidth="200px"
-        maxWidth="300px"
-        marginLeft="10px"
-      />
-    </Box>
+    <>
+      <Box>
+        <Image
+          objectFit="contain"
+          src={logo}
+          alt="Ventify"
+          width="18vw"
+          minWidth="200px"
+          maxWidth="300px"
+          marginLeft="10px"
+        />
+      </Box>
+      <Divider orientation="horizontal" />
+    </>
   );
 };
 
@@ -131,9 +134,8 @@ export default function HomePage() {
   return (
     <Box>
       <Header />
-      <Divider orientation="horizontal" />
 
-      <Center marginTop="50px">
+      <Center marginTop="40px">
         <Heading
           as="h1"
           textTransform="capitalize"
@@ -155,7 +157,7 @@ export default function HomePage() {
         </Heading>
       </Center>
 
-      <Center marginTop="70px">
+      <Center marginTop="50px">
         <InputGroup size="md" width="fit-content">
           <Input
             placeholder="e.g. 201812010"
@@ -191,7 +193,7 @@ export default function HomePage() {
         </InputGroup>
       </Center>
 
-      <Center marginTop="50px">
+      <Center marginTop="60px">
         <Image objectFit="contain" src={hero} alt="ventify" width="500px" />
       </Center>
 
