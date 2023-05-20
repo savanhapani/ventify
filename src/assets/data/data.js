@@ -36,6 +36,10 @@ const confessCategories = [
     id: "8",
     title: "events",
   },
+  {
+    id: "9",
+    title: "suggestion",
+  },
 ];
 
 const confessions = [
@@ -89,7 +93,7 @@ const confessions = [
     id: 3,
     confession:
       "I stole my roommate's favorite hoodie and have been secretly wearing it for weeks.",
-    category: confessCategories[2].title,
+    category: confessCategories[8].title,
     comments: [
       {
         id: "1",
