@@ -54,17 +54,17 @@ const reactions = [
     image: like,
   },
   {
-    id: "1",
+    id: "2",
     title: "funny",
     image: funny,
   },
   {
-    id: "1",
+    id: "3",
     title: "shock",
     image: shocked,
   },
   {
-    id: "1",
+    id: "4",
     title: "curious",
     image: curious,
   },
