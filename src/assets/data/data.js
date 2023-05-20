@@ -3,6 +3,11 @@ import display from "../../assets/display.svg";
 import confess from "../../assets/confess.svg";
 import cat from "../../assets/cat.svg";
 
+import like from "../../assets/reactions/like.png";
+import funny from "../../assets/reactions/funny.png";
+import shocked from "../../assets/reactions/shocked.png";
+import curious from "../../assets/reactions/curious.png";
+
 const confessCategories = [
   {
     id: "1",
@@ -35,6 +40,33 @@ const confessCategories = [
   {
     id: "8",
     title: "events",
+  },
+  {
+    id: "9",
+    title: "suggestion",
+  },
+];
+
+const reactions = [
+  {
+    id: "1",
+    title: "like",
+    image: like,
+  },
+  {
+    id: "1",
+    title: "funny",
+    image: funny,
+  },
+  {
+    id: "1",
+    title: "shock",
+    image: shocked,
+  },
+  {
+    id: "1",
+    title: "curious",
+    image: curious,
   },
 ];
 
@@ -89,7 +121,7 @@ const confessions = [
     id: 3,
     confession:
       "I stole my roommate's favorite hoodie and have been secretly wearing it for weeks.",
-    category: confessCategories[2].title,
+    category: confessCategories[8].title,
     comments: [
       {
         id: "1",
@@ -412,4 +444,4 @@ const howItWorks = [
       "Our platform ensures the complete anonymity of confessions, safeguarding individual identities throughout the process. Our commitment to privacy extends to our backend systems, as we refrain from storing or accessing any user-specific information. Confessions are attributed solely to the respective batch numbers, preserving anonymity while providing a sense of collective representation.",
   },
 ];
-export { confessCategories, confessions, howItWorks };
+export { confessCategories, confessions, howItWorks, reactions };

@@ -15,10 +15,12 @@ import {
   InputRightAddon,
   useDisclosure,
 } from "@chakra-ui/react";
-import { HamburgerIcon, StarIcon, ChatIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
 import Comment from "./Comment";
+import ReactionButton from "./ReactionButton";
 import ConfessionModal from "./ConfessionModal";
+import { reactions } from "../assets/data/data";
 
 const Confession = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -65,9 +67,9 @@ const Confession = (props) => {
 
         <CardFooter flexDirection="column">
           <Flex alignItems="center" justifyContent="space-between">
-            <Button flex="1" variant="ghost" leftIcon={<StarIcon />}>
-              10 Likes
-            </Button>
+            {reactions.map((item) => (
+              <ReactionButton {...item} key={item.id} />
+            ))}
           </Flex>
 
           <Box marginTop="10px">
