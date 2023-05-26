@@ -14,6 +14,7 @@ import {
   Input,
   InputRightAddon,
   useDisclosure,
+  Badge,
 } from "@chakra-ui/react";
 import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
@@ -25,7 +26,7 @@ import { reactions } from "../assets/data/data";
 const Confession = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { confession, category, comments } = props;
+  const { confession, category, isVisibleToBatchOnly, comments } = props;
 
   const visibleComments = comments?.slice(0, 3);
   const totalComments = comments?.length;
@@ -39,6 +40,12 @@ const Confession = (props) => {
         backgroundColor="#fff"
         height="fit-content"
       >
+        {isVisibleToBatchOnly && (
+          <Badge colorScheme="purple" variant="subtle" textAlign="center">
+            only your batch can see this confession
+          </Badge>
+        )}
+
         <CardHeader>
           <Flex alignItems="center" justifyContent="space-between">
             <Tag size="lg" variant="solid" backgroundColor={color.primary}>

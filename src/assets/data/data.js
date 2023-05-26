@@ -76,6 +76,7 @@ const confessions = [
     confession:
       "I cheated on my final exam last semester and still feel guilty about it.",
     category: confessCategories[0].title,
+    isVisibleToBatchOnly: false,
     comments: [
       {
         id: "3",
@@ -104,6 +105,8 @@ const confessions = [
     confession:
       "I have a crush on my best friend's significant other, and it's tearing me apart.",
     category: confessCategories[1].title,
+    isVisibleToBatchOnly: false,
+
     comments: [
       {
         id: "1",
@@ -122,6 +125,8 @@ const confessions = [
     confession:
       "I stole my roommate's favorite hoodie and have been secretly wearing it for weeks.",
     category: confessCategories[8].title,
+    isVisibleToBatchOnly: true,
+
     comments: [
       {
         id: "1",
@@ -230,6 +235,7 @@ const confessions = [
     confession:
       "I pretended to be sick to skip a group project meeting because I didn't want to work with my lazy teammates.",
     category: confessCategories[3].title,
+    isVisibleToBatchOnly: false,
     comments: [],
   },
   {
@@ -237,6 +243,7 @@ const confessions = [
     confession:
       "I accidentally broke a window in the library, but I blamed it on someone else to avoid the consequences.",
     category: confessCategories[4].title,
+    isVisibleToBatchOnly: false,
     comments: [
       {
         id: "1",
@@ -275,6 +282,7 @@ const confessions = [
     confession:
       "I regularly eavesdrop on conversations in the campus coffee shop just to entertain myself.",
     category: confessCategories[5].title,
+    isVisibleToBatchOnly: false,
     comments: [
       {
         id: "1",
@@ -313,6 +321,8 @@ const confessions = [
     confession:
       "I've been spreading rumors about a classmate out of jealousy, and I regret it deeply.",
     category: confessCategories[6].title,
+    isVisibleToBatchOnly: true,
+
     comments: [
       {
         id: "1",
@@ -351,6 +361,8 @@ const confessions = [
     confession:
       "I stole the mascot costume during a sports event and wore it to a rival school's pep rally.",
     category: confessCategories[7].title,
+    isVisibleToBatchOnly: false,
+
     comments: [
       {
         id: "5",
@@ -369,6 +381,8 @@ const confessions = [
     confession:
       "I used my professor's computer to change my final grade because I was afraid of failing the course.",
     category: confessCategories[0].title,
+    isVisibleToBatchOnly: false,
+
     comments: [
       {
         id: "1",
@@ -407,6 +421,8 @@ const confessions = [
     confession:
       "I've been leaving anonymous love notes in the library for a secret admirer, but it's all a made-up story.",
     category: confessCategories[1].title,
+    isVisibleToBatchOnly: false,
+
     comments: [],
   },
 ];

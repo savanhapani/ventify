@@ -13,6 +13,8 @@ import {
   Stack,
   FormControl,
   FormHelperText,
+  Switch,
+  FormLabel,
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import color from "../styles/colors";
@@ -57,6 +59,7 @@ function CreateConfess(props) {
               </FormHelperText>
             </FormControl>
           </Box>
+
           <Box marginTop="20px">
             <Select
               placeholder="Select Category"
@@ -70,6 +73,15 @@ function CreateConfess(props) {
                 </option>
               ))}
             </Select>
+          </Box>
+
+          <Box marginTop="20px">
+            <FormControl>
+              <FormLabel htmlFor="isChecked">
+                Visible to your batch only
+              </FormLabel>
+              <Switch id="isChecked" colorScheme="purple" />
+            </FormControl>
           </Box>
         </ModalBody>
 
