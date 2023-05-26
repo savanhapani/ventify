@@ -26,7 +26,8 @@ import { reactions } from "../assets/data/data";
 const Confession = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { confession, category, isVisibleToBatchOnly, comments } = props;
+  const { confession, category, batchYear, isVisibleToBatchOnly, comments } =
+    props;
 
   const visibleComments = comments?.slice(0, 3);
   const totalComments = comments?.length;
@@ -49,7 +50,7 @@ const Confession = (props) => {
         <CardHeader>
           <Flex alignItems="center" justifyContent="space-between">
             <Tag size="lg" variant="solid" backgroundColor={color.primary}>
-              2018
+              {batchYear}
             </Tag>
 
             <Box flex="1" paddingLeft="20px">

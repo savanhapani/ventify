@@ -60,9 +60,13 @@ function ConfessionsPage() {
         marginBottom="100px"
       >
         <Flex wrap="wrap" gap="5" justifyContent="center">
-          {confessions.map((item) => (
-            <Confession {...item} key={item.id} />
-          ))}
+          {confessions
+            .filter(
+              (item) => !item.isVisibleToBatchOnly || item.batchYear === 2018
+            )
+            .map((item) => (
+              <Confession {...item} key={item.id} />
+            ))}
         </Flex>
       </Container>
       <CreateConfess
