@@ -35,11 +35,23 @@ import { reactions } from "../assets/data/data";
 const Confession = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { confession, category, batchYear, isVisibleToBatchOnly, comments } =
-    props;
+  const {
+    confession,
+    category,
+    batchYear,
+    isVisibleToBatchOnly,
+    comments,
+    onDeleteConfessOpen,
+    setConfessionToBeDelete,
+  } = props;
 
   const visibleComments = comments?.slice(0, 3);
   const totalComments = comments?.length;
+
+  const openDeleteConfessionDialog = () => {
+    setConfessionToBeDelete(confession);
+    onDeleteConfessOpen();
+  };
 
   return (
     <>
@@ -78,7 +90,12 @@ const Confession = (props) => {
                 colorScheme="gray"
               />
               <MenuList>
-                <MenuItem icon={<DeleteIcon />}>delete</MenuItem>
+                <MenuItem
+                  icon={<DeleteIcon />}
+                  onClick={openDeleteConfessionDialog}
+                >
+                  delete
+                </MenuItem>
                 <MenuItem icon={<WarningTwoIcon />}>report</MenuItem>
               </MenuList>
             </Menu>
