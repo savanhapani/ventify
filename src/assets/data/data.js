@@ -47,6 +47,47 @@ const confessCategories = [
   },
 ];
 
+const availableBatches = [
+  {
+    id: "1",
+    title: 2018,
+  },
+  {
+    id: "2",
+
+    title: 2019,
+  },
+  {
+    id: "3",
+    title: 2020,
+  },
+  {
+    id: "4",
+
+    title: 2021,
+  },
+  {
+    id: "5",
+
+    title: 2022,
+  },
+];
+
+const confessionsSortingOptions = [
+  {
+    id: "1",
+    title: "most liked",
+  },
+  {
+    id: "2",
+    title: "most commented",
+  },
+  {
+    id: "3",
+    title: "recently added",
+  },
+];
+
 const reactions = [
   {
     id: "1",
@@ -467,4 +508,11 @@ const howItWorks = [
       "Our platform ensures the complete anonymity of confessions, safeguarding individual identities throughout the process. Our commitment to privacy extends to our backend systems, as we refrain from storing or accessing any user-specific information. Confessions are attributed solely to the respective batch numbers, preserving anonymity while providing a sense of collective representation.",
   },
 ];
-export { confessCategories, confessions, howItWorks, reactions };
+export {
+  confessCategories,
+  confessions,
+  howItWorks,
+  reactions,
+  availableBatches,
+  confessionsSortingOptions,
+};

@@ -13,6 +13,7 @@ import logo from "../assets/logo.png";
 import { AddIcon } from "@chakra-ui/icons";
 import CreateConfess from "../components/CreateConfess";
 import { useState } from "react";
+import FilterBar from "../components/FilterBar";
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -51,15 +52,20 @@ function ConfessionsPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box>
+    <Box overflow="hidden" height="100vh">
       <Header onOpen={onOpen} />
-      <Container
-        maxW="90vw"
-        centerContent
-        marginTop="60px"
-        marginBottom="100px"
-      >
-        <Flex wrap="wrap" gap="5" justifyContent="center">
+      <Flex>
+        <FilterBar />
+        <Flex
+          wrap="wrap"
+          gap="5"
+          justifyContent="center"
+          overflow="auto"
+          maxHeight="800px"
+          paddingTop="50px"
+          paddingBottom="300px"
+          paddingLeft="30px"
+        >
           {confessions
             .filter(
               (item) => !item.isVisibleToBatchOnly || item.batchYear === 2018
@@ -68,7 +74,7 @@ function ConfessionsPage() {
               <Confession {...item} key={item.id} />
             ))}
         </Flex>
-      </Container>
+      </Flex>
       <CreateConfess
         isOpen={isOpen}
         onClose={onClose}
