@@ -15,8 +15,17 @@ import {
   InputRightAddon,
   useDisclosure,
   Badge,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
-import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
+import {
+  HamburgerIcon,
+  ChatIcon,
+  DeleteIcon,
+  WarningTwoIcon,
+} from "@chakra-ui/icons";
 import color from "../styles/colors";
 import Comment from "./Comment";
 import ReactionButton from "./ReactionButton";
@@ -60,12 +69,19 @@ const Confession = (props) => {
               <Text fontSize="sm">10m ago</Text>
             </Box>
 
-            <IconButton
-              variant="ghost"
-              colorScheme="gray"
-              aria-label="See menu"
-              icon={<HamburgerIcon />}
-            />
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label="See menu"
+                icon={<HamburgerIcon />}
+                variant="ghost"
+                colorScheme="gray"
+              />
+              <MenuList>
+                <MenuItem icon={<DeleteIcon />}>delete</MenuItem>
+                <MenuItem icon={<WarningTwoIcon />}>report</MenuItem>
+              </MenuList>
+            </Menu>
           </Flex>
         </CardHeader>
 
