@@ -1,6 +1,5 @@
 import {
   Flex,
-  Container,
   Box,
   Image,
   Button,
@@ -14,6 +13,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import CreateConfess from "../components/CreateConfess";
 import { useState } from "react";
 import FilterBar from "../components/FilterBar";
+import DeleteConfess from "../components/DeleteConfess";
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -49,7 +49,14 @@ const Header = (props) => {
 
 function ConfessionsPage() {
   const [confession, setConfession] = useState("");
+  const [confessionToBeDelete, setConfessionToBeDelete] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const {
+    isOpen: isDeleteConfessOpen,
+    onOpen: onDeleteConfessOpen,
+    onClose: onDeleteConfessClose,
+  } = useDisclosure();
 
   return (
     <Box overflow="hidden" height="100vh">
@@ -71,7 +78,13 @@ function ConfessionsPage() {
               (item) => !item.isVisibleToBatchOnly || item.batchYear === 2018
             )
             .map((item) => (
-              <Confession {...item} key={item.id} />
+              <Confession
+                {...item}
+                key={item.id}
+                onDeleteConfessOpen={onDeleteConfessOpen}
+                setConfessionToBeDelete={setConfessionToBeDelete}
+                confessionToBeDelete={confessionToBeDelete}
+              />
             ))}
         </Flex>
       </Flex>
@@ -80,6 +93,11 @@ function ConfessionsPage() {
         onClose={onClose}
         confession={confession}
         setConfession={setConfession}
+      />
+      <DeleteConfess
+        isDeleteConfessOpen={isDeleteConfessOpen}
+        onDeleteConfessClose={onDeleteConfessClose}
+        confessionToBeDelete={confessionToBeDelete}
       />
     </Box>
   );
