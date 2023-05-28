@@ -14,9 +14,12 @@ import {
   Stack,
   VStack,
   Divider,
+  Flex,
+  Link,
 } from "@chakra-ui/react";
 import logo from "../assets/logo.png";
 import hero from "../assets/hero.svg";
+import github from "../assets/github.png";
 import { howItWorks } from "../assets/data/data";
 import color from "../styles/colors";
 import { useNavigate } from "react-router";
@@ -26,7 +29,7 @@ import useToastMessage from "../hooks/useToastMessage";
 const Header = () => {
   return (
     <>
-      <Box>
+      <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
         <Image
           objectFit="contain"
           src={logo}
@@ -34,9 +37,28 @@ const Header = () => {
           width="18vw"
           minWidth="200px"
           maxWidth="300px"
-          marginLeft="10px"
         />
-      </Box>
+
+        <Link href="https://github.com/BrijenMakwana/ventify" isExternal>
+          <Flex
+            alignItems="center"
+            backgroundColor="blackAlpha.100"
+            padding="5px 10px"
+            borderRadius="30px"
+          >
+            <Image
+              objectFit="contain"
+              src={github}
+              alt="git"
+              width="35px"
+              aspectRatio="1"
+            />
+            <Text textTransform="capitalize" marginLeft="10px" fontSize="sm">
+              view code
+            </Text>
+          </Flex>
+        </Link>
+      </Flex>
       <Divider orientation="horizontal" />
     </>
   );

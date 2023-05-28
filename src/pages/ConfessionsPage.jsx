@@ -14,12 +14,13 @@ import CreateConfess from "../components/CreateConfess";
 import { useState } from "react";
 import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
+import ReportConfess from "../components/ReportConfess";
 
 const Header = (props) => {
   const { onOpen } = props;
   return (
     <>
-      <Flex alignItems="center" justifyContent="space-between">
+      <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
         <Image
           objectFit="contain"
           src={logo}
@@ -27,14 +28,12 @@ const Header = (props) => {
           width="18vw"
           minWidth="200px"
           maxWidth="300px"
-          marginLeft="10px"
         />
         <Button
           textTransform="capitalize"
           variant="solid"
           size="md"
           colorScheme="purple"
-          marginRight="20px"
           borderRadius="50px"
           rightIcon={<AddIcon boxSize="13px" />}
           onClick={onOpen}
@@ -56,6 +55,12 @@ function ConfessionsPage() {
     isOpen: isDeleteConfessOpen,
     onOpen: onDeleteConfessOpen,
     onClose: onDeleteConfessClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isReportConfessOpen,
+    onOpen: onReportConfessOpen,
+    onClose: onReportConfessClose,
   } = useDisclosure();
 
   return (
@@ -84,6 +89,7 @@ function ConfessionsPage() {
                 onDeleteConfessOpen={onDeleteConfessOpen}
                 setConfessionToBeDelete={setConfessionToBeDelete}
                 confessionToBeDelete={confessionToBeDelete}
+                onReportConfessOpen={onReportConfessOpen}
               />
             ))}
         </Flex>
@@ -98,6 +104,11 @@ function ConfessionsPage() {
         isDeleteConfessOpen={isDeleteConfessOpen}
         onDeleteConfessClose={onDeleteConfessClose}
         confessionToBeDelete={confessionToBeDelete}
+      />
+
+      <ReportConfess
+        isReportConfessOpen={isReportConfessOpen}
+        onReportConfessClose={onReportConfessClose}
       />
     </Box>
   );
