@@ -43,6 +43,7 @@ const Confession = (props) => {
     comments,
     onDeleteConfessOpen,
     setConfessionToBeDelete,
+    onReportConfessOpen,
   } = props;
 
   const visibleComments = comments?.slice(0, 3);
@@ -93,10 +94,18 @@ const Confession = (props) => {
                 <MenuItem
                   icon={<DeleteIcon />}
                   onClick={openDeleteConfessionDialog}
+                  textTransform="capitalize"
+                  color="red"
                 >
                   delete
                 </MenuItem>
-                <MenuItem icon={<WarningTwoIcon />}>report</MenuItem>
+                <MenuItem
+                  icon={<WarningTwoIcon />}
+                  onClick={onReportConfessOpen}
+                  textTransform="capitalize"
+                >
+                  report
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>

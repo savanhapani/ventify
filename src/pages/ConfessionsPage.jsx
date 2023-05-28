@@ -14,6 +14,7 @@ import CreateConfess from "../components/CreateConfess";
 import { useState } from "react";
 import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
+import ReportConfess from "../components/ReportConfess";
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -58,6 +59,12 @@ function ConfessionsPage() {
     onClose: onDeleteConfessClose,
   } = useDisclosure();
 
+  const {
+    isOpen: isReportConfessOpen,
+    onOpen: onReportConfessOpen,
+    onClose: onReportConfessClose,
+  } = useDisclosure();
+
   return (
     <Box overflow="hidden" height="100vh">
       <Header onOpen={onOpen} />
@@ -84,6 +91,7 @@ function ConfessionsPage() {
                 onDeleteConfessOpen={onDeleteConfessOpen}
                 setConfessionToBeDelete={setConfessionToBeDelete}
                 confessionToBeDelete={confessionToBeDelete}
+                onReportConfessOpen={onReportConfessOpen}
               />
             ))}
         </Flex>
@@ -98,6 +106,11 @@ function ConfessionsPage() {
         isDeleteConfessOpen={isDeleteConfessOpen}
         onDeleteConfessClose={onDeleteConfessClose}
         confessionToBeDelete={confessionToBeDelete}
+      />
+
+      <ReportConfess
+        isReportConfessOpen={isReportConfessOpen}
+        onReportConfessClose={onReportConfessClose}
       />
     </Box>
   );
