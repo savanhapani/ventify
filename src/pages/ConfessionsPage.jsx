@@ -20,7 +20,7 @@ const Header = (props) => {
   const { onOpen } = props;
   return (
     <>
-      <Flex alignItems="center" justifyContent="space-between">
+      <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
         <Image
           objectFit="contain"
           src={logo}
@@ -28,14 +28,12 @@ const Header = (props) => {
           width="18vw"
           minWidth="200px"
           maxWidth="300px"
-          marginLeft="10px"
         />
         <Button
           textTransform="capitalize"
           variant="solid"
           size="md"
           colorScheme="purple"
-          marginRight="20px"
           borderRadius="50px"
           rightIcon={<AddIcon boxSize="13px" />}
           onClick={onOpen}
