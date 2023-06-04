@@ -6,7 +6,7 @@ import {
   useDisclosure,
   Divider,
 } from "@chakra-ui/react";
-import { confessCategories, confessions } from "../assets/data/data";
+import { confessCategories } from "../assets/data/data";
 import Confession from "../components/Confession";
 import logo from "../assets/logo.png";
 import { AddIcon } from "@chakra-ui/icons";
@@ -16,7 +16,8 @@ import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
 import ReportConfess from "../components/ReportConfess";
 import useToastMessage from "../hooks/useToastMessage";
-import { collection, addDoc, db } from "../firebase/firebase";
+import { collection, addDoc, db, getDocs } from "../firebase/firebase";
+import { useEffect } from "react";
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -60,6 +61,8 @@ const ConfessionsPage = () => {
   const [confessionToBeDelete, setConfessionToBeDelete] = useState("");
   const [confessionToBeReport, setConfessionToBeReport] = useState("");
 
+  const [confessions, setConfessions] = useState([]);
+
   const {
     isOpen: isCreateConfessOpen,
     onOpen: onCreateConfessOpen,
@@ -102,12 +105,17 @@ const ConfessionsPage = () => {
       category: confessionCategory,
       batchYear: batchYear,
       isVisibleToBatchOnly: isVisibleToBatchOnly,
+      timeStamp: new Date(),
       comments: [],
       reports: [],
     };
 
     try {
-      await addDoc(collection(db, "confessions"), confessionObj);
+      const deletionCode = await addDoc(
+        collection(db, "confessions"),
+        confessionObj
+      );
+      console.log(deletionCode.id, "deletion code");
 
       showToastMessage(
         "Congratulations",
@@ -120,6 +128,19 @@ const ConfessionsPage = () => {
     }
     resetConfession();
   };
+
+  const getConfessions = async () => {
+    const querySnapshot = await getDocs(collection(db, "confessions"));
+    const confessionsData = [];
+    querySnapshot.forEach((doc) => {
+      confessionsData.push(doc.data());
+    });
+    setConfessions(confessionsData);
+  };
+
+  useEffect(() => {
+    getConfessions();
+  }, []);
 
   return (
     <Box overflow="hidden" height="100vh">

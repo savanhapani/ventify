@@ -140,7 +140,6 @@ export default function HomePage() {
     }
     // login
     const userEmail = `${studentRollNo}@daiict.ac.in`;
-    console.log(userEmail);
 
     showToastMessage(
       "Link Sent",
