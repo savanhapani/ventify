@@ -7,13 +7,17 @@ import {
   AlertDialogFooter,
   Button,
   Text,
+  Code,
+  Input,
 } from "@chakra-ui/react";
+import color from "../styles/colors";
 import { useRef } from "react";
 
 const ReportConfess = (props) => {
   const cancelRef = useRef();
 
-  const { isReportConfessOpen, onReportConfessClose } = props;
+  const { isReportConfessOpen, onReportConfessClose, confessionToBeReport } =
+    props;
   return (
     <AlertDialog
       isOpen={isReportConfessOpen}
@@ -26,25 +30,45 @@ const ReportConfess = (props) => {
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="md" fontWeight="bold">
-            Reported
+            Report
           </AlertDialogHeader>
 
           <AlertDialogBody>
             <Text fontSize="md">
               We will look into this confession and take necessary actions.
             </Text>
+
+            <Code marginTop="10px" variant="subtle" padding="10px">
+              {confessionToBeReport}
+            </Code>
+
+            <Input
+              placeholder="Your reason to report this confession..."
+              size="md"
+              focusBorderColor={color.primary}
+              marginTop="20px"
+            />
           </AlertDialogBody>
 
           <AlertDialogFooter>
             <Button
               ref={cancelRef}
               onClick={onReportConfessClose}
+              variant="outline"
+              textTransform="capitalize"
+              borderRadius="50px"
+            >
+              cancel
+            </Button>
+            <Button
+              onClick={onReportConfessClose}
               variant="solid"
               textTransform="capitalize"
               borderRadius="50px"
-              colorScheme="purple"
+              colorScheme="yellow"
+              ml={3}
             >
-              okay
+              report
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

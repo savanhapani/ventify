@@ -44,7 +44,7 @@ const DeleteConfess = (props) => {
             </Code>
 
             <Input
-              placeholder="Enter deletion code here"
+              placeholder="Enter deletion code here..."
               size="md"
               focusBorderColor={color.primary}
               marginTop="20px"
