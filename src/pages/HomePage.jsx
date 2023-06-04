@@ -25,6 +25,7 @@ import color from "../styles/colors";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import useToastMessage from "../hooks/useToastMessage";
+import {} from "../firebase/firebase";
 
 const Header = () => {
   return (
@@ -138,6 +139,8 @@ export default function HomePage() {
       return;
     }
     // login
+    const userEmail = `${studentRollNo}@daiict.ac.in`;
+    console.log(userEmail);
 
     showToastMessage(
       "Link Sent",
@@ -145,7 +148,6 @@ export default function HomePage() {
       "success",
       "purple"
     );
-
     navigate("/confessions");
   };
   return (
