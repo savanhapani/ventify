@@ -28,18 +28,29 @@ import {
 } from "@chakra-ui/icons";
 import color from "../styles/colors";
 import Comment from "./Comment";
+import { useState } from "react";
 import ReactionButton from "./ReactionButton";
 import ConfessionModal from "./ConfessionModal";
 import { reactions } from "../assets/data/data";
+import moment from "moment";
+import { doc, updateDoc, db, arrayUnion } from "../firebase/firebase";
+import useToastMessage from "../hooks/useToastMessage";
 
 const Confession = (props) => {
+  const [userComment, setUserComment] = useState("");
+  const [isCommenting, setIsCommenting] = useState(false);
+
+  const { showToastMessage } = useToastMessage();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
+    id,
     confession,
     category,
     batchYear,
     isVisibleToBatchOnly,
+    timeStamp,
     comments,
     onDeleteConfessOpen,
     setConfessionToBeDelete,
@@ -60,10 +71,37 @@ const Confession = (props) => {
     onReportConfessOpen();
   };
 
+  const resetComment = () => {
+    setUserComment("");
+  };
+
+  const addCommentToConfession = async () => {
+    setIsCommenting(true);
+    const confessionRef = doc(db, "confessions", id);
+
+    const userCommentObj = {
+      batchYear: 2018,
+      comment: userComment,
+    };
+
+    await updateDoc(confessionRef, {
+      comments: arrayUnion(userCommentObj),
+    });
+
+    resetComment();
+    setIsCommenting(false);
+    showToastMessage(
+      "Successful",
+      "Comment added successfully!",
+      "success",
+      "purple"
+    );
+  };
+
   return (
     <>
       <Card
-        maxW="400px"
+        width="400px"
         colorScheme="blackAlpha"
         variant="elevated"
         backgroundColor="#fff"
@@ -85,7 +123,7 @@ const Confession = (props) => {
               <Heading size="sm" as="h3" textTransform="capitalize">
                 {category}
               </Heading>
-              <Text fontSize="sm">10m ago</Text>
+              <Text fontSize="sm">{moment(timeStamp.toDate()).fromNow()}</Text>
             </Box>
 
             <Menu>
@@ -134,6 +172,8 @@ const Confession = (props) => {
                 placeholder="Add a comment..."
                 variant="flushed"
                 focusBorderColor={color.primary}
+                onChange={(event) => setUserComment(event.target.value)}
+                value={userComment}
               />
 
               <InputRightAddon backgroundColor="transparent" border="none">
@@ -142,6 +182,9 @@ const Confession = (props) => {
                   icon={<ChatIcon />}
                   colorScheme="purple"
                   variant="ghost"
+                  isDisabled={!userComment}
+                  isLoading={isCommenting}
+                  onClick={addCommentToConfession}
                 />
               </InputRightAddon>
             </InputGroup>
