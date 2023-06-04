@@ -44,6 +44,7 @@ const Confession = (props) => {
     onDeleteConfessOpen,
     setConfessionToBeDelete,
     onReportConfessOpen,
+    setConfessionToBeReport,
   } = props;
 
   const visibleComments = comments?.slice(0, 3);
@@ -52,6 +53,11 @@ const Confession = (props) => {
   const openDeleteConfessionDialog = () => {
     setConfessionToBeDelete(confession);
     onDeleteConfessOpen();
+  };
+
+  const openReportConfessionDialog = () => {
+    setConfessionToBeReport(confession);
+    onReportConfessOpen();
   };
 
   return (
@@ -101,7 +107,7 @@ const Confession = (props) => {
                 </MenuItem>
                 <MenuItem
                   icon={<WarningTwoIcon />}
-                  onClick={onReportConfessOpen}
+                  onClick={openReportConfessionDialog}
                   textTransform="capitalize"
                 >
                   report

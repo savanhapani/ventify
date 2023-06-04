@@ -58,6 +58,7 @@ const ConfessionsPage = () => {
   const [isConfessing, setIsConfessing] = useState(false);
   const { showToastMessage } = useToastMessage();
   const [confessionToBeDelete, setConfessionToBeDelete] = useState("");
+  const [confessionToBeReport, setConfessionToBeReport] = useState("");
 
   const {
     isOpen: isCreateConfessOpen,
@@ -145,8 +146,8 @@ const ConfessionsPage = () => {
                 key={item.id}
                 onDeleteConfessOpen={onDeleteConfessOpen}
                 setConfessionToBeDelete={setConfessionToBeDelete}
-                confessionToBeDelete={confessionToBeDelete}
                 onReportConfessOpen={onReportConfessOpen}
+                setConfessionToBeReport={setConfessionToBeReport}
               />
             ))}
         </Flex>
@@ -172,6 +173,7 @@ const ConfessionsPage = () => {
       <ReportConfess
         isReportConfessOpen={isReportConfessOpen}
         onReportConfessClose={onReportConfessClose}
+        confessionToBeReport={confessionToBeReport}
       />
     </Box>
   );
