@@ -23,7 +23,7 @@ export default function FilterBar() {
       marginLeft="20px"
       height="fit-content"
       variant="elevated"
-      width="5xl"
+      width="xs"
     >
       <CardBody>
         <FilterTags heading="categories" tags={confessCategories} />

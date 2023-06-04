@@ -11,13 +11,20 @@ import Confession from "../components/Confession";
 import logo from "../assets/logo.png";
 import { AddIcon } from "@chakra-ui/icons";
 import CreateConfess from "../components/CreateConfess";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
 import ReportConfess from "../components/ReportConfess";
 import useToastMessage from "../hooks/useToastMessage";
-import { collection, addDoc, db, getDocs } from "../firebase/firebase";
-import { useEffect } from "react";
+import {
+  collection,
+  addDoc,
+  db,
+  getDocs,
+  query,
+  where,
+  or,
+} from "../firebase/firebase";
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -111,11 +118,7 @@ const ConfessionsPage = () => {
     };
 
     try {
-      const deletionCode = await addDoc(
-        collection(db, "confessions"),
-        confessionObj
-      );
-      console.log(deletionCode.id, "deletion code");
+      await addDoc(collection(db, "confessions"), confessionObj);
 
       showToastMessage(
         "Congratulations",
@@ -130,10 +133,20 @@ const ConfessionsPage = () => {
   };
 
   const getConfessions = async () => {
-    const querySnapshot = await getDocs(collection(db, "confessions"));
+    const confessionsRef = collection(db, "confessions");
+
+    const confessionsQuery = query(
+      confessionsRef,
+      or(
+        where("isVisibleToBatchOnly", "==", false),
+        where("batchYear", "==", 2018)
+      )
+    );
+
+    const querySnapshot = await getDocs(confessionsQuery);
     const confessionsData = [];
     querySnapshot.forEach((doc) => {
-      confessionsData.push(doc.data());
+      confessionsData.push({ id: doc.id, ...doc.data() });
     });
     setConfessions(confessionsData);
   };
@@ -156,21 +169,18 @@ const ConfessionsPage = () => {
           paddingTop="50px"
           paddingBottom="300px"
           paddingLeft="30px"
+          flex="1"
         >
-          {confessions
-            .filter(
-              (item) => !item.isVisibleToBatchOnly || item.batchYear === 2018
-            )
-            .map((item) => (
-              <Confession
-                {...item}
-                key={item.id}
-                onDeleteConfessOpen={onDeleteConfessOpen}
-                setConfessionToBeDelete={setConfessionToBeDelete}
-                onReportConfessOpen={onReportConfessOpen}
-                setConfessionToBeReport={setConfessionToBeReport}
-              />
-            ))}
+          {confessions.map((item) => (
+            <Confession
+              {...item}
+              key={item.id}
+              onDeleteConfessOpen={onDeleteConfessOpen}
+              setConfessionToBeDelete={setConfessionToBeDelete}
+              onReportConfessOpen={onReportConfessOpen}
+              setConfessionToBeReport={setConfessionToBeReport}
+            />
+          ))}
         </Flex>
       </Flex>
       <CreateConfess
