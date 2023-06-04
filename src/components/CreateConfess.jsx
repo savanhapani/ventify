@@ -22,15 +22,26 @@ import { useRef } from "react";
 
 const CONFESSION_CHAR_LIMIT = 280;
 
-function CreateConfess(props) {
-  const { isOpen, onClose, confession, setConfession } = props;
+const CreateConfess = (props) => {
+  const {
+    isCreateConfessOpen,
+    createConfession,
+    handleCategoryChange,
+    handleIsVisibleToBatchOnlyChange,
+    confession,
+    setConfession,
+    confessionCategory,
+    isVisibleToBatchOnly,
+    isConfessing,
+    resetConfession,
+  } = props;
   const initialRef = useRef(null);
 
   return (
     <Modal
       initialFocusRef={initialRef}
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={isCreateConfessOpen}
+      onClose={resetConfession}
       motionPreset="slideInBottom"
       closeOnOverlayClick={false}
       size={{ base: "full", sm: "lg" }}
@@ -62,10 +73,11 @@ function CreateConfess(props) {
 
           <Box marginTop="20px">
             <Select
-              placeholder="Select Category"
               focusBorderColor={color.primary}
               variant="filled"
               textTransform="capitalize"
+              onChange={handleCategoryChange}
+              value={confessionCategory}
             >
               {confessCategories.map((item) => (
                 <option value={item.title} key={item.id}>
@@ -80,7 +92,12 @@ function CreateConfess(props) {
               <FormLabel htmlFor="isChecked">
                 Visible to your batch only
               </FormLabel>
-              <Switch id="isChecked" colorScheme="purple" />
+              <Switch
+                id="isChecked"
+                colorScheme="purple"
+                onChange={handleIsVisibleToBatchOnlyChange}
+                isChecked={isVisibleToBatchOnly}
+              />
             </FormControl>
           </Box>
         </ModalBody>
@@ -92,7 +109,7 @@ function CreateConfess(props) {
               variant="outline"
               textTransform="capitalize"
               borderRadius="50px"
-              onClick={onClose}
+              onClick={resetConfession}
             >
               Cancel
             </Button>
@@ -102,6 +119,10 @@ function CreateConfess(props) {
               colorScheme="purple"
               textTransform="capitalize"
               borderRadius="50px"
+              onClick={createConfession}
+              isDisabled={!confession}
+              isLoading={isConfessing}
+              loadingText="Confessing"
             >
               confess
             </Button>
@@ -110,6 +131,6 @@ function CreateConfess(props) {
       </ModalContent>
     </Modal>
   );
-}
+};
 
 export default CreateConfess;
