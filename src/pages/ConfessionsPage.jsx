@@ -145,6 +145,8 @@ const ConfessionsPage = () => {
       console.error("Error adding document: ", e);
     }
     resetConfession();
+
+    getConfessions();
   };
 
   const deleteConfession = async (confessionDeletionCode) => {
@@ -156,7 +158,7 @@ const ConfessionsPage = () => {
         "warning",
         "yellow"
       );
-      confessionToBeDelete({});
+      setConfessionToBeDelete({});
       return;
     }
     onDeleteConfessClose();
@@ -169,7 +171,8 @@ const ConfessionsPage = () => {
       "success",
       "purple"
     );
-    confessionToBeDelete({});
+    setConfessionToBeDelete({});
+    getConfessions();
   };
 
   const getConfessions = async () => {
@@ -219,6 +222,7 @@ const ConfessionsPage = () => {
               setConfessionToBeDelete={setConfessionToBeDelete}
               onReportConfessOpen={onReportConfessOpen}
               setConfessionToBeReport={setConfessionToBeReport}
+              getConfessions={getConfessions}
             />
           ))}
         </Flex>

@@ -40,9 +40,13 @@ const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
 
-  const { showToastMessage } = useToastMessage();
+  const {
+    isOpen: isConfessionModalOpen,
+    onOpen: onConfessionModalOpen,
+    onClose: onConfessionModalClose,
+  } = useDisclosure();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { showToastMessage } = useToastMessage();
 
   const {
     id,
@@ -57,6 +61,7 @@ const Confession = (props) => {
     setConfessionToBeDelete,
     onReportConfessOpen,
     setConfessionToBeReport,
+    getConfessions,
   } = props;
 
   const visibleComments = comments?.slice(0, 3);
@@ -100,6 +105,7 @@ const Confession = (props) => {
       "success",
       "purple"
     );
+    getConfessions();
   };
 
   return (
@@ -201,8 +207,8 @@ const Confession = (props) => {
 
           {totalComments > 0 && (
             <Box marginTop="10px">
-              {visibleComments.map((item) => (
-                <Comment {...item} key={item.id} />
+              {visibleComments.map((item, index) => (
+                <Comment {...item} key={index} />
               ))}
 
               {totalComments > 3 && (
@@ -212,7 +218,7 @@ const Confession = (props) => {
                   textTransform="capitalize"
                   size="sm"
                   marginTop="15px"
-                  onClick={onOpen}
+                  onClick={onConfessionModalOpen}
                 >
                   view all {totalComments} comments
                 </Button>
@@ -221,7 +227,15 @@ const Confession = (props) => {
           )}
         </CardFooter>
       </Card>
-      <ConfessionModal isOpen={isOpen} onClose={onClose} {...props} />
+      <ConfessionModal
+        isConfessionModalOpen={isConfessionModalOpen}
+        onConfessionModalClose={onConfessionModalClose}
+        addCommentToConfession={addCommentToConfession}
+        userComment={userComment}
+        setUserComment={setUserComment}
+        isCommenting={isCommenting}
+        {...props}
+      />
     </>
   );
 };
