@@ -50,6 +50,7 @@ const Confession = (props) => {
     category,
     batchYear,
     isVisibleToBatchOnly,
+    commentIsDisabled,
     timeStamp,
     comments,
     onDeleteConfessOpen,
@@ -169,8 +170,13 @@ const Confession = (props) => {
           <Box marginTop="10px">
             <InputGroup size="md">
               <Input
-                placeholder="Add a comment..."
+                placeholder={
+                  commentIsDisabled
+                    ? "User has disabled the comments"
+                    : "Add a comment..."
+                }
                 variant="flushed"
+                isDisabled={commentIsDisabled}
                 focusBorderColor={color.primary}
                 onChange={(event) => setUserComment(event.target.value)}
                 value={userComment}

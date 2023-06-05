@@ -63,6 +63,8 @@ const ConfessionsPage = () => {
     confessCategories[0].title
   );
   const [isVisibleToBatchOnly, setIsVisibleToBatchOnly] = useState(false);
+  const [commentIsDisabled, setCommentIsDisabled] = useState(false);
+
   const [isConfessing, setIsConfessing] = useState(false);
   const { showToastMessage } = useToastMessage();
   const [confessionToBeDelete, setConfessionToBeDelete] = useState("");
@@ -104,6 +106,10 @@ const ConfessionsPage = () => {
     setIsVisibleToBatchOnly(event.target.checked);
   };
 
+  const handleCommentIsDisabledChange = (event) => {
+    setCommentIsDisabled(event.target.checked);
+  };
+
   const createConfession = async () => {
     setIsConfessing(true);
 
@@ -112,6 +118,7 @@ const ConfessionsPage = () => {
       category: confessionCategory,
       batchYear: batchYear,
       isVisibleToBatchOnly: isVisibleToBatchOnly,
+      commentIsDisabled: commentIsDisabled,
       timeStamp: new Date(),
       comments: [],
       reports: [],
@@ -188,10 +195,12 @@ const ConfessionsPage = () => {
         createConfession={createConfession}
         handleCategoryChange={handleCategoryChange}
         handleIsVisibleToBatchOnlyChange={handleIsVisibleToBatchOnlyChange}
+        handleCommentIsDisabledChange={handleCommentIsDisabledChange}
         confession={confession}
         setConfession={setConfession}
         confessionCategory={confessionCategory}
         isVisibleToBatchOnly={isVisibleToBatchOnly}
+        commentIsDisabled={commentIsDisabled}
         isConfessing={isConfessing}
         resetConfession={resetConfession}
       />
