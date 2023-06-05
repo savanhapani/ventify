@@ -63,7 +63,10 @@ const Confession = (props) => {
   const totalComments = comments?.length;
 
   const openDeleteConfessionDialog = () => {
-    setConfessionToBeDelete(confession);
+    setConfessionToBeDelete({
+      id: id,
+      title: confession,
+    });
     onDeleteConfessOpen();
   };
 

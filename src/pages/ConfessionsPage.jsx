@@ -24,6 +24,8 @@ import {
   query,
   where,
   or,
+  deleteDoc,
+  doc,
 } from "../firebase/firebase";
 
 const Header = (props) => {
@@ -67,7 +69,7 @@ const ConfessionsPage = () => {
 
   const [isConfessing, setIsConfessing] = useState(false);
   const { showToastMessage } = useToastMessage();
-  const [confessionToBeDelete, setConfessionToBeDelete] = useState("");
+  const [confessionToBeDelete, setConfessionToBeDelete] = useState({});
   const [confessionToBeReport, setConfessionToBeReport] = useState("");
 
   const [confessions, setConfessions] = useState([]);
@@ -126,11 +128,16 @@ const ConfessionsPage = () => {
     };
 
     try {
-      await addDoc(collection(db, "confessions"), confessionObj);
+      const confessionRef = await addDoc(
+        collection(db, "confessions"),
+        confessionObj
+      );
+      const deletionCode = confessionRef.id;
+      navigator.clipboard.writeText(deletionCode);
 
       showToastMessage(
         "Congratulations",
-        "You have confessed succesfully!!",
+        `You have confessed succesfully!! The deletion code for this confession is ${deletionCode} and copied to clipboard.`,
         "success",
         "purple"
       );
@@ -138,6 +145,31 @@ const ConfessionsPage = () => {
       console.error("Error adding document: ", e);
     }
     resetConfession();
+  };
+
+  const deleteConfession = async (confessionDeletionCode) => {
+    if (confessionDeletionCode != confessionToBeDelete.id) {
+      onDeleteConfessClose();
+      showToastMessage(
+        "Error",
+        "The deletion code you have entered is incorrect!!",
+        "warning",
+        "yellow"
+      );
+      confessionToBeDelete({});
+      return;
+    }
+    onDeleteConfessClose();
+
+    await deleteDoc(doc(db, "confessions", confessionDeletionCode));
+
+    showToastMessage(
+      "Deleted",
+      "Confession is successfully deleted",
+      "success",
+      "purple"
+    );
+    confessionToBeDelete({});
   };
 
   const getConfessions = async () => {
@@ -209,6 +241,7 @@ const ConfessionsPage = () => {
         isDeleteConfessOpen={isDeleteConfessOpen}
         onDeleteConfessClose={onDeleteConfessClose}
         confessionToBeDelete={confessionToBeDelete}
+        deleteConfession={deleteConfession}
       />
 
       <ReportConfess
