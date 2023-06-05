@@ -92,8 +92,9 @@ const ConfessionsPage = () => {
 
   const resetConfession = () => {
     setConfession("");
-    setConfessionCategory("");
+    setConfessionCategory(confessCategories[0].title);
     setIsVisibleToBatchOnly(false);
+    setCommentIsDisabled(false);
     setIsConfessing(false);
     onCreateConfessClose();
   };
