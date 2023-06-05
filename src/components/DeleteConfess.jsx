@@ -11,18 +11,33 @@ import {
   Text,
 } from "@chakra-ui/react";
 import color from "../styles/colors";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const DeleteConfess = (props) => {
+  const [userEnteredDeletionCode, setUserEnteredDeletionCode] = useState("");
   const cancelRef = useRef();
 
-  const { isDeleteConfessOpen, onDeleteConfessClose, confessionToBeDelete } =
-    props;
+  const {
+    isDeleteConfessOpen,
+    onDeleteConfessClose,
+    confessionToBeDelete,
+    deleteConfession,
+  } = props;
+
+  const resetDeleteConfession = () => {
+    setUserEnteredDeletionCode("");
+    onDeleteConfessClose();
+  };
+
+  const deleteAndResetConfession = () => {
+    deleteConfession(userEnteredDeletionCode);
+    setUserEnteredDeletionCode("");
+  };
   return (
     <AlertDialog
       isOpen={isDeleteConfessOpen}
       leastDestructiveRef={cancelRef}
-      onClose={onDeleteConfessClose}
+      onClose={resetDeleteConfession}
       motionPreset="slideInBottom"
       closeOnOverlayClick={false}
       autoFocus
@@ -40,7 +55,7 @@ const DeleteConfess = (props) => {
             </Text>
 
             <Code marginTop="10px" variant="subtle" padding="10px">
-              {confessionToBeDelete}
+              {confessionToBeDelete.title}
             </Code>
 
             <Input
@@ -48,13 +63,17 @@ const DeleteConfess = (props) => {
               size="md"
               focusBorderColor={color.primary}
               marginTop="20px"
+              onChange={(event) =>
+                setUserEnteredDeletionCode(event.target.value)
+              }
+              value={userEnteredDeletionCode}
             />
           </AlertDialogBody>
 
           <AlertDialogFooter>
             <Button
               ref={cancelRef}
-              onClick={onDeleteConfessClose}
+              onClick={resetDeleteConfession}
               variant="outline"
               textTransform="capitalize"
               borderRadius="50px"
@@ -63,10 +82,11 @@ const DeleteConfess = (props) => {
             </Button>
             <Button
               colorScheme="red"
-              onClick={onDeleteConfessClose}
+              onClick={deleteAndResetConfession}
               ml={3}
               textTransform="capitalize"
               borderRadius="50px"
+              isDisabled={!userEnteredDeletionCode}
             >
               Delete
             </Button>

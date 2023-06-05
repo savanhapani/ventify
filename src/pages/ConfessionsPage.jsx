@@ -24,6 +24,8 @@ import {
   query,
   where,
   or,
+  deleteDoc,
+  doc,
 } from "../firebase/firebase";
 
 const Header = (props) => {
@@ -63,9 +65,11 @@ const ConfessionsPage = () => {
     confessCategories[0].title
   );
   const [isVisibleToBatchOnly, setIsVisibleToBatchOnly] = useState(false);
+  const [commentIsDisabled, setCommentIsDisabled] = useState(false);
+
   const [isConfessing, setIsConfessing] = useState(false);
   const { showToastMessage } = useToastMessage();
-  const [confessionToBeDelete, setConfessionToBeDelete] = useState("");
+  const [confessionToBeDelete, setConfessionToBeDelete] = useState({});
   const [confessionToBeReport, setConfessionToBeReport] = useState("");
 
   const [confessions, setConfessions] = useState([]);
@@ -90,8 +94,9 @@ const ConfessionsPage = () => {
 
   const resetConfession = () => {
     setConfession("");
-    setConfessionCategory("");
+    setConfessionCategory(confessCategories[0].title);
     setIsVisibleToBatchOnly(false);
+    setCommentIsDisabled(false);
     setIsConfessing(false);
     onCreateConfessClose();
   };
@@ -104,6 +109,10 @@ const ConfessionsPage = () => {
     setIsVisibleToBatchOnly(event.target.checked);
   };
 
+  const handleCommentIsDisabledChange = (event) => {
+    setCommentIsDisabled(event.target.checked);
+  };
+
   const createConfession = async () => {
     setIsConfessing(true);
 
@@ -112,17 +121,23 @@ const ConfessionsPage = () => {
       category: confessionCategory,
       batchYear: batchYear,
       isVisibleToBatchOnly: isVisibleToBatchOnly,
+      commentIsDisabled: commentIsDisabled,
       timeStamp: new Date(),
       comments: [],
       reports: [],
     };
 
     try {
-      await addDoc(collection(db, "confessions"), confessionObj);
+      const confessionRef = await addDoc(
+        collection(db, "confessions"),
+        confessionObj
+      );
+      const deletionCode = confessionRef.id;
+      navigator.clipboard.writeText(deletionCode);
 
       showToastMessage(
         "Congratulations",
-        "You have confessed succesfully!!",
+        `You have confessed succesfully!! The deletion code for this confession is ${deletionCode} and copied to clipboard.`,
         "success",
         "purple"
       );
@@ -130,6 +145,34 @@ const ConfessionsPage = () => {
       console.error("Error adding document: ", e);
     }
     resetConfession();
+
+    getConfessions();
+  };
+
+  const deleteConfession = async (confessionDeletionCode) => {
+    if (confessionDeletionCode != confessionToBeDelete.id) {
+      onDeleteConfessClose();
+      showToastMessage(
+        "Error",
+        "The deletion code you have entered is incorrect!!",
+        "warning",
+        "yellow"
+      );
+      setConfessionToBeDelete({});
+      return;
+    }
+    onDeleteConfessClose();
+
+    await deleteDoc(doc(db, "confessions", confessionDeletionCode));
+
+    showToastMessage(
+      "Deleted",
+      "Confession is successfully deleted",
+      "success",
+      "purple"
+    );
+    setConfessionToBeDelete({});
+    getConfessions();
   };
 
   const getConfessions = async () => {
@@ -179,6 +222,7 @@ const ConfessionsPage = () => {
               setConfessionToBeDelete={setConfessionToBeDelete}
               onReportConfessOpen={onReportConfessOpen}
               setConfessionToBeReport={setConfessionToBeReport}
+              getConfessions={getConfessions}
             />
           ))}
         </Flex>
@@ -188,10 +232,12 @@ const ConfessionsPage = () => {
         createConfession={createConfession}
         handleCategoryChange={handleCategoryChange}
         handleIsVisibleToBatchOnlyChange={handleIsVisibleToBatchOnlyChange}
+        handleCommentIsDisabledChange={handleCommentIsDisabledChange}
         confession={confession}
         setConfession={setConfession}
         confessionCategory={confessionCategory}
         isVisibleToBatchOnly={isVisibleToBatchOnly}
+        commentIsDisabled={commentIsDisabled}
         isConfessing={isConfessing}
         resetConfession={resetConfession}
       />
@@ -199,6 +245,7 @@ const ConfessionsPage = () => {
         isDeleteConfessOpen={isDeleteConfessOpen}
         onDeleteConfessClose={onDeleteConfessClose}
         confessionToBeDelete={confessionToBeDelete}
+        deleteConfession={deleteConfession}
       />
 
       <ReportConfess

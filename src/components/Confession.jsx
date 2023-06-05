@@ -40,9 +40,13 @@ const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
 
-  const { showToastMessage } = useToastMessage();
+  const {
+    isOpen: isConfessionModalOpen,
+    onOpen: onConfessionModalOpen,
+    onClose: onConfessionModalClose,
+  } = useDisclosure();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { showToastMessage } = useToastMessage();
 
   const {
     id,
@@ -50,19 +54,24 @@ const Confession = (props) => {
     category,
     batchYear,
     isVisibleToBatchOnly,
+    commentIsDisabled,
     timeStamp,
     comments,
     onDeleteConfessOpen,
     setConfessionToBeDelete,
     onReportConfessOpen,
     setConfessionToBeReport,
+    getConfessions,
   } = props;
 
   const visibleComments = comments?.slice(0, 3);
   const totalComments = comments?.length;
 
   const openDeleteConfessionDialog = () => {
-    setConfessionToBeDelete(confession);
+    setConfessionToBeDelete({
+      id: id,
+      title: confession,
+    });
     onDeleteConfessOpen();
   };
 
@@ -96,6 +105,7 @@ const Confession = (props) => {
       "success",
       "purple"
     );
+    getConfessions();
   };
 
   return (
@@ -169,8 +179,13 @@ const Confession = (props) => {
           <Box marginTop="10px">
             <InputGroup size="md">
               <Input
-                placeholder="Add a comment..."
+                placeholder={
+                  commentIsDisabled
+                    ? "User has disabled the comments"
+                    : "Add a comment..."
+                }
                 variant="flushed"
+                isDisabled={commentIsDisabled}
                 focusBorderColor={color.primary}
                 onChange={(event) => setUserComment(event.target.value)}
                 value={userComment}
@@ -192,8 +207,8 @@ const Confession = (props) => {
 
           {totalComments > 0 && (
             <Box marginTop="10px">
-              {visibleComments.map((item) => (
-                <Comment {...item} key={item.id} />
+              {visibleComments.map((item, index) => (
+                <Comment {...item} key={index} />
               ))}
 
               {totalComments > 3 && (
@@ -203,7 +218,7 @@ const Confession = (props) => {
                   textTransform="capitalize"
                   size="sm"
                   marginTop="15px"
-                  onClick={onOpen}
+                  onClick={onConfessionModalOpen}
                 >
                   view all {totalComments} comments
                 </Button>
@@ -212,7 +227,15 @@ const Confession = (props) => {
           )}
         </CardFooter>
       </Card>
-      <ConfessionModal isOpen={isOpen} onClose={onClose} {...props} />
+      <ConfessionModal
+        isConfessionModalOpen={isConfessionModalOpen}
+        onConfessionModalClose={onConfessionModalClose}
+        addCommentToConfession={addCommentToConfession}
+        userComment={userComment}
+        setUserComment={setUserComment}
+        isCommenting={isCommenting}
+        {...props}
+      />
     </>
   );
 };

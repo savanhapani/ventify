@@ -28,10 +28,12 @@ const CreateConfess = (props) => {
     createConfession,
     handleCategoryChange,
     handleIsVisibleToBatchOnlyChange,
+    handleCommentIsDisabledChange,
     confession,
     setConfession,
     confessionCategory,
     isVisibleToBatchOnly,
+    commentIsDisabled,
     isConfessing,
     resetConfession,
   } = props;
@@ -89,14 +91,24 @@ const CreateConfess = (props) => {
 
           <Box marginTop="20px">
             <FormControl>
-              <FormLabel htmlFor="isChecked">
+              <FormLabel htmlFor="isVisibleToBatchOnly">
                 Visible to your batch only
               </FormLabel>
               <Switch
-                id="isChecked"
+                id="isVisibleToBatchOnly"
                 colorScheme="purple"
                 onChange={handleIsVisibleToBatchOnlyChange}
                 isChecked={isVisibleToBatchOnly}
+              />
+
+              <FormLabel htmlFor="commentIsDisabled" marginTop="10px">
+                Disable comments
+              </FormLabel>
+              <Switch
+                id="commentIsDisabled"
+                colorScheme="purple"
+                onChange={handleCommentIsDisabledChange}
+                isChecked={commentIsDisabled}
               />
             </FormControl>
           </Box>

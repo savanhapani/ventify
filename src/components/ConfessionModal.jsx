@@ -21,13 +21,23 @@ import { ChatIcon } from "@chakra-ui/icons";
 import Comment from "./Comment";
 
 function ConfessionModal(props) {
-  const { isOpen, onClose, confession, category, comments } = props;
+  const {
+    isConfessionModalOpen,
+    onConfessionModalClose,
+    addCommentToConfession,
+    confession,
+    category,
+    comments,
+    userComment,
+    setUserComment,
+    isCommenting,
+  } = props;
 
   return (
     <>
       <Modal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isConfessionModalOpen}
+        onClose={onConfessionModalClose}
         motionPreset="slideInBottom"
         closeOnOverlayClick={false}
         size={{ base: "full", sm: "3xl" }}
@@ -64,6 +74,8 @@ function ConfessionModal(props) {
                   placeholder="Add a comment..."
                   variant="flushed"
                   focusBorderColor={color.primary}
+                  onChange={(event) => setUserComment(event.target.value)}
+                  value={userComment}
                 />
 
                 <InputRightAddon backgroundColor="transparent" border="none">
@@ -72,6 +84,9 @@ function ConfessionModal(props) {
                     icon={<ChatIcon />}
                     colorScheme="purple"
                     variant="ghost"
+                    isDisabled={!userComment}
+                    isLoading={isCommenting}
+                    onClick={addCommentToConfession}
                   />
                 </InputRightAddon>
               </InputGroup>
@@ -84,8 +99,8 @@ function ConfessionModal(props) {
               marginTop="20px"
               maxHeight={{ base: "", sm: "40vh" }}
             >
-              {comments?.map((item) => (
-                <Comment {...item} key={item.id} />
+              {comments?.map((item, index) => (
+                <Comment {...item} key={index} />
               ))}
             </Box>
           </ModalBody>
