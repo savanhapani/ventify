@@ -16,7 +16,16 @@ import {
 import FilterTags from "./FilterTags";
 import color from "../styles/colors";
 
-export default function FilterBar() {
+export default function FilterBar(props) {
+  const {
+    handleCategorySelection,
+    selectedCategories,
+    handleBatchSelection,
+    selectedBatches,
+    toggleShowBatchExclusiveConfessions,
+    showBatchExclusiveConfessions,
+  } = props;
+
   return (
     <Card
       marginTop="20px"
@@ -26,8 +35,18 @@ export default function FilterBar() {
       width="xs"
     >
       <CardBody>
-        <FilterTags heading="categories" tags={confessCategories} />
-        <FilterTags heading="batches" tags={availableBatches} />
+        <FilterTags
+          heading="categories"
+          tags={confessCategories}
+          selectedTags={selectedCategories}
+          handleSelection={handleCategorySelection}
+        />
+        <FilterTags
+          heading="batches"
+          tags={availableBatches}
+          selectedTags={selectedBatches}
+          handleSelection={handleBatchSelection}
+        />
 
         <Box marginTop="15px">
           <Heading as="h3" textTransform="capitalize" fontSize="md">
@@ -57,13 +76,18 @@ export default function FilterBar() {
             justifyContent="space-between"
           >
             <FormLabel
-              htmlFor="isChecked"
+              htmlFor="showBatchExclusiveConfessions"
               textTransform="capitalize"
               fontSize="sm"
             >
               Show batch exclusive confessions
             </FormLabel>
-            <Switch id="isChecked" colorScheme="purple" />
+            <Switch
+              id="showBatchExclusiveConfessions"
+              colorScheme="purple"
+              onChange={toggleShowBatchExclusiveConfessions}
+              isChecked={showBatchExclusiveConfessions}
+            />
           </FormControl>
         </Box>
       </CardBody>

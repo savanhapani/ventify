@@ -76,6 +76,11 @@ const ConfessionsPage = () => {
 
   const [confessions, setConfessions] = useState([]);
 
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedBatches, setSelectedBatches] = useState([]);
+  const [showBatchExclusiveConfessions, setShowBatchExclusiveConfessions] =
+    useState(false);
+
   const {
     isOpen: isCreateConfessOpen,
     onOpen: onCreateConfessOpen,
@@ -222,6 +227,30 @@ const ConfessionsPage = () => {
     setConfessions(confessionsData);
   };
 
+  const handleCategorySelection = (selectedCategory) => {
+    if (selectedCategories.includes(selectedCategory)) {
+      setSelectedCategories(
+        selectedCategories.filter((category) => category !== selectedCategory)
+      );
+    } else {
+      setSelectedCategories([...selectedCategories, selectedCategory]);
+    }
+  };
+
+  const handleBatchSelection = (selectedBatch) => {
+    if (selectedBatches.includes(selectedBatch)) {
+      setSelectedBatches(
+        selectedBatches.filter((batch) => batch !== selectedBatch)
+      );
+    } else {
+      setSelectedBatches([...selectedBatches, selectedBatch]);
+    }
+  };
+
+  const toggleShowBatchExclusiveConfessions = (event) => {
+    setShowBatchExclusiveConfessions(event.target.checked);
+  };
+
   useEffect(() => {
     getConfessions();
   }, []);
@@ -230,7 +259,16 @@ const ConfessionsPage = () => {
     <Box overflow="hidden" height="100vh">
       <Header onOpen={onCreateConfessOpen} />
       <Flex>
-        <FilterBar />
+        <FilterBar
+          handleCategorySelection={handleCategorySelection}
+          selectedCategories={selectedCategories}
+          handleBatchSelection={handleBatchSelection}
+          selectedBatches={selectedBatches}
+          toggleShowBatchExclusiveConfessions={
+            toggleShowBatchExclusiveConfessions
+          }
+          showBatchExclusiveConfessions={showBatchExclusiveConfessions}
+        />
         <Flex
           wrap="wrap"
           gap="5"
@@ -242,17 +280,26 @@ const ConfessionsPage = () => {
           paddingLeft="30px"
           flex="1"
         >
-          {confessions.map((item) => (
-            <Confession
-              {...item}
-              key={item.id}
-              onDeleteConfessOpen={onDeleteConfessOpen}
-              setConfessionToBeDelete={setConfessionToBeDelete}
-              onReportConfessOpen={onReportConfessOpen}
-              setConfessionToBeReport={setConfessionToBeReport}
-              getConfessions={getConfessions}
-            />
-          ))}
+          {confessions
+            .filter(
+              (item) =>
+                (selectedCategories.length === 0 ||
+                  selectedCategories.includes(item.category)) &&
+                (selectedBatches.length === 0 ||
+                  selectedBatches.includes(item.batchYear)) &&
+                (!showBatchExclusiveConfessions || item.isVisibleToBatchOnly)
+            )
+            .map((item) => (
+              <Confession
+                {...item}
+                key={item.id}
+                onDeleteConfessOpen={onDeleteConfessOpen}
+                setConfessionToBeDelete={setConfessionToBeDelete}
+                onReportConfessOpen={onReportConfessOpen}
+                setConfessionToBeReport={setConfessionToBeReport}
+                getConfessions={getConfessions}
+              />
+            ))}
         </Flex>
       </Flex>
       <CreateConfess
