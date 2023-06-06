@@ -19,6 +19,7 @@ import {
 import color from "../styles/colors";
 import { ChatIcon } from "@chakra-ui/icons";
 import Comment from "./Comment";
+import { useRef } from "react";
 
 function ConfessionModal(props) {
   const {
@@ -33,9 +34,12 @@ function ConfessionModal(props) {
     isCommenting,
   } = props;
 
+  const initialRef = useRef(null);
+
   return (
     <>
       <Modal
+        initialFocusRef={initialRef}
         isOpen={isConfessionModalOpen}
         onClose={onConfessionModalClose}
         motionPreset="slideInBottom"
@@ -76,6 +80,7 @@ function ConfessionModal(props) {
                   focusBorderColor={color.primary}
                   onChange={(event) => setUserComment(event.target.value)}
                   value={userComment}
+                  ref={initialRef}
                 />
 
                 <InputRightAddon backgroundColor="transparent" border="none">
