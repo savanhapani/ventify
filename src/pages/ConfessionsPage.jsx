@@ -26,6 +26,8 @@ import {
   or,
   deleteDoc,
   doc,
+  updateDoc,
+  arrayUnion,
 } from "../firebase/firebase";
 
 const Header = (props) => {
@@ -70,7 +72,7 @@ const ConfessionsPage = () => {
   const [isConfessing, setIsConfessing] = useState(false);
   const { showToastMessage } = useToastMessage();
   const [confessionToBeDelete, setConfessionToBeDelete] = useState({});
-  const [confessionToBeReport, setConfessionToBeReport] = useState("");
+  const [confessionToBeReport, setConfessionToBeReport] = useState({});
 
   const [confessions, setConfessions] = useState([]);
 
@@ -175,6 +177,32 @@ const ConfessionsPage = () => {
     getConfessions();
   };
 
+  const reportConfession = async (confessionId, reasonToReport) => {
+    const confessionRef = doc(db, "confessions", confessionId);
+
+    const reportObj = {
+      batchYear: 2018,
+      reasonToReport: reasonToReport,
+    };
+    try {
+      await updateDoc(confessionRef, {
+        reports: arrayUnion(reportObj),
+      });
+      onReportConfessClose();
+
+      showToastMessage(
+        "Reported",
+        "We will look into it!",
+        "success",
+        "purple"
+      );
+    } catch {
+      showToastMessage("Error", "Try again later!", "error", "red");
+    }
+
+    setConfessionToBeReport({});
+  };
+
   const getConfessions = async () => {
     const confessionsRef = collection(db, "confessions");
 
@@ -252,6 +280,7 @@ const ConfessionsPage = () => {
         isReportConfessOpen={isReportConfessOpen}
         onReportConfessClose={onReportConfessClose}
         confessionToBeReport={confessionToBeReport}
+        reportConfession={reportConfession}
       />
     </Box>
   );

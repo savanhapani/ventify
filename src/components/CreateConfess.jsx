@@ -61,7 +61,7 @@ const CreateConfess = (props) => {
                 variant="outline"
                 size="md"
                 rows="5"
-                maxLength={280}
+                maxLength={CONFESSION_CHAR_LIMIT}
                 resize="none"
                 ref={initialRef}
                 onChange={(e) => setConfession(e.target.value)}

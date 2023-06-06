@@ -36,6 +36,8 @@ import moment from "moment";
 import { doc, updateDoc, db, arrayUnion } from "../firebase/firebase";
 import useToastMessage from "../hooks/useToastMessage";
 
+const COMMENT_CHAR_LIMIT = 280;
+
 const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
@@ -76,7 +78,7 @@ const Confession = (props) => {
   };
 
   const openReportConfessionDialog = () => {
-    setConfessionToBeReport(confession);
+    setConfessionToBeReport({ id: id, title: confession });
     onReportConfessOpen();
   };
 
@@ -189,6 +191,7 @@ const Confession = (props) => {
                 focusBorderColor={color.primary}
                 onChange={(event) => setUserComment(event.target.value)}
                 value={userComment}
+                maxLength={COMMENT_CHAR_LIMIT}
               />
 
               <InputRightAddon backgroundColor="transparent" border="none">
