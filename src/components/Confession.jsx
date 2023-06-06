@@ -76,7 +76,7 @@ const Confession = (props) => {
   };
 
   const openReportConfessionDialog = () => {
-    setConfessionToBeReport(confession);
+    setConfessionToBeReport({ id: id, title: confession });
     onReportConfessOpen();
   };
 

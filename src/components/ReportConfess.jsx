@@ -11,18 +11,33 @@ import {
   Input,
 } from "@chakra-ui/react";
 import color from "../styles/colors";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const ReportConfess = (props) => {
+  const [reasonToReport, setReasonToReport] = useState("");
   const cancelRef = useRef();
 
-  const { isReportConfessOpen, onReportConfessClose, confessionToBeReport } =
-    props;
+  const {
+    isReportConfessOpen,
+    onReportConfessClose,
+    confessionToBeReport,
+    reportConfession,
+  } = props;
+
+  const resetReportConfession = () => {
+    setReasonToReport("");
+    onReportConfessClose();
+  };
+
+  const reportAndResetConfession = () => {
+    reportConfession(confessionToBeReport.id, reasonToReport);
+    setReasonToReport("");
+  };
   return (
     <AlertDialog
       isOpen={isReportConfessOpen}
       leastDestructiveRef={cancelRef}
-      onClose={onReportConfessClose}
+      onClose={resetReportConfession}
       motionPreset="slideInBottom"
       closeOnOverlayClick={false}
       autoFocus
@@ -39,7 +54,7 @@ const ReportConfess = (props) => {
             </Text>
 
             <Code marginTop="10px" variant="subtle" padding="10px">
-              {confessionToBeReport}
+              {confessionToBeReport.title}
             </Code>
 
             <Input
@@ -47,13 +62,15 @@ const ReportConfess = (props) => {
               size="md"
               focusBorderColor={color.primary}
               marginTop="20px"
+              onChange={(event) => setReasonToReport(event.target.value)}
+              value={reasonToReport}
             />
           </AlertDialogBody>
 
           <AlertDialogFooter>
             <Button
               ref={cancelRef}
-              onClick={onReportConfessClose}
+              onClick={resetReportConfession}
               variant="outline"
               textTransform="capitalize"
               borderRadius="50px"
@@ -61,7 +78,8 @@ const ReportConfess = (props) => {
               cancel
             </Button>
             <Button
-              onClick={onReportConfessClose}
+              onClick={reportAndResetConfession}
+              isDisabled={!reasonToReport}
               variant="solid"
               textTransform="capitalize"
               borderRadius="50px"
