@@ -1,16 +1,29 @@
-import { Flex, Tag, Text } from "@chakra-ui/react";
+import { Flex, Tag, Text, Box } from "@chakra-ui/react";
+import moment from "moment";
+import color from "../styles/colors";
 
 const Comment = (props) => {
-  const { batchYear, comment } = props;
+  const { batchYear, comment, timeStamp } = props;
   return (
-    <Flex padding="5px 0" alignItems="center" justifyContent="space-between">
-      <Tag size="md" variant="subtle" marginTop="5px">
-        {batchYear}
-      </Tag>
-      <Text fontSize="md" marginLeft="10px" flex="1">
-        {comment}
+    <Box marginTop="5px" padding="5px 0">
+      <Flex alignItems="flex-start" justifyContent="space-between">
+        <Tag size="md" variant="subtle">
+          {batchYear}
+        </Tag>
+
+        <Text fontSize="md" flex="1" marginLeft="10px">
+          {comment}
+        </Text>
+      </Flex>
+      <Text
+        fontSize="xs"
+        textAlign="end"
+        marginTop="5px"
+        color="blackAlpha.700"
+      >
+        {moment(timeStamp?.toDate()).fromNow()}
       </Text>
-    </Flex>
+    </Box>
   );
 };
 
