@@ -5,10 +5,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  InputGroup,
-  Input,
-  IconButton,
-  InputRightAddon,
   Box,
   Flex,
   Tag,
@@ -17,9 +13,8 @@ import {
 } from "@chakra-ui/react";
 
 import color from "../styles/colors";
-import { ChatIcon } from "@chakra-ui/icons";
 import Comment from "./Comment";
-import { useRef } from "react";
+import { AddComment } from "./Confession";
 
 function ConfessionModal(props) {
   const {
@@ -29,17 +24,15 @@ function ConfessionModal(props) {
     confession,
     category,
     comments,
+    commentIsDisabled,
     userComment,
     setUserComment,
     isCommenting,
   } = props;
 
-  const initialRef = useRef(null);
-
   return (
     <>
       <Modal
-        initialFocusRef={initialRef}
         isOpen={isConfessionModalOpen}
         onClose={onConfessionModalClose}
         motionPreset="slideInBottom"
@@ -72,30 +65,13 @@ function ConfessionModal(props) {
               <Text fontSize="lg">{confession}</Text>
             </Box>
 
-            <Box marginTop="10px">
-              <InputGroup size="md">
-                <Input
-                  placeholder="Add a comment..."
-                  variant="flushed"
-                  focusBorderColor={color.primary}
-                  onChange={(event) => setUserComment(event.target.value)}
-                  value={userComment}
-                  ref={initialRef}
-                />
-
-                <InputRightAddon backgroundColor="transparent" border="none">
-                  <IconButton
-                    aria-label="Add Comment"
-                    icon={<ChatIcon />}
-                    colorScheme="purple"
-                    variant="ghost"
-                    isDisabled={!userComment}
-                    isLoading={isCommenting}
-                    onClick={addCommentToConfession}
-                  />
-                </InputRightAddon>
-              </InputGroup>
-            </Box>
+            <AddComment
+              addCommentToConfession={addCommentToConfession}
+              commentIsDisabled={commentIsDisabled}
+              setUserComment={setUserComment}
+              userComment={userComment}
+              isCommenting={isCommenting}
+            />
 
             <Box
               marginBottom="10px"

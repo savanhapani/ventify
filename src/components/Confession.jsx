@@ -38,6 +38,54 @@ import useToastMessage from "../hooks/useToastMessage";
 
 const COMMENT_CHAR_LIMIT = 280;
 
+export const AddComment = (props) => {
+  const {
+    addCommentToConfession,
+    commentIsDisabled,
+    setUserComment,
+    userComment,
+    isCommenting,
+  } = props;
+  return (
+    <Box marginTop="10px">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          addCommentToConfession();
+        }}
+      >
+        <InputGroup size="md">
+          <Input
+            placeholder={
+              commentIsDisabled
+                ? "User has disabled the comments"
+                : "Add a comment..."
+            }
+            variant="flushed"
+            isDisabled={commentIsDisabled}
+            focusBorderColor={color.primary}
+            onChange={(event) => setUserComment(event.target.value)}
+            value={userComment}
+            maxLength={COMMENT_CHAR_LIMIT}
+          />
+
+          <InputRightAddon backgroundColor="transparent" border="none">
+            <IconButton
+              aria-label="Add Comment"
+              icon={<ChatIcon />}
+              colorScheme="purple"
+              variant="ghost"
+              isDisabled={!userComment}
+              isLoading={isCommenting}
+              onClick={addCommentToConfession}
+            />
+          </InputRightAddon>
+        </InputGroup>
+      </form>
+    </Box>
+  );
+};
+
 const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
@@ -93,6 +141,7 @@ const Confession = (props) => {
     const userCommentObj = {
       batchYear: 2018,
       comment: userComment,
+      timeStamp: new Date(),
     };
 
     await updateDoc(confessionRef, {
@@ -178,35 +227,13 @@ const Confession = (props) => {
             ))}
           </Flex>
 
-          <Box marginTop="10px">
-            <InputGroup size="md">
-              <Input
-                placeholder={
-                  commentIsDisabled
-                    ? "User has disabled the comments"
-                    : "Add a comment..."
-                }
-                variant="flushed"
-                isDisabled={commentIsDisabled}
-                focusBorderColor={color.primary}
-                onChange={(event) => setUserComment(event.target.value)}
-                value={userComment}
-                maxLength={COMMENT_CHAR_LIMIT}
-              />
-
-              <InputRightAddon backgroundColor="transparent" border="none">
-                <IconButton
-                  aria-label="Add Comment"
-                  icon={<ChatIcon />}
-                  colorScheme="purple"
-                  variant="ghost"
-                  isDisabled={!userComment}
-                  isLoading={isCommenting}
-                  onClick={addCommentToConfession}
-                />
-              </InputRightAddon>
-            </InputGroup>
-          </Box>
+          <AddComment
+            addCommentToConfession={addCommentToConfession}
+            commentIsDisabled={commentIsDisabled}
+            setUserComment={setUserComment}
+            userComment={userComment}
+            isCommenting={isCommenting}
+          />
 
           {totalComments > 0 && (
             <Box marginTop="10px">

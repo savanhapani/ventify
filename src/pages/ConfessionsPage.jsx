@@ -188,6 +188,7 @@ const ConfessionsPage = () => {
     const reportObj = {
       batchYear: 2018,
       reasonToReport: reasonToReport,
+      timeStamp: new Date(),
     };
     try {
       await updateDoc(confessionRef, {
