@@ -5,10 +5,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  InputGroup,
-  Input,
-  IconButton,
-  InputRightAddon,
   Box,
   Flex,
   Tag,
@@ -17,10 +13,8 @@ import {
 } from "@chakra-ui/react";
 
 import color from "../styles/colors";
-import { ChatIcon } from "@chakra-ui/icons";
 import Comment from "./Comment";
 import { AddComment } from "./Confession";
-import { useRef } from "react";
 
 function ConfessionModal(props) {
   const {
