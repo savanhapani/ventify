@@ -7,6 +7,12 @@ import {
   FormControl,
   FormLabel,
   Switch,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Tooltip,
 } from "@chakra-ui/react";
 import {
   confessCategories,
@@ -35,18 +41,75 @@ export default function FilterBar(props) {
       width="xs"
     >
       <CardBody>
-        <FilterTags
-          heading="categories"
-          tags={confessCategories}
-          selectedTags={selectedCategories}
-          handleSelection={handleCategorySelection}
-        />
-        <FilterTags
-          heading="batches"
-          tags={availableBatches}
-          selectedTags={selectedBatches}
-          handleSelection={handleBatchSelection}
-        />
+        <Accordion defaultIndex={[0]} allowMultiple>
+          <AccordionItem>
+            <h3>
+              <Tooltip
+                label={selectedCategories.join(", ")}
+                fontSize="sm"
+                placement="top"
+                textTransform="capitalize"
+                backgroundColor="gray.700"
+                isDisabled={selectedCategories.length === 0}
+              >
+                <AccordionButton
+                  _expanded={{ bg: color.primary, color: "white" }}
+                >
+                  <Box
+                    as="span"
+                    flex="1"
+                    textAlign="left"
+                    textTransform="capitalize"
+                  >
+                    categories
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </Tooltip>
+            </h3>
+            <AccordionPanel pb={4}>
+              <FilterTags
+                tags={confessCategories}
+                selectedTags={selectedCategories}
+                handleSelection={handleCategorySelection}
+              />
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem>
+            <h3>
+              <Tooltip
+                label={selectedBatches.join(", ")}
+                fontSize="sm"
+                placement="top"
+                textTransform="capitalize"
+                backgroundColor="gray.700"
+                isDisabled={selectedBatches.length === 0}
+              >
+                <AccordionButton
+                  _expanded={{ bg: color.primary, color: "white" }}
+                >
+                  <Box
+                    as="span"
+                    flex="1"
+                    textAlign="left"
+                    textTransform="capitalize"
+                  >
+                    batches
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </Tooltip>
+            </h3>
+            <AccordionPanel pb={4}>
+              <FilterTags
+                tags={availableBatches}
+                selectedTags={selectedBatches}
+                handleSelection={handleBatchSelection}
+              />
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
 
         <Box marginTop="15px">
           <Heading as="h3" textTransform="capitalize" fontSize="md">
