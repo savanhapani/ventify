@@ -5,6 +5,7 @@ import {
   Button,
   useDisclosure,
   Divider,
+  Text,
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import Confession from "../components/Confession";
@@ -29,6 +30,7 @@ import {
   updateDoc,
   arrayUnion,
 } from "../firebase/firebase";
+import color from "../styles/colors";
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -57,6 +59,46 @@ const Header = (props) => {
       </Flex>
       <Divider orientation="horizontal" />
     </>
+  );
+};
+
+const AppliedFiltersHeading = (props) => {
+  const { selectedCategories, selectedBatches } = props;
+
+  if (selectedCategories.length === 0 && selectedBatches.length === 0) {
+    return;
+  }
+
+  return (
+    <Text
+      fontSize="21px"
+      paddingTop="15px"
+      paddingBottom="30px"
+      fontWeight="400"
+      textAlign="center"
+      marginRight="50px"
+      as="h2"
+    >
+      We are displaying confessions
+      {selectedCategories.length > 0 && "categorized under "}
+      <Text
+        as="span"
+        color={color.primary}
+        fontWeight="600"
+        textTransform="capitalize"
+      >
+        {selectedCategories.join(", ")}
+      </Text>
+      {selectedBatches.length > 0 && " from the batches "}
+      <Text
+        as="span"
+        color={color.primary}
+        fontWeight="600"
+        textTransform="capitalize"
+      >
+        {selectedBatches.sort((a, b) => a - b).join(", ")}
+      </Text>
+    </Text>
   );
 };
 
@@ -270,38 +312,43 @@ const ConfessionsPage = () => {
           }
           showBatchExclusiveConfessions={showBatchExclusiveConfessions}
         />
-        <Flex
-          wrap="wrap"
-          gap="5"
-          justifyContent="center"
-          overflow="auto"
-          maxHeight="800px"
-          paddingTop="50px"
-          paddingBottom="300px"
-          paddingLeft="30px"
-          flex="1"
-        >
-          {confessions
-            .filter(
-              (item) =>
-                (selectedCategories.length === 0 ||
-                  selectedCategories.includes(item.category)) &&
-                (selectedBatches.length === 0 ||
-                  selectedBatches.includes(item.batchYear)) &&
-                (!showBatchExclusiveConfessions || item.isVisibleToBatchOnly)
-            )
-            .map((item) => (
-              <Confession
-                {...item}
-                key={item.id}
-                onDeleteConfessOpen={onDeleteConfessOpen}
-                setConfessionToBeDelete={setConfessionToBeDelete}
-                onReportConfessOpen={onReportConfessOpen}
-                setConfessionToBeReport={setConfessionToBeReport}
-                getConfessions={getConfessions}
-              />
-            ))}
-        </Flex>
+        <Box flex="1" paddingLeft="30px">
+          <AppliedFiltersHeading
+            selectedCategories={selectedCategories}
+            selectedBatches={selectedBatches}
+          />
+
+          <Flex
+            wrap="wrap"
+            gap="5"
+            justifyContent="center"
+            overflow="auto"
+            maxHeight="800px"
+            paddingTop="30px"
+            paddingBottom="300px"
+          >
+            {confessions
+              .filter(
+                (item) =>
+                  (selectedCategories.length === 0 ||
+                    selectedCategories.includes(item.category)) &&
+                  (selectedBatches.length === 0 ||
+                    selectedBatches.includes(item.batchYear)) &&
+                  (!showBatchExclusiveConfessions || item.isVisibleToBatchOnly)
+              )
+              .map((item) => (
+                <Confession
+                  {...item}
+                  key={item.id}
+                  onDeleteConfessOpen={onDeleteConfessOpen}
+                  setConfessionToBeDelete={setConfessionToBeDelete}
+                  onReportConfessOpen={onReportConfessOpen}
+                  setConfessionToBeReport={setConfessionToBeReport}
+                  getConfessions={getConfessions}
+                />
+              ))}
+          </Flex>
+        </Box>
       </Flex>
       <CreateConfess
         isCreateConfessOpen={isCreateConfessOpen}
