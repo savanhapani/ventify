@@ -80,7 +80,7 @@ const AppliedFiltersHeading = (props) => {
       as="h2"
     >
       We are displaying confessions
-      {selectedCategories.length > 0 && "categorized under "}
+      {selectedCategories.length > 0 && " categorized under "}
       <Text
         as="span"
         color={color.primary}
