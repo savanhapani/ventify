@@ -26,7 +26,13 @@ import color from "../styles/colors";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import useToastMessage from "../hooks/useToastMessage";
-import {} from "../firebase/firebase";
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  signInWithEmailAndPassword,
+} from "../firebase/firebase";
 
 const Header = () => {
   return (
@@ -129,19 +135,87 @@ const HomePage = () => {
 
   const [loginUiIsVisible, setLoginUiIsVisible] = useState(true);
 
+  const [isRegisteringUser, setIsRegisteringUser] = useState(false);
+  const [isLoginInUser, setIsLoginInUser] = useState(false);
+
   const { showToastMessage } = useToastMessage();
   const navigate = useNavigate();
 
-  const login = () => {
+  const resetUserInputs = () => {
+    setStudentRollNo("");
+    setPassword("");
+  };
+
+  const logout = async () => {
+    await signOut(auth);
+  };
+
+  const sendEmailVerificationLink = async (userEmail) => {
+    try {
+      await sendEmailVerification(auth.currentUser);
+      showToastMessage(
+        "Link Sent",
+        `We have sent you the login link at ${userEmail}. Please check your inbox.`,
+        "success",
+        "purple"
+      );
+    } catch (error) {
+      showToastMessage("Error", error.message, "error", "red");
+    }
+  };
+
+  const registerUser = async () => {
+    setIsRegisteringUser(true);
     const userEmail = `${studentRollNo}@daiict.ac.in`;
 
-    showToastMessage(
-      "Link Sent",
-      `We have sent you the login link at ${userEmail}. Please check your inbox.`,
-      "success",
-      "purple"
-    );
-    navigate("/confessions");
+    try {
+      await createUserWithEmailAndPassword(auth, userEmail, password);
+      await sendEmailVerificationLink(userEmail);
+      logout();
+      setLoginUiIsVisible(true);
+      setIsRegisteringUser(false);
+      resetUserInputs();
+    } catch (error) {
+      showToastMessage("Error", error.message, "error", "red");
+      setIsRegisteringUser(false);
+      resetUserInputs();
+    }
+  };
+
+  const login = async () => {
+    setIsLoginInUser(true);
+    const userEmail = `${studentRollNo}@daiict.ac.in`;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        userEmail,
+        password
+      );
+      const user = userCredential.user;
+      const emailIsVerified = user.emailVerified;
+
+      if (!emailIsVerified) {
+        logout();
+        showToastMessage(
+          "Error",
+          "Please verify your email first!!",
+          "error",
+          "red"
+        );
+        setIsLoginInUser(false);
+        resetUserInputs();
+
+        return;
+      }
+      navigate("/confessions");
+      setIsLoginInUser(false);
+      resetUserInputs();
+    } catch (error) {
+      showToastMessage("Error", error.message, "error", "red");
+      setIsLoginInUser(false);
+      resetUserInputs();
+    }
   };
   return (
     <Box>
@@ -228,7 +302,11 @@ const HomePage = () => {
                 textTransform="capitalize"
                 isDisabled={!studentRollNo || !password}
                 size="md"
-                onClick={login}
+                onClick={loginUiIsVisible ? login : registerUser}
+                isLoading={loginUiIsVisible ? isLoginInUser : isRegisteringUser}
+                loadingText={
+                  loginUiIsVisible ? "please wait" : "sending verification link"
+                }
               >
                 {loginUiIsVisible ? "login" : "register"}
               </Button>
