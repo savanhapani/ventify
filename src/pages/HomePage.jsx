@@ -33,6 +33,7 @@ import {
   signOut,
   signInWithEmailAndPassword,
 } from "../firebase/firebase";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { VentifyContext } from "../context/VentifyContextProvider";
 
 const Header = () => {
@@ -143,6 +144,8 @@ const HomePage = () => {
 
   const { showToastMessage } = useToastMessage();
   const navigate = useNavigate();
+
+  const userIsLoggedIn = auth.currentUser;
 
   const resetUserInputs = () => {
     setStudentRollNo("");
@@ -257,77 +260,96 @@ const HomePage = () => {
 
         <Center flex="1">
           <Box width="300px" padding="10px">
-            <Heading
-              as="h2"
-              textTransform="capitalize"
-              fontSize="3xl"
-              textAlign="center"
-            >
-              {loginUiIsVisible ? "login" : "register"}
-            </Heading>
-
-            <InputGroup size="md" marginTop="20px">
-              <Input
-                placeholder="e.g. 201812010"
-                focusBorderColor={color.primary}
-                variant="outline"
-                type="number"
-                autoFocus
-                onChange={(e) => setStudentRollNo(e.target.value)}
-                value={studentRollNo}
-              />
-
-              <InputRightAddon>
-                <Text>@daiict.ac.in</Text>
-              </InputRightAddon>
-            </InputGroup>
-
-            <InputGroup size="md" marginTop="20px">
-              <Input
-                pr="4.5rem"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter password"
-                focusBorderColor={color.primary}
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-              />
-              <InputRightElement width="4.5rem">
-                <Button
-                  h="1.75rem"
-                  size="sm"
-                  onClick={() => setShowpassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-
-            <Box marginTop="20px" display="flex" flexDirection="column">
+            {userIsLoggedIn ? (
               <Button
                 colorScheme="purple"
                 variant="solid"
                 textTransform="capitalize"
-                isDisabled={!studentRollNo || !password}
                 size="md"
-                onClick={loginUiIsVisible ? login : registerUser}
-                isLoading={loginUiIsVisible ? isLoginInUser : isRegisteringUser}
-                loadingText={
-                  loginUiIsVisible ? "please wait" : "sending verification link"
-                }
+                rightIcon={<ArrowForwardIcon />}
+                onClick={() => navigate("/confessions")}
               >
-                {loginUiIsVisible ? "login" : "register"}
+                alrady logged in
               </Button>
+            ) : (
+              <>
+                <Heading
+                  as="h2"
+                  textTransform="capitalize"
+                  fontSize="3xl"
+                  textAlign="center"
+                >
+                  {loginUiIsVisible ? "login" : "register"}
+                </Heading>
 
-              <Button
-                colorScheme="purple"
-                variant="link"
-                size="sm"
-                marginTop="10px"
-                onClick={() => setLoginUiIsVisible((prev) => !prev)}
-              >
-                {loginUiIsVisible ? "new here?" : "go back to login"}
-              </Button>
-            </Box>
+                <InputGroup size="md" marginTop="20px">
+                  <Input
+                    placeholder="e.g. 201812010"
+                    focusBorderColor={color.primary}
+                    variant="outline"
+                    type="number"
+                    autoFocus
+                    onChange={(e) => setStudentRollNo(e.target.value)}
+                    value={studentRollNo}
+                  />
+
+                  <InputRightAddon>
+                    <Text>@daiict.ac.in</Text>
+                  </InputRightAddon>
+                </InputGroup>
+
+                <InputGroup size="md" marginTop="20px">
+                  <Input
+                    pr="4.5rem"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    focusBorderColor={color.primary}
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button
+                      h="1.75rem"
+                      size="sm"
+                      onClick={() => setShowpassword(!showPassword)}
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+
+                <Box marginTop="20px" display="flex" flexDirection="column">
+                  <Button
+                    colorScheme="purple"
+                    variant="solid"
+                    textTransform="capitalize"
+                    isDisabled={!studentRollNo || !password}
+                    size="md"
+                    onClick={loginUiIsVisible ? login : registerUser}
+                    isLoading={
+                      loginUiIsVisible ? isLoginInUser : isRegisteringUser
+                    }
+                    loadingText={
+                      loginUiIsVisible
+                        ? "please wait"
+                        : "sending verification link"
+                    }
+                  >
+                    {loginUiIsVisible ? "login" : "register"}
+                  </Button>
+
+                  <Button
+                    colorScheme="purple"
+                    variant="link"
+                    size="sm"
+                    marginTop="10px"
+                    onClick={() => setLoginUiIsVisible((prev) => !prev)}
+                  >
+                    {loginUiIsVisible ? "new here?" : "go back to login"}
+                  </Button>
+                </Box>
+              </>
+            )}
           </Box>
         </Center>
       </Flex>
