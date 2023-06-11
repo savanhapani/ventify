@@ -24,7 +24,7 @@ import github from "../assets/github.png";
 import { howItWorks } from "../assets/data/data";
 import color from "../styles/colors";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import useToastMessage from "../hooks/useToastMessage";
 import {
   auth,
@@ -33,6 +33,7 @@ import {
   signOut,
   signInWithEmailAndPassword,
 } from "../firebase/firebase";
+import { VentifyContext } from "../context/VentifyContextProvider";
 
 const Header = () => {
   return (
@@ -138,6 +139,8 @@ const HomePage = () => {
   const [isRegisteringUser, setIsRegisteringUser] = useState(false);
   const [isLoginInUser, setIsLoginInUser] = useState(false);
 
+  const { setLoggedInBatchYear } = useContext(VentifyContext);
+
   const { showToastMessage } = useToastMessage();
   const navigate = useNavigate();
 
@@ -208,6 +211,10 @@ const HomePage = () => {
 
         return;
       }
+      const currentbatchYear = Number(studentRollNo.toString().substring(0, 4));
+      setLoggedInBatchYear(currentbatchYear);
+      localStorage.setItem("loggedInBatchYear", currentbatchYear);
+
       navigate("/confessions");
       setIsLoginInUser(false);
       resetUserInputs();

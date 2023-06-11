@@ -1,6 +1,8 @@
 import {
   Card,
   CardBody,
+  CardFooter,
+  Button,
   Box,
   Select,
   Heading,
@@ -21,6 +23,7 @@ import {
 } from "../assets/data/data";
 import FilterTags from "./FilterTags";
 import color from "../styles/colors";
+import { CloseIcon } from "@chakra-ui/icons";
 
 export default function FilterBar(props) {
   const {
@@ -30,6 +33,7 @@ export default function FilterBar(props) {
     selectedBatches,
     toggleShowBatchExclusiveConfessions,
     showBatchExclusiveConfessions,
+    clearAllFilters,
   } = props;
 
   return (
@@ -154,6 +158,20 @@ export default function FilterBar(props) {
           </FormControl>
         </Box>
       </CardBody>
+
+      {(selectedCategories.length > 0 || selectedBatches.length > 0) && (
+        <CardFooter>
+          <Button
+            variant="outline"
+            size="sm"
+            colorScheme="red"
+            onClick={clearAllFilters}
+            rightIcon={<CloseIcon boxSize="10px" />}
+          >
+            Clear all filters
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }

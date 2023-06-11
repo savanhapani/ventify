@@ -28,13 +28,14 @@ import {
 } from "@chakra-ui/icons";
 import color from "../styles/colors";
 import Comment from "./Comment";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import ReactionButton from "./ReactionButton";
 import ConfessionModal from "./ConfessionModal";
 import { reactions } from "../assets/data/data";
 import moment from "moment";
 import { doc, updateDoc, db, arrayUnion } from "../firebase/firebase";
 import useToastMessage from "../hooks/useToastMessage";
+import { VentifyContext } from "../context/VentifyContextProvider";
 
 const COMMENT_CHAR_LIMIT = 280;
 
@@ -89,6 +90,7 @@ export const AddComment = (props) => {
 const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
+  const { loggedInBatchYear } = useContext(VentifyContext);
 
   const {
     isOpen: isConfessionModalOpen,
@@ -139,7 +141,7 @@ const Confession = (props) => {
     const confessionRef = doc(db, "confessions", id);
 
     const userCommentObj = {
-      batchYear: 2018,
+      batchYear: loggedInBatchYear,
       comment: userComment,
       timeStamp: new Date(),
     };

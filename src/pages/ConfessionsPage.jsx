@@ -6,13 +6,21 @@ import {
   useDisclosure,
   Divider,
   Text,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuDivider,
+  IconButton,
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import Confession from "../components/Confession";
 import logo from "../assets/logo.png";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, HamburgerIcon } from "@chakra-ui/icons";
 import CreateConfess from "../components/CreateConfess";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
 import ReportConfess from "../components/ReportConfess";
@@ -31,9 +39,13 @@ import {
   arrayUnion,
 } from "../firebase/firebase";
 import color from "../styles/colors";
+import AccountDrawer from "../components/AccountDrawer";
+import { VentifyContext } from "../context/VentifyContextProvider";
+import { useNavigate } from "react-router-dom";
+import { signOut, auth } from "../firebase/firebase";
 
 const Header = (props) => {
-  const { onOpen } = props;
+  const { onOpen, onAccountDrawerOpen, logout } = props;
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
@@ -45,17 +57,43 @@ const Header = (props) => {
           minWidth="200px"
           maxWidth="300px"
         />
-        <Button
-          textTransform="capitalize"
-          variant="solid"
-          size="md"
-          colorScheme="purple"
-          borderRadius="50px"
-          rightIcon={<AddIcon boxSize="13px" />}
-          onClick={onOpen}
-        >
-          confess
-        </Button>
+
+        <Flex>
+          <Button
+            textTransform="capitalize"
+            variant="solid"
+            size="md"
+            colorScheme="purple"
+            rightIcon={<AddIcon boxSize="13px" />}
+            onClick={onOpen}
+            marginRight="20px"
+          >
+            confess
+          </Button>
+
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Menu"
+              icon={<HamburgerIcon />}
+              variant="outline"
+              colorScheme="blackAlpha"
+              size="md"
+            />
+
+            <MenuList>
+              <MenuGroup title="Profile">
+                <MenuItem onClick={onAccountDrawerOpen}>My Account</MenuItem>
+              </MenuGroup>
+              <MenuDivider />
+              <MenuGroup title="Help">
+                <MenuItem color="red" onClick={logout}>
+                  Logout
+                </MenuItem>
+              </MenuGroup>
+            </MenuList>
+          </Menu>
+        </Flex>
       </Flex>
       <Divider orientation="horizontal" />
     </>
@@ -70,7 +108,7 @@ const AppliedFiltersHeading = (props) => {
   }
 
   return (
-    <Text
+    <Heading
       fontSize="21px"
       paddingTop="15px"
       paddingBottom="30px"
@@ -96,14 +134,13 @@ const AppliedFiltersHeading = (props) => {
         fontWeight="600"
         textTransform="capitalize"
       >
-        {selectedBatches.sort((a, b) => a - b).join(", ")}
+        {[...selectedBatches].sort((a, b) => a - b).join(", ")}
       </Text>
-    </Text>
+    </Heading>
   );
 };
 
 const ConfessionsPage = () => {
-  const batchYear = 2018;
   const [confession, setConfession] = useState("");
   const [confessionCategory, setConfessionCategory] = useState(
     confessCategories[0].title
@@ -123,6 +160,10 @@ const ConfessionsPage = () => {
   const [showBatchExclusiveConfessions, setShowBatchExclusiveConfessions] =
     useState(false);
 
+  const navigate = useNavigate();
+
+  const { loggedInBatchYear } = useContext(VentifyContext);
+
   const {
     isOpen: isCreateConfessOpen,
     onOpen: onCreateConfessOpen,
@@ -139,6 +180,12 @@ const ConfessionsPage = () => {
     isOpen: isReportConfessOpen,
     onOpen: onReportConfessOpen,
     onClose: onReportConfessClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isAccountDrawerOpen,
+    onOpen: onAccountDrawerOpen,
+    onClose: onAccountDrawerClose,
   } = useDisclosure();
 
   const resetConfession = () => {
@@ -168,7 +215,7 @@ const ConfessionsPage = () => {
     const confessionObj = {
       confession: confession,
       category: confessionCategory,
-      batchYear: batchYear,
+      batchYear: loggedInBatchYear,
       isVisibleToBatchOnly: isVisibleToBatchOnly,
       commentIsDisabled: commentIsDisabled,
       timeStamp: new Date(),
@@ -228,7 +275,7 @@ const ConfessionsPage = () => {
     const confessionRef = doc(db, "confessions", confessionId);
 
     const reportObj = {
-      batchYear: 2018,
+      batchYear: loggedInBatchYear,
       reasonToReport: reasonToReport,
       timeStamp: new Date(),
     };
@@ -258,7 +305,7 @@ const ConfessionsPage = () => {
       confessionsRef,
       or(
         where("isVisibleToBatchOnly", "==", false),
-        where("batchYear", "==", 2018)
+        where("batchYear", "==", Number(loggedInBatchYear))
       )
     );
 
@@ -294,13 +341,36 @@ const ConfessionsPage = () => {
     setShowBatchExclusiveConfessions(event.target.checked);
   };
 
+  const clearAllFilters = () => {
+    setSelectedCategories([]);
+    setSelectedBatches([]);
+    setShowBatchExclusiveConfessions(false);
+  };
+
+  const logout = async () => {
+    await signOut(auth);
+    localStorage.removeItem("loggedInBatchYear");
+    navigate("/", { replace: true });
+
+    showToastMessage(
+      "Successful",
+      "You have logged out!!",
+      "success",
+      "purple"
+    );
+  };
+
   useEffect(() => {
     getConfessions();
   }, []);
 
   return (
     <Box overflow="hidden" height="100vh">
-      <Header onOpen={onCreateConfessOpen} />
+      <Header
+        onOpen={onCreateConfessOpen}
+        onAccountDrawerOpen={onAccountDrawerOpen}
+        logout={logout}
+      />
       <Flex>
         <FilterBar
           handleCategorySelection={handleCategorySelection}
@@ -311,6 +381,7 @@ const ConfessionsPage = () => {
             toggleShowBatchExclusiveConfessions
           }
           showBatchExclusiveConfessions={showBatchExclusiveConfessions}
+          clearAllFilters={clearAllFilters}
         />
         <Box flex="1" paddingLeft="30px">
           <AppliedFiltersHeading
@@ -376,6 +447,11 @@ const ConfessionsPage = () => {
         onReportConfessClose={onReportConfessClose}
         confessionToBeReport={confessionToBeReport}
         reportConfession={reportConfession}
+      />
+      <AccountDrawer
+        isAccountDrawerOpen={isAccountDrawerOpen}
+        onAccountDrawerClose={onAccountDrawerClose}
+        logout={logout}
       />
     </Box>
   );
