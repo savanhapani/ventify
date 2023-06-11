@@ -18,11 +18,13 @@ import {
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import color from "../styles/colors";
-import { useRef } from "react";
+import { useRef, useContext } from "react";
+import { VentifyContext } from "../context/VentifyContextProvider";
 
 const CONFESSION_CHAR_LIMIT = 280;
 
 const CreateConfess = (props) => {
+  const { loggedInBatchYear } = useContext(VentifyContext);
   const {
     isCreateConfessOpen,
     createConfession,
@@ -50,7 +52,7 @@ const CreateConfess = (props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>2018</ModalHeader>
+        <ModalHeader>{loggedInBatchYear}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Box>
@@ -120,8 +122,8 @@ const CreateConfess = (props) => {
               colorScheme="red"
               variant="outline"
               textTransform="capitalize"
-              borderRadius="50px"
               onClick={resetConfession}
+              mr={3}
             >
               Cancel
             </Button>
@@ -130,7 +132,6 @@ const CreateConfess = (props) => {
               variant="solid"
               colorScheme="purple"
               textTransform="capitalize"
-              borderRadius="50px"
               onClick={createConfession}
               isDisabled={!confession}
               isLoading={isConfessing}

@@ -16,6 +16,7 @@ import {
   Divider,
   Flex,
   Link,
+  InputRightElement,
 } from "@chakra-ui/react";
 import logo from "../assets/logo.png";
 import hero from "../assets/hero.svg";
@@ -23,9 +24,16 @@ import github from "../assets/github.png";
 import { howItWorks } from "../assets/data/data";
 import color from "../styles/colors";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import useToastMessage from "../hooks/useToastMessage";
-import {} from "../firebase/firebase";
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  signInWithEmailAndPassword,
+} from "../firebase/firebase";
+import { VentifyContext } from "../context/VentifyContextProvider";
 
 const Header = () => {
   return (
@@ -121,33 +129,100 @@ const HowItWorks = () => {
   );
 };
 
-export default function HomePage() {
+const HomePage = () => {
   const [studentRollNo, setStudentRollNo] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowpassword] = useState(false);
+
+  const [loginUiIsVisible, setLoginUiIsVisible] = useState(true);
+
+  const [isRegisteringUser, setIsRegisteringUser] = useState(false);
+  const [isLoginInUser, setIsLoginInUser] = useState(false);
+
+  const { setLoggedInBatchYear } = useContext(VentifyContext);
 
   const { showToastMessage } = useToastMessage();
   const navigate = useNavigate();
 
-  const getLoginLink = () => {
-    if (!studentRollNo) {
-      showToastMessage(
-        "Error",
-        "Please enter your Roll Number.",
-        "error",
-        "red"
-      );
+  const resetUserInputs = () => {
+    setStudentRollNo("");
+    setPassword("");
+  };
 
-      return;
+  const logout = async () => {
+    await signOut(auth);
+  };
+
+  const sendEmailVerificationLink = async (userEmail) => {
+    try {
+      await sendEmailVerification(auth.currentUser);
+      showToastMessage(
+        "Link Sent",
+        `We have sent you the login link at ${userEmail}. Please check your inbox.`,
+        "success",
+        "purple"
+      );
+    } catch (error) {
+      showToastMessage("Error", error.message, "error", "red");
     }
-    // login
+  };
+
+  const registerUser = async () => {
+    setIsRegisteringUser(true);
     const userEmail = `${studentRollNo}@daiict.ac.in`;
 
-    showToastMessage(
-      "Link Sent",
-      `We have sent you the login link at ${studentRollNo}@daiict.ac.in. Please check your inbox.`,
-      "success",
-      "purple"
-    );
-    navigate("/confessions");
+    try {
+      await createUserWithEmailAndPassword(auth, userEmail, password);
+      await sendEmailVerificationLink(userEmail);
+      logout();
+      setLoginUiIsVisible(true);
+      setIsRegisteringUser(false);
+      resetUserInputs();
+    } catch (error) {
+      showToastMessage("Error", error.message, "error", "red");
+      setIsRegisteringUser(false);
+      resetUserInputs();
+    }
+  };
+
+  const login = async () => {
+    setIsLoginInUser(true);
+    const userEmail = `${studentRollNo}@daiict.ac.in`;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        userEmail,
+        password
+      );
+      const user = userCredential.user;
+      const emailIsVerified = user.emailVerified;
+
+      if (!emailIsVerified) {
+        logout();
+        showToastMessage(
+          "Error",
+          "Please verify your email first!!",
+          "error",
+          "red"
+        );
+        setIsLoginInUser(false);
+        resetUserInputs();
+
+        return;
+      }
+      const currentbatchYear = Number(studentRollNo.toString().substring(0, 4));
+      setLoggedInBatchYear(currentbatchYear);
+      localStorage.setItem("loggedInBatchYear", currentbatchYear);
+
+      navigate("/confessions");
+      setIsLoginInUser(false);
+      resetUserInputs();
+    } catch (error) {
+      showToastMessage("Error", error.message, "error", "red");
+      setIsLoginInUser(false);
+      resetUserInputs();
+    }
   };
   return (
     <Box>
@@ -175,47 +250,91 @@ export default function HomePage() {
         </Heading>
       </Center>
 
-      <Center marginTop="50px">
-        <InputGroup size="md" width="fit-content">
-          <Input
-            placeholder="e.g. 201812010"
-            focusBorderColor={color.primary}
-            variant="outline"
-            type="number"
-            autoFocus
-            onChange={(e) => setStudentRollNo(e.target.value)}
-          />
+      <Flex justifyContent="space-between" marginTop="60px" alignItems="center">
+        <Center flex="1">
+          <Image objectFit="contain" src={hero} alt="ventify" width="500px" />
+        </Center>
 
-          <InputRightAddon paddingRight="0">
-            <Text>@daiict.ac.in</Text>
-            <Button
+        <Center flex="1">
+          <Box width="300px" padding="10px">
+            <Heading
+              as="h2"
               textTransform="capitalize"
-              variant="solid"
-              width="140px"
-              backgroundColor={color.primary}
-              color="#fff"
-              marginLeft="15px"
-              onClick={getLoginLink}
-              borderTopLeftRadius="0"
-              borderBottomLeftRadius="0"
-              isLoading={false}
-              loadingText="sending link"
-              _hover={{
-                bg: color.hover,
-                color: "#fff",
-              }}
+              fontSize="3xl"
+              textAlign="center"
             >
-              get login link
-            </Button>
-          </InputRightAddon>
-        </InputGroup>
-      </Center>
+              {loginUiIsVisible ? "login" : "register"}
+            </Heading>
 
-      <Center marginTop="60px">
-        <Image objectFit="contain" src={hero} alt="ventify" width="500px" />
-      </Center>
+            <InputGroup size="md" marginTop="20px">
+              <Input
+                placeholder="e.g. 201812010"
+                focusBorderColor={color.primary}
+                variant="outline"
+                type="number"
+                autoFocus
+                onChange={(e) => setStudentRollNo(e.target.value)}
+                value={studentRollNo}
+              />
+
+              <InputRightAddon>
+                <Text>@daiict.ac.in</Text>
+              </InputRightAddon>
+            </InputGroup>
+
+            <InputGroup size="md" marginTop="20px">
+              <Input
+                pr="4.5rem"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                focusBorderColor={color.primary}
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+              <InputRightElement width="4.5rem">
+                <Button
+                  h="1.75rem"
+                  size="sm"
+                  onClick={() => setShowpassword(!showPassword)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+
+            <Box marginTop="20px" display="flex" flexDirection="column">
+              <Button
+                colorScheme="purple"
+                variant="solid"
+                textTransform="capitalize"
+                isDisabled={!studentRollNo || !password}
+                size="md"
+                onClick={loginUiIsVisible ? login : registerUser}
+                isLoading={loginUiIsVisible ? isLoginInUser : isRegisteringUser}
+                loadingText={
+                  loginUiIsVisible ? "please wait" : "sending verification link"
+                }
+              >
+                {loginUiIsVisible ? "login" : "register"}
+              </Button>
+
+              <Button
+                colorScheme="purple"
+                variant="link"
+                size="sm"
+                marginTop="10px"
+                onClick={() => setLoginUiIsVisible((prev) => !prev)}
+              >
+                {loginUiIsVisible ? "new here?" : "go back to login"}
+              </Button>
+            </Box>
+          </Box>
+        </Center>
+      </Flex>
 
       <HowItWorks />
     </Box>
   );
-}
+};
+
+export default HomePage;

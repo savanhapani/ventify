@@ -15,6 +15,7 @@ import {
 import color from "../styles/colors";
 import Comment from "./Comment";
 import { AddComment } from "./Confession";
+import moment from "moment";
 
 function ConfessionModal(props) {
   const {
@@ -22,7 +23,9 @@ function ConfessionModal(props) {
     onConfessionModalClose,
     addCommentToConfession,
     confession,
+    batchYear,
     category,
+    timeStamp,
     comments,
     commentIsDisabled,
     userComment,
@@ -44,7 +47,7 @@ function ConfessionModal(props) {
           <ModalHeader>
             <Flex alignItems="center" justifyContent="space-between">
               <Tag size="lg" variant="solid" backgroundColor={color.primary}>
-                2018
+                {batchYear}
               </Tag>
 
               <Box flex="1" paddingLeft="20px">
@@ -52,7 +55,7 @@ function ConfessionModal(props) {
                   {category}
                 </Heading>
                 <Text fontSize="sm" fontWeight="400">
-                  10m ago
+                  {moment(timeStamp.toDate()).fromNow()}
                 </Text>
               </Box>
 
@@ -74,7 +77,7 @@ function ConfessionModal(props) {
             />
 
             <Box
-              marginBottom="10px"
+              paddingBottom="10px"
               width="100%"
               overflowY={{ base: "", sm: "auto" }}
               marginTop="20px"
