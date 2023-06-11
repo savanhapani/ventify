@@ -35,14 +35,14 @@ const AccountDrawer = (props) => {
             variant="outline"
             mr={3}
             onClick={onAccountDrawerClose}
-            colorScheme="red"
+            colorScheme="purple"
             textTransform="capitalize"
             size="md"
           >
             close
           </Button>
           <Button
-            colorScheme="purple"
+            colorScheme="red"
             variant="solid"
             textTransform="capitalize"
             size="md"
