@@ -55,7 +55,7 @@ export const AddComment = (props) => {
           addCommentToConfession();
         }}
       >
-        <InputGroup size="md">
+        <InputGroup size="md" alignItems="center">
           <Input
             placeholder={
               commentIsDisabled
@@ -68,9 +68,15 @@ export const AddComment = (props) => {
             onChange={(event) => setUserComment(event.target.value)}
             value={userComment}
             maxLength={COMMENT_CHAR_LIMIT}
+            flex="1"
           />
 
           <InputRightAddon backgroundColor="transparent" border="none">
+            {userComment && (
+              <Text fontSize="xs" as="span" color="blackAlpha.700">
+                {userComment.length}/{COMMENT_CHAR_LIMIT}
+              </Text>
+            )}
             <IconButton
               aria-label="Add Comment"
               icon={<ChatIcon />}
