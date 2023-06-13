@@ -1,6 +1,5 @@
 import { Flex, Tag, Text, Box } from "@chakra-ui/react";
 import moment from "moment";
-import color from "../styles/colors";
 
 const Comment = (props) => {
   const { batchYear, comment, timeStamp } = props;

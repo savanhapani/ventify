@@ -53,9 +53,9 @@ const Header = (props) => {
           objectFit="contain"
           src={logo}
           alt="Ventify"
-          width="18vw"
-          minWidth="200px"
-          maxWidth="300px"
+          width="13vw"
+          minWidth="100px"
+          maxWidth="200px"
         />
 
         <Flex>
