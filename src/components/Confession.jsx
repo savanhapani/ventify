@@ -49,8 +49,9 @@ export const AddComment = (props) => {
     setUserComment,
     userComment,
     isCommenting,
-    loggedInBatchYear,
   } = props;
+
+  const { loggedInBatchYear } = useContext(VentifyContext);
   return (
     <Box marginTop="10px">
       <form
@@ -249,7 +250,6 @@ const Confession = (props) => {
             setUserComment={setUserComment}
             userComment={userComment}
             isCommenting={isCommenting}
-            loggedInBatchYear={loggedInBatchYear}
           />
 
           {totalComments > 0 && (
