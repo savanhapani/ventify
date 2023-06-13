@@ -38,6 +38,7 @@ import useToastMessage from "../hooks/useToastMessage";
 import { VentifyContext } from "../context/VentifyContextProvider";
 
 const COMMENT_CHAR_LIMIT = 280;
+const ALLOWED_VISIBLE_COMMENTS = 3;
 
 export const AddComment = (props) => {
   const {
@@ -122,7 +123,7 @@ const Confession = (props) => {
     getConfessions,
   } = props;
 
-  const visibleComments = comments?.slice(0, 3);
+  const visibleComments = comments?.slice(0, ALLOWED_VISIBLE_COMMENTS);
   const totalComments = comments?.length;
 
   const openDeleteConfessionDialog = () => {
@@ -244,7 +245,7 @@ const Confession = (props) => {
                 <Comment {...item} key={index} />
               ))}
 
-              {totalComments > 3 && (
+              {totalComments > ALLOWED_VISIBLE_COMMENTS && (
                 <Button
                   colorScheme="purple"
                   variant="link"

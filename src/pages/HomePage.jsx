@@ -212,7 +212,7 @@ const HomePage = () => {
       setLoggedInBatchYear(currentbatchYear);
       localStorage.setItem("loggedInBatchYear", currentbatchYear);
 
-      navigate("/confessions");
+      navigate("/confessions", { replace: true });
       setIsLoginInUser(false);
       resetUserInputs();
     } catch (error) {
