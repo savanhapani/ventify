@@ -14,6 +14,7 @@ import {
   MenuGroup,
   MenuDivider,
   IconButton,
+  Icon,
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import Confession from "../components/Confession";
@@ -39,6 +40,8 @@ import {
   arrayUnion,
 } from "../firebase/firebase";
 import color from "../styles/colors";
+import { FaUser } from "react-icons/fa";
+import { TbLogout } from "react-icons/tb";
 import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
@@ -83,11 +86,20 @@ const Header = (props) => {
 
             <MenuList>
               <MenuGroup title="Profile">
-                <MenuItem onClick={onAccountDrawerOpen}>My Account</MenuItem>
+                <MenuItem
+                  onClick={onAccountDrawerOpen}
+                  icon={<Icon as={FaUser} />}
+                >
+                  My Account
+                </MenuItem>
               </MenuGroup>
               <MenuDivider />
               <MenuGroup title="Help">
-                <MenuItem color="red" onClick={logout}>
+                <MenuItem
+                  color="red"
+                  onClick={logout}
+                  icon={<Icon as={TbLogout} />}
+                >
                   Logout
                 </MenuItem>
               </MenuGroup>
