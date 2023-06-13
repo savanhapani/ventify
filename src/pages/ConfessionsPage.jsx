@@ -246,8 +246,7 @@ const ConfessionsPage = () => {
       showToastMessage(
         "Congratulations",
         `You have confessed succesfully!! The deletion code for this confession is ${deletionCode} and copied to clipboard.`,
-        "success",
-        "purple"
+        "success"
       );
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -263,8 +262,7 @@ const ConfessionsPage = () => {
       showToastMessage(
         "Error",
         "The deletion code you have entered is incorrect!!",
-        "warning",
-        "yellow"
+        "warning"
       );
       setConfessionToBeDelete({});
       return;
@@ -276,8 +274,7 @@ const ConfessionsPage = () => {
     showToastMessage(
       "Deleted",
       "Confession is successfully deleted",
-      "success",
-      "purple"
+      "success"
     );
     setConfessionToBeDelete({});
     getConfessions();
@@ -297,14 +294,9 @@ const ConfessionsPage = () => {
       });
       onReportConfessClose();
 
-      showToastMessage(
-        "Reported",
-        "We will look into it!",
-        "success",
-        "purple"
-      );
+      showToastMessage("Reported", "We will look into it!", "success");
     } catch {
-      showToastMessage("Error", "Try again later!", "error", "red");
+      showToastMessage("Error", "Try again later!", "error");
     }
 
     setConfessionToBeReport({});
@@ -364,12 +356,7 @@ const ConfessionsPage = () => {
     localStorage.removeItem("loggedInBatchYear");
     navigate("/", { replace: true });
 
-    showToastMessage(
-      "Successful",
-      "You have logged out!!",
-      "success",
-      "purple"
-    );
+    showToastMessage("Successful", "You have logged out!!", "success");
   };
 
   useEffect(() => {

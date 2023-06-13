@@ -158,12 +158,7 @@ const Confession = (props) => {
 
     resetComment();
     setIsCommenting(false);
-    showToastMessage(
-      "Successful",
-      "Comment added successfully!",
-      "success",
-      "purple"
-    );
+    showToastMessage("Successful", "Comment added successfully!", "success");
     getConfessions();
   };
 
