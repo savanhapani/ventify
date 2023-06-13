@@ -1,8 +1,8 @@
-import { Button, Image, Tooltip } from "@chakra-ui/react";
+import { IconButton, Tooltip } from "@chakra-ui/react";
 import color from "../styles/colors";
 
 const ReactionButton = (props) => {
-  const { title, image } = props;
+  const { title, icon } = props;
   return (
     <Tooltip
       hasArrow
@@ -14,15 +14,16 @@ const ReactionButton = (props) => {
       bg={color.primary}
       color="#fff"
     >
-      <Button variant="ghost" colorScheme="purple">
-        <Image
-          boxSize="30px"
-          src={image}
-          alt={title}
-          objectFit="contain"
-          aspectRatio="1"
-        />
-      </Button>
+      <IconButton
+        variant="ghost"
+        aria-label={title}
+        fontSize="21px"
+        icon={icon}
+        colorScheme="blackAlpha"
+        _hover={{
+          color: color.primary,
+        }}
+      />
     </Tooltip>
   );
 };
