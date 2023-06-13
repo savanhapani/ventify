@@ -237,7 +237,7 @@ const Confession = (props) => {
         </CardBody>
 
         <CardFooter flexDirection="column">
-          <Flex alignItems="center" justifyContent="space-between">
+          <Flex alignItems="center" justifyContent="space-around">
             {reactions.map((item) => (
               <ReactionButton {...item} key={item.id} />
             ))}
