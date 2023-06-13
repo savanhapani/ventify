@@ -19,7 +19,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  InputLeftAddon,
   InputLeftElement,
 } from "@chakra-ui/react";
 import {
