@@ -227,7 +227,7 @@ const ConfessionsPage = () => {
     const confessionObj = {
       confession: confession,
       category: confessionCategory,
-      batchYear: loggedInBatchYear,
+      batchYear: Number(loggedInBatchYear),
       isVisibleToBatchOnly: isVisibleToBatchOnly,
       commentIsDisabled: commentIsDisabled,
       timeStamp: new Date(),
