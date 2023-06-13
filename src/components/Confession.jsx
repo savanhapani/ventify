@@ -19,6 +19,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  InputLeftAddon,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
@@ -38,6 +40,7 @@ import useToastMessage from "../hooks/useToastMessage";
 import { VentifyContext } from "../context/VentifyContextProvider";
 
 const COMMENT_CHAR_LIMIT = 280;
+const ALLOWED_VISIBLE_COMMENTS = 3;
 
 export const AddComment = (props) => {
   const {
@@ -47,6 +50,8 @@ export const AddComment = (props) => {
     userComment,
     isCommenting,
   } = props;
+
+  const { loggedInBatchYear } = useContext(VentifyContext);
   return (
     <Box marginTop="10px">
       <form
@@ -56,6 +61,14 @@ export const AddComment = (props) => {
         }}
       >
         <InputGroup size="md" alignItems="center">
+          {userComment && (
+            <InputLeftElement pointerEvents="none" width="fit-content">
+              <Tag size="md" variant="subtle">
+                {loggedInBatchYear}
+              </Tag>
+            </InputLeftElement>
+          )}
+
           <Input
             placeholder={
               commentIsDisabled
@@ -69,6 +82,7 @@ export const AddComment = (props) => {
             value={userComment}
             maxLength={COMMENT_CHAR_LIMIT}
             flex="1"
+            paddingLeft={userComment && "60px"}
           />
 
           <InputRightAddon backgroundColor="transparent" border="none">
@@ -122,7 +136,7 @@ const Confession = (props) => {
     getConfessions,
   } = props;
 
-  const visibleComments = comments?.slice(0, 3);
+  const visibleComments = comments?.slice(0, ALLOWED_VISIBLE_COMMENTS);
   const totalComments = comments?.length;
 
   const openDeleteConfessionDialog = () => {
@@ -158,12 +172,7 @@ const Confession = (props) => {
 
     resetComment();
     setIsCommenting(false);
-    showToastMessage(
-      "Successful",
-      "Comment added successfully!",
-      "success",
-      "purple"
-    );
+    showToastMessage("Successful", "Comment added successfully!", "success");
     getConfessions();
   };
 
@@ -249,7 +258,7 @@ const Confession = (props) => {
                 <Comment {...item} key={index} />
               ))}
 
-              {totalComments > 3 && (
+              {totalComments > ALLOWED_VISIBLE_COMMENTS && (
                 <Button
                   colorScheme="purple"
                   variant="link"

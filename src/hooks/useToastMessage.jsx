@@ -2,8 +2,13 @@ import { useToast } from "@chakra-ui/react";
 
 const useToastMessage = () => {
   const toast = useToast();
+  const colorSchemes = {
+    success: "purple",
+    error: "red",
+    warning: "yellow",
+  };
 
-  const showToastMessage = (title, description, status, colorScheme) => {
+  const showToastMessage = (title, description, status) => {
     toast({
       title: title,
       description: description,
@@ -11,7 +16,7 @@ const useToastMessage = () => {
       duration: 5000,
       isClosable: true,
       variant: "solid",
-      colorScheme: colorScheme,
+      colorScheme: colorSchemes[status],
       position: "bottom",
     });
   };

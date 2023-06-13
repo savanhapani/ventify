@@ -14,6 +14,7 @@ import {
   MenuGroup,
   MenuDivider,
   IconButton,
+  Icon,
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import Confession from "../components/Confession";
@@ -39,6 +40,8 @@ import {
   arrayUnion,
 } from "../firebase/firebase";
 import color from "../styles/colors";
+import { FaUser } from "react-icons/fa";
+import { TbLogout } from "react-icons/tb";
 import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
@@ -53,9 +56,9 @@ const Header = (props) => {
           objectFit="contain"
           src={logo}
           alt="Ventify"
-          width="18vw"
-          minWidth="200px"
-          maxWidth="300px"
+          width="13vw"
+          minWidth="100px"
+          maxWidth="200px"
         />
 
         <Flex>
@@ -83,11 +86,20 @@ const Header = (props) => {
 
             <MenuList>
               <MenuGroup title="Profile">
-                <MenuItem onClick={onAccountDrawerOpen}>My Account</MenuItem>
+                <MenuItem
+                  onClick={onAccountDrawerOpen}
+                  icon={<Icon as={FaUser} />}
+                >
+                  My Account
+                </MenuItem>
               </MenuGroup>
               <MenuDivider />
               <MenuGroup title="Help">
-                <MenuItem color="red" onClick={logout}>
+                <MenuItem
+                  color="red"
+                  onClick={logout}
+                  icon={<Icon as={TbLogout} />}
+                >
                   Logout
                 </MenuItem>
               </MenuGroup>
@@ -234,8 +246,7 @@ const ConfessionsPage = () => {
       showToastMessage(
         "Congratulations",
         `You have confessed succesfully!! The deletion code for this confession is ${deletionCode} and copied to clipboard.`,
-        "success",
-        "purple"
+        "success"
       );
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -251,8 +262,7 @@ const ConfessionsPage = () => {
       showToastMessage(
         "Error",
         "The deletion code you have entered is incorrect!!",
-        "warning",
-        "yellow"
+        "warning"
       );
       setConfessionToBeDelete({});
       return;
@@ -264,8 +274,7 @@ const ConfessionsPage = () => {
     showToastMessage(
       "Deleted",
       "Confession is successfully deleted",
-      "success",
-      "purple"
+      "success"
     );
     setConfessionToBeDelete({});
     getConfessions();
@@ -285,14 +294,9 @@ const ConfessionsPage = () => {
       });
       onReportConfessClose();
 
-      showToastMessage(
-        "Reported",
-        "We will look into it!",
-        "success",
-        "purple"
-      );
+      showToastMessage("Reported", "We will look into it!", "success");
     } catch {
-      showToastMessage("Error", "Try again later!", "error", "red");
+      showToastMessage("Error", "Try again later!", "error");
     }
 
     setConfessionToBeReport({});
@@ -352,12 +356,7 @@ const ConfessionsPage = () => {
     localStorage.removeItem("loggedInBatchYear");
     navigate("/", { replace: true });
 
-    showToastMessage(
-      "Successful",
-      "You have logged out!!",
-      "success",
-      "purple"
-    );
+    showToastMessage("Successful", "You have logged out!!", "success");
   };
 
   useEffect(() => {

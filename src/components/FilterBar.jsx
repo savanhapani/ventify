@@ -1,7 +1,6 @@
 import {
   Card,
   CardBody,
-  CardFooter,
   Button,
   Box,
   Select,
@@ -38,13 +37,25 @@ export default function FilterBar(props) {
 
   return (
     <Card
-      marginTop="20px"
-      marginLeft="20px"
+      marginTop="5px"
+      marginLeft="5px"
       height="fit-content"
       variant="elevated"
       width="xs"
     >
       <CardBody>
+        {(selectedCategories.length > 0 || selectedBatches.length > 0) && (
+          <Button
+            variant="ghost"
+            size="sm"
+            colorScheme="red"
+            onClick={clearAllFilters}
+            leftIcon={<CloseIcon boxSize="10px" />}
+            marginBottom="20px"
+          >
+            Clear all filters
+          </Button>
+        )}
         <Accordion defaultIndex={[0]} allowMultiple>
           <AccordionItem>
             <h3>
@@ -158,20 +169,6 @@ export default function FilterBar(props) {
           </FormControl>
         </Box>
       </CardBody>
-
-      {(selectedCategories.length > 0 || selectedBatches.length > 0) && (
-        <CardFooter>
-          <Button
-            variant="outline"
-            size="sm"
-            colorScheme="red"
-            onClick={clearAllFilters}
-            rightIcon={<CloseIcon boxSize="10px" />}
-          >
-            Clear all filters
-          </Button>
-        </CardFooter>
-      )}
     </Card>
   );
 }

@@ -161,12 +161,11 @@ const HomePage = () => {
       await sendEmailVerification(auth.currentUser);
       showToastMessage(
         "Link Sent",
-        `We have sent you the login link at ${userEmail}. Please check your inbox.`,
-        "success",
-        "purple"
+        `We have sent you the email verification link at ${userEmail}. Please check your inbox.`,
+        "success"
       );
     } catch (error) {
-      showToastMessage("Error", error.message, "error", "red");
+      showToastMessage("Error", error.message, "error");
     }
   };
 
@@ -182,7 +181,7 @@ const HomePage = () => {
       setIsRegisteringUser(false);
       resetUserInputs();
     } catch (error) {
-      showToastMessage("Error", error.message, "error", "red");
+      showToastMessage("Error", error.message, "error");
       setIsRegisteringUser(false);
       resetUserInputs();
     }
@@ -203,12 +202,7 @@ const HomePage = () => {
 
       if (!emailIsVerified) {
         logout();
-        showToastMessage(
-          "Error",
-          "Please verify your email first!!",
-          "error",
-          "red"
-        );
+        showToastMessage("Error", "Please verify your email first!!", "error");
         setIsLoginInUser(false);
         resetUserInputs();
 
@@ -218,11 +212,11 @@ const HomePage = () => {
       setLoggedInBatchYear(currentbatchYear);
       localStorage.setItem("loggedInBatchYear", currentbatchYear);
 
-      navigate("/confessions");
+      navigate("/confessions", { replace: true });
       setIsLoginInUser(false);
       resetUserInputs();
     } catch (error) {
-      showToastMessage("Error", error.message, "error", "red");
+      showToastMessage("Error", error.message, "error");
       setIsLoginInUser(false);
       resetUserInputs();
     }

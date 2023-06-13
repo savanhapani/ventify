@@ -79,6 +79,7 @@ function ConfessionModal(props) {
             <Box
               paddingBottom="10px"
               width="100%"
+              paddingRight="15px"
               overflowY={{ base: "", sm: "auto" }}
               marginTop="20px"
               maxHeight={{ base: "", sm: "40vh" }}
