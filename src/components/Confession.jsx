@@ -19,6 +19,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  InputLeftAddon,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
@@ -47,6 +49,7 @@ export const AddComment = (props) => {
     setUserComment,
     userComment,
     isCommenting,
+    loggedInBatchYear,
   } = props;
   return (
     <Box marginTop="10px">
@@ -57,6 +60,14 @@ export const AddComment = (props) => {
         }}
       >
         <InputGroup size="md" alignItems="center">
+          {userComment && (
+            <InputLeftElement pointerEvents="none" width="fit-content">
+              <Tag size="md" variant="subtle">
+                {loggedInBatchYear}
+              </Tag>
+            </InputLeftElement>
+          )}
+
           <Input
             placeholder={
               commentIsDisabled
@@ -70,6 +81,7 @@ export const AddComment = (props) => {
             value={userComment}
             maxLength={COMMENT_CHAR_LIMIT}
             flex="1"
+            paddingLeft={userComment && "60px"}
           />
 
           <InputRightAddon backgroundColor="transparent" border="none">
@@ -237,6 +249,7 @@ const Confession = (props) => {
             setUserComment={setUserComment}
             userComment={userComment}
             isCommenting={isCommenting}
+            loggedInBatchYear={loggedInBatchYear}
           />
 
           {totalComments > 0 && (
