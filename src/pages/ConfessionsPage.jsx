@@ -1,7 +1,6 @@
 import {
   Flex,
   Box,
-  Image,
   Button,
   useDisclosure,
   Divider,
@@ -18,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { confessCategories } from "../assets/data/data";
 import Confession from "../components/Confession";
-import logo from "../assets/logo.png";
 import { AddIcon, HamburgerIcon } from "@chakra-ui/icons";
 import CreateConfess from "../components/CreateConfess";
 import { useState, useEffect, useContext } from "react";
@@ -46,20 +44,14 @@ import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
 import { signOut, auth } from "../firebase/firebase";
+import Logo from "../components/Logo";
 
 const Header = (props) => {
   const { onOpen, onAccountDrawerOpen, logout } = props;
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
-        <Image
-          objectFit="contain"
-          src={logo}
-          alt="Ventify"
-          width="13vw"
-          minWidth="100px"
-          maxWidth="200px"
-        />
+        <Logo />
 
         <Flex>
           <Button
