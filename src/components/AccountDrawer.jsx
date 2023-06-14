@@ -7,9 +7,11 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Button,
+  Tag,
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { VentifyContext } from "../context/VentifyContextProvider";
+import color from "../styles/colors";
 
 const AccountDrawer = (props) => {
   const { isAccountDrawerOpen, onAccountDrawerClose, logout } = props;
@@ -26,7 +28,11 @@ const AccountDrawer = (props) => {
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>{loggedInBatchYear}</DrawerHeader>
+        <DrawerHeader>
+          <Tag size="lg" variant="solid" backgroundColor={color.primary}>
+            {loggedInBatchYear}
+          </Tag>
+        </DrawerHeader>
 
         <DrawerBody></DrawerBody>
 

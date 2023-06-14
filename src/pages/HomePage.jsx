@@ -18,7 +18,7 @@ import {
   Link,
   InputRightElement,
 } from "@chakra-ui/react";
-import logo from "../assets/logo.png";
+
 import hero from "../assets/hero.svg";
 import github from "../assets/github.png";
 import { howItWorks } from "../assets/data/data";
@@ -35,19 +35,13 @@ import {
 } from "../firebase/firebase";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { VentifyContext } from "../context/VentifyContextProvider";
+import Logo from "../components/Logo";
 
 const Header = () => {
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
-        <Image
-          objectFit="contain"
-          src={logo}
-          alt="Ventify"
-          width="18vw"
-          minWidth="200px"
-          maxWidth="300px"
-        />
+        <Logo />
 
         <Link href="https://github.com/BrijenMakwana/ventify" isExternal>
           <Flex
