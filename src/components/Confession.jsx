@@ -191,7 +191,13 @@ const Confession = (props) => {
 
         <CardHeader>
           <Flex alignItems="center" justifyContent="space-between">
-            <Tag size="lg" variant="solid" backgroundColor={color.primary}>
+            <Tag
+              size="lg"
+              variant="solid"
+              backgroundColor={
+                loggedInBatchYear == batchYear ? color.primary : color.contrast
+              }
+            >
               {batchYear}
             </Tag>
 
@@ -254,7 +260,11 @@ const Confession = (props) => {
           {totalComments > 0 && (
             <Box marginTop="10px">
               {visibleComments.map((item, index) => (
-                <Comment {...item} key={index} />
+                <Comment
+                  {...item}
+                  key={index}
+                  loggedInBatchYear={loggedInBatchYear}
+                />
               ))}
 
               {totalComments > ALLOWED_VISIBLE_COMMENTS && (

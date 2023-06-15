@@ -87,7 +87,11 @@ function ConfessionModal(props) {
               maxHeight={{ base: "", sm: "40vh" }}
             >
               {comments?.map((item, index) => (
-                <Comment {...item} key={index} />
+                <Comment
+                  {...item}
+                  key={index}
+                  loggedInBatchYear={loggedInBatchYear}
+                />
               ))}
             </Box>
           </ModalBody>
