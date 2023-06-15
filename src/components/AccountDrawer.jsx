@@ -26,6 +26,7 @@ const AccountDrawer = (props) => {
         placement="left"
         onClose={onAccountDrawerClose}
         size="xs"
+        closeOnOverlayClick={false}
       >
         <DrawerOverlay />
         <DrawerContent>
