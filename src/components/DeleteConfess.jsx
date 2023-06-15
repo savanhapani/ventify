@@ -76,7 +76,6 @@ const DeleteConfess = (props) => {
               onClick={resetDeleteConfession}
               variant="outline"
               textTransform="capitalize"
-              borderRadius="50px"
             >
               cancel
             </Button>
@@ -85,7 +84,6 @@ const DeleteConfess = (props) => {
               onClick={deleteAndResetConfession}
               ml={3}
               textTransform="capitalize"
-              borderRadius="50px"
               isDisabled={!userEnteredDeletionCode}
             >
               Delete

@@ -73,7 +73,6 @@ const ReportConfess = (props) => {
               onClick={resetReportConfession}
               variant="outline"
               textTransform="capitalize"
-              borderRadius="50px"
             >
               cancel
             </Button>
@@ -82,7 +81,6 @@ const ReportConfess = (props) => {
               isDisabled={!reasonToReport}
               variant="solid"
               textTransform="capitalize"
-              borderRadius="50px"
               colorScheme="yellow"
               ml={3}
             >
