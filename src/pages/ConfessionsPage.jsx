@@ -444,6 +444,7 @@ const ConfessionsPage = () => {
                   onReportConfessOpen={onReportConfessOpen}
                   setConfessionToBeReport={setConfessionToBeReport}
                   getConfessions={getConfessions}
+                  loggedInBatchYear={loggedInBatchYear}
                 />
               ))}
           </Flex>

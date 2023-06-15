@@ -31,6 +31,7 @@ function ConfessionModal(props) {
     userComment,
     setUserComment,
     isCommenting,
+    loggedInBatchYear,
   } = props;
 
   return (
@@ -74,6 +75,7 @@ function ConfessionModal(props) {
               setUserComment={setUserComment}
               userComment={userComment}
               isCommenting={isCommenting}
+              loggedInBatchYear={loggedInBatchYear}
             />
 
             <Box

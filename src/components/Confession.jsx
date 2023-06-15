@@ -29,14 +29,13 @@ import {
 } from "@chakra-ui/icons";
 import color from "../styles/colors";
 import Comment from "./Comment";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import ReactionButton from "./ReactionButton";
 import ConfessionModal from "./ConfessionModal";
 import { reactions } from "../assets/data/data";
 import moment from "moment";
 import { doc, updateDoc, db, arrayUnion } from "../firebase/firebase";
 import useToastMessage from "../hooks/useToastMessage";
-import { VentifyContext } from "../context/VentifyContextProvider";
 
 const COMMENT_CHAR_LIMIT = 280;
 const ALLOWED_VISIBLE_COMMENTS = 3;
@@ -48,9 +47,9 @@ export const AddComment = (props) => {
     setUserComment,
     userComment,
     isCommenting,
+    loggedInBatchYear,
   } = props;
 
-  const { loggedInBatchYear } = useContext(VentifyContext);
   return (
     <Box marginTop="10px">
       <form
@@ -109,7 +108,6 @@ export const AddComment = (props) => {
 const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
-  const { loggedInBatchYear } = useContext(VentifyContext);
 
   const {
     isOpen: isConfessionModalOpen,
@@ -133,6 +131,7 @@ const Confession = (props) => {
     onReportConfessOpen,
     setConfessionToBeReport,
     getConfessions,
+    loggedInBatchYear,
   } = props;
 
   const visibleComments = comments?.slice(0, ALLOWED_VISIBLE_COMMENTS);
@@ -249,6 +248,7 @@ const Confession = (props) => {
             setUserComment={setUserComment}
             userComment={userComment}
             isCommenting={isCommenting}
+            loggedInBatchYear={loggedInBatchYear}
           />
 
           {totalComments > 0 && (
