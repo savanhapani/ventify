@@ -6,7 +6,7 @@ import color from "../styles/colors";
 const CommunityGuidelines = () => {
   return (
     <Box margin="10px 0">
-      <Heading as="h3" textTransform="capitalize" fontSize="md">
+      <Heading as="h3" textTransform="capitalize" fontSize="16px">
         community guidelines
       </Heading>
       <List spacing={3} marginTop="10px">

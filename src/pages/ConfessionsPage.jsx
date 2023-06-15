@@ -77,7 +77,7 @@ const Header = (props) => {
               aria-label="Menu"
               icon={<HamburgerIcon />}
               variant="outline"
-              colorScheme="blackAlpha"
+              colorScheme="gray"
               size="md"
             />
 
