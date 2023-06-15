@@ -480,7 +480,6 @@ const ConfessionsPage = () => {
       <AccountDrawer
         isAccountDrawerOpen={isAccountDrawerOpen}
         onAccountDrawerClose={onAccountDrawerClose}
-        onPasswordResetDialogOpen={onPasswordResetDialogOpen}
         logout={logout}
       />
       <PasswordResetDialog

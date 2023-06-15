@@ -46,6 +46,19 @@ const confessCategories = [
   },
 ];
 
+const communityGuidelines = [
+  { id: 1, title: "Respect and kindness towards all users" },
+  { id: 2, title: "No personal attacks or offensive behavior" },
+  { id: 3, title: "Maintain confidentiality and respect privacy" },
+  { id: 4, title: "Prohibit hate speech and discrimination" },
+  { id: 5, title: "No bullying, harassment, or cyberbullying" },
+  { id: 6, title: "Provide constructive criticism, avoid personal attacks" },
+  { id: 7, title: "Report violations for prompt moderation" },
+  { id: 8, title: "Embrace inclusivity and diversity" },
+  { id: 9, title: "Focus on educational discussions and insights" },
+  { id: 10, title: "Comply with laws and regulations" },
+];
+
 const availableBatches = [
   {
     id: "1",
@@ -144,4 +157,5 @@ export {
   reactions,
   availableBatches,
   confessionsSortingOptions,
+  communityGuidelines,
 };
