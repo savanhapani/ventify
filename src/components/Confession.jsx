@@ -61,7 +61,7 @@ export const AddComment = (props) => {
         <InputGroup size="md" alignItems="center">
           {userComment && (
             <InputLeftElement pointerEvents="none" width="fit-content">
-              <Tag size="md" variant="subtle">
+              <Tag size="md" variant="subtle" colorScheme="purple">
                 {loggedInBatchYear}
               </Tag>
             </InputLeftElement>
@@ -218,19 +218,19 @@ const Confession = (props) => {
               />
               <MenuList>
                 <MenuItem
+                  icon={<WarningTwoIcon />}
+                  onClick={openReportConfessionDialog}
+                  textTransform="capitalize"
+                >
+                  report
+                </MenuItem>
+                <MenuItem
                   icon={<DeleteIcon />}
                   onClick={openDeleteConfessionDialog}
                   textTransform="capitalize"
                   color="red"
                 >
                   delete
-                </MenuItem>
-                <MenuItem
-                  icon={<WarningTwoIcon />}
-                  onClick={openReportConfessionDialog}
-                  textTransform="capitalize"
-                >
-                  report
                 </MenuItem>
               </MenuList>
             </Menu>
