@@ -12,14 +12,10 @@ import {
 import { useContext } from "react";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import color from "../styles/colors";
+import CommunityGuidelines from "./CommunityGuidelines";
 
 const AccountDrawer = (props) => {
-  const {
-    isAccountDrawerOpen,
-    onAccountDrawerClose,
-    logout,
-    onPasswordResetDialogOpen,
-  } = props;
+  const { isAccountDrawerOpen, onAccountDrawerClose, logout } = props;
 
   const { loggedInBatchYear } = useContext(VentifyContext);
 
@@ -41,13 +37,7 @@ const AccountDrawer = (props) => {
           </DrawerHeader>
 
           <DrawerBody>
-            <Button
-              variant="ghost"
-              size="md"
-              onClick={onPasswordResetDialogOpen}
-            >
-              Reset password
-            </Button>
+            <CommunityGuidelines />
           </DrawerBody>
 
           <DrawerFooter>
