@@ -2,11 +2,15 @@ import { Flex, Tag, Text, Box } from "@chakra-ui/react";
 import moment from "moment";
 
 const Comment = (props) => {
-  const { batchYear, comment, timeStamp } = props;
+  const { batchYear, comment, timeStamp, loggedInBatchYear } = props;
   return (
     <Box marginTop="5px" padding="5px 0">
       <Flex alignItems="flex-start" justifyContent="space-between">
-        <Tag size="md" variant="subtle">
+        <Tag
+          size="md"
+          variant={loggedInBatchYear == batchYear ? "subtle" : "outline"}
+          colorScheme="purple"
+        >
           {batchYear}
         </Tag>
 

@@ -31,6 +31,7 @@ function ConfessionModal(props) {
     userComment,
     setUserComment,
     isCommenting,
+    loggedInBatchYear,
   } = props;
 
   return (
@@ -74,6 +75,7 @@ function ConfessionModal(props) {
               setUserComment={setUserComment}
               userComment={userComment}
               isCommenting={isCommenting}
+              loggedInBatchYear={loggedInBatchYear}
             />
 
             <Box
@@ -85,7 +87,11 @@ function ConfessionModal(props) {
               maxHeight={{ base: "", sm: "40vh" }}
             >
               {comments?.map((item, index) => (
-                <Comment {...item} key={index} />
+                <Comment
+                  {...item}
+                  key={index}
+                  loggedInBatchYear={loggedInBatchYear}
+                />
               ))}
             </Box>
           </ModalBody>

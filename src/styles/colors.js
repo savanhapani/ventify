@@ -1,7 +1,6 @@
 const color = {
   primary: "rgb(118,73,226)",
-  hover: "rgba(118,73,226,0.7)",
-  comment: "rgb(41,47,51)",
+  contrast: "rgb(226, 73, 118)",
 };
 
 export default color;
