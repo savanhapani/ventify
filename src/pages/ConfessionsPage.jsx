@@ -36,18 +36,23 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  sendPasswordResetEmail,
+  signOut,
+  auth,
 } from "../firebase/firebase";
 import color from "../styles/colors";
 import { FaUser } from "react-icons/fa";
 import { TbLogout } from "react-icons/tb";
+import { RiLockPasswordFill } from "react-icons/ri";
 import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
-import { signOut, auth } from "../firebase/firebase";
 import Logo from "../components/Logo";
+import PasswordResetDialog from "../components/PasswordResetDialog";
 
 const Header = (props) => {
-  const { onOpen, onAccountDrawerOpen, logout } = props;
+  const { onOpen, onAccountDrawerOpen, logout, onPasswordResetDialogOpen } =
+    props;
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
@@ -87,6 +92,12 @@ const Header = (props) => {
               </MenuGroup>
               <MenuDivider />
               <MenuGroup title="Help">
+                <MenuItem
+                  onClick={onPasswordResetDialogOpen}
+                  icon={<Icon as={RiLockPasswordFill} />}
+                >
+                  Reset Password
+                </MenuItem>
                 <MenuItem
                   color="red"
                   onClick={logout}
@@ -168,6 +179,8 @@ const ConfessionsPage = () => {
 
   const { loggedInBatchYear } = useContext(VentifyContext);
 
+  const [passwordIsResetting, setPasswordIsResetting] = useState(false);
+
   const {
     isOpen: isCreateConfessOpen,
     onOpen: onCreateConfessOpen,
@@ -190,6 +203,12 @@ const ConfessionsPage = () => {
     isOpen: isAccountDrawerOpen,
     onOpen: onAccountDrawerOpen,
     onClose: onAccountDrawerClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isPasswordResetDialogOpen,
+    onOpen: onPasswordResetDialogOpen,
+    onClose: onPasswordResetDialogClose,
   } = useDisclosure();
 
   const resetConfession = () => {
@@ -351,6 +370,23 @@ const ConfessionsPage = () => {
     showToastMessage("Successful", "You have logged out!!", "success");
   };
 
+  const resetPassword = () => {
+    setPasswordIsResetting(true);
+    sendPasswordResetEmail(auth, auth.currentUser.email)
+      .then(() => {
+        logout();
+        showToastMessage(
+          "Successful",
+          "Check your email to reset your password.",
+          "success"
+        );
+        setPasswordIsResetting(false);
+      })
+      .catch((error) => {
+        setPasswordIsResetting(false);
+      });
+  };
+
   useEffect(() => {
     getConfessions();
   }, []);
@@ -360,6 +396,7 @@ const ConfessionsPage = () => {
       <Header
         onOpen={onCreateConfessOpen}
         onAccountDrawerOpen={onAccountDrawerOpen}
+        onPasswordResetDialogOpen={onPasswordResetDialogOpen}
         logout={logout}
       />
       <Flex>
@@ -442,7 +479,14 @@ const ConfessionsPage = () => {
       <AccountDrawer
         isAccountDrawerOpen={isAccountDrawerOpen}
         onAccountDrawerClose={onAccountDrawerClose}
+        onPasswordResetDialogOpen={onPasswordResetDialogOpen}
         logout={logout}
+      />
+      <PasswordResetDialog
+        isPasswordResetDialogOpen={isPasswordResetDialogOpen}
+        onPasswordResetDialogClose={onPasswordResetDialogClose}
+        passwordIsResetting={passwordIsResetting}
+        resetPassword={resetPassword}
       />
     </Box>
   );
