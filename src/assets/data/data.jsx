@@ -109,7 +109,7 @@ const confessionsSortingOptions = [
   },
 ];
 
-const reactions = [
+const availableReactions = [
   {
     id: "1",
     title: "like",
@@ -163,7 +163,7 @@ const howItWorks = [
 export {
   confessCategories,
   howItWorks,
-  reactions,
+  availableReactions,
   availableBatches,
   confessionsSortingOptions,
   communityGuidelines,
