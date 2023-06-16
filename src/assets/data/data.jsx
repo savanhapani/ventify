@@ -32,6 +32,7 @@ const confessCategories = [
     id: "6",
     title: "career",
   },
+
   {
     id: "7",
     title: "faculty",
@@ -43,6 +44,14 @@ const confessCategories = [
   {
     id: "9",
     title: "suggestion",
+  },
+  {
+    id: "10",
+    title: "library",
+  },
+  {
+    id: "11",
+    title: "food",
   },
 ];
 
