@@ -392,6 +392,15 @@ const ConfessionsPage = () => {
       });
   };
 
+  const filteredConfessions = confessions.filter(
+    (item) =>
+      (selectedCategories.length === 0 ||
+        selectedCategories.includes(item.category)) &&
+      (selectedBatches.length === 0 ||
+        selectedBatches.includes(item.batchYear)) &&
+      (!showBatchExclusiveConfessions || item.isVisibleToBatchOnly)
+  );
+
   useEffect(() => {
     getConfessions();
   }, []);
@@ -431,27 +440,18 @@ const ConfessionsPage = () => {
             paddingTop="30px"
             paddingBottom="300px"
           >
-            {confessions
-              .filter(
-                (item) =>
-                  (selectedCategories.length === 0 ||
-                    selectedCategories.includes(item.category)) &&
-                  (selectedBatches.length === 0 ||
-                    selectedBatches.includes(item.batchYear)) &&
-                  (!showBatchExclusiveConfessions || item.isVisibleToBatchOnly)
-              )
-              .map((item) => (
-                <Confession
-                  {...item}
-                  key={item.id}
-                  onDeleteConfessOpen={onDeleteConfessOpen}
-                  setConfessionToBeDelete={setConfessionToBeDelete}
-                  onReportConfessOpen={onReportConfessOpen}
-                  setConfessionToBeReport={setConfessionToBeReport}
-                  getConfessions={getConfessions}
-                  loggedInBatchYear={loggedInBatchYear}
-                />
-              ))}
+            {filteredConfessions.map((item) => (
+              <Confession
+                {...item}
+                key={item.id}
+                onDeleteConfessOpen={onDeleteConfessOpen}
+                setConfessionToBeDelete={setConfessionToBeDelete}
+                onReportConfessOpen={onReportConfessOpen}
+                setConfessionToBeReport={setConfessionToBeReport}
+                getConfessions={getConfessions}
+                loggedInBatchYear={loggedInBatchYear}
+              />
+            ))}
           </Flex>
         </Box>
       </Flex>
