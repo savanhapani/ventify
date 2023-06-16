@@ -194,7 +194,10 @@ const HomePage = () => {
       const user = userCredential.user;
       const emailIsVerified = user.emailVerified;
 
-      if (!emailIsVerified) {
+      if (
+        !emailIsVerified &&
+        import.meta.env.VITE_TESTING_ENVIRONMENT == "prod"
+      ) {
         logout();
         showToastMessage("Error", "Please verify your email first!!", "error");
         setIsLoginInUser(false);
