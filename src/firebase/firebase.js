@@ -19,6 +19,7 @@ import {
   updateDoc,
   arrayUnion,
   deleteDoc,
+  increment,
 } from "firebase/firestore";
 
 const firebaseConfigEnv = {
@@ -67,4 +68,5 @@ export {
   sendEmailVerification,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  increment,
 };

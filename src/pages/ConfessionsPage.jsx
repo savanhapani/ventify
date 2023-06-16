@@ -243,6 +243,11 @@ const ConfessionsPage = () => {
       commentIsDisabled: commentIsDisabled,
       timeStamp: new Date(),
       comments: [],
+      reactions: {
+        like: 0,
+        funny: 0,
+        shock: 0,
+      },
       reports: [],
     };
 

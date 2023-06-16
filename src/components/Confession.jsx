@@ -32,9 +32,15 @@ import Comment from "./Comment";
 import { useState } from "react";
 import ReactionButton from "./ReactionButton";
 import ConfessionModal from "./ConfessionModal";
-import { reactions } from "../assets/data/data";
+import { availableReactions } from "../assets/data/data";
 import moment from "moment";
-import { doc, updateDoc, db, arrayUnion } from "../firebase/firebase";
+import {
+  doc,
+  updateDoc,
+  db,
+  arrayUnion,
+  increment,
+} from "../firebase/firebase";
 import useToastMessage from "../hooks/useToastMessage";
 
 const COMMENT_CHAR_LIMIT = 280;
@@ -126,6 +132,7 @@ const Confession = (props) => {
     commentIsDisabled,
     timeStamp,
     comments,
+    reactions,
     onDeleteConfessOpen,
     setConfessionToBeDelete,
     onReportConfessOpen,
@@ -171,6 +178,30 @@ const Confession = (props) => {
     resetComment();
     setIsCommenting(false);
     showToastMessage("Successful", "Comment added successfully!", "success");
+    getConfessions();
+  };
+
+  const reactToConfession = async (type) => {
+    const confessionRef = doc(db, "confessions", id);
+
+    switch (type) {
+      case "like":
+        await updateDoc(confessionRef, {
+          "reactions.like": increment(1),
+        });
+        break;
+      case "funny":
+        await updateDoc(confessionRef, {
+          "reactions.funny": increment(1),
+        });
+        break;
+      case "shock":
+        await updateDoc(confessionRef, {
+          "reactions.shock": increment(1),
+        });
+        break;
+    }
+
     getConfessions();
   };
 
@@ -243,8 +274,13 @@ const Confession = (props) => {
 
         <CardFooter flexDirection="column">
           <Flex alignItems="center" justifyContent="space-around">
-            {reactions.map((item) => (
-              <ReactionButton {...item} key={item.id} />
+            {availableReactions.map((item) => (
+              <ReactionButton
+                {...item}
+                key={item.id}
+                reactToConfession={reactToConfession}
+                reactionCount={reactions[item.title]}
+              />
             ))}
           </Flex>
 
