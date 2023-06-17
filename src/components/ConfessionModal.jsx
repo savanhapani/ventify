@@ -14,7 +14,7 @@ import {
 
 import color from "../styles/colors";
 import Comment from "./Comment";
-import { AddComment } from "./Confession";
+import { AddComment, ReactionsToConfession } from "./Confession";
 import moment from "moment";
 
 function ConfessionModal(props) {
@@ -27,11 +27,13 @@ function ConfessionModal(props) {
     category,
     timeStamp,
     comments,
+    reactions,
     commentIsDisabled,
     userComment,
     setUserComment,
     isCommenting,
     loggedInBatchYear,
+    reactToConfession,
   } = props;
 
   return (
@@ -65,9 +67,14 @@ function ConfessionModal(props) {
           </ModalHeader>
 
           <ModalBody>
-            <Box>
+            <Box marginBottom="15px">
               <Text fontSize="lg">{confession}</Text>
             </Box>
+
+            <ReactionsToConfession
+              reactToConfession={reactToConfession}
+              reactions={reactions}
+            />
 
             <AddComment
               addCommentToConfession={addCommentToConfession}

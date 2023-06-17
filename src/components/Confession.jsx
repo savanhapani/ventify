@@ -46,6 +46,22 @@ import useToastMessage from "../hooks/useToastMessage";
 const COMMENT_CHAR_LIMIT = 280;
 const ALLOWED_VISIBLE_COMMENTS = 3;
 
+export const ReactionsToConfession = (props) => {
+  const { reactToConfession, reactions } = props;
+  return (
+    <Flex alignItems="center" justifyContent="space-around">
+      {availableReactions.map((item) => (
+        <ReactionButton
+          {...item}
+          key={item.id}
+          reactToConfession={reactToConfession}
+          reactionCount={reactions[item.title]}
+        />
+      ))}
+    </Flex>
+  );
+};
+
 export const AddComment = (props) => {
   const {
     addCommentToConfession,
@@ -273,16 +289,10 @@ const Confession = (props) => {
         </CardBody>
 
         <CardFooter flexDirection="column">
-          <Flex alignItems="center" justifyContent="space-around">
-            {availableReactions.map((item) => (
-              <ReactionButton
-                {...item}
-                key={item.id}
-                reactToConfession={reactToConfession}
-                reactionCount={reactions[item.title]}
-              />
-            ))}
-          </Flex>
+          <ReactionsToConfession
+            reactToConfession={reactToConfession}
+            reactions={reactions}
+          />
 
           <AddComment
             addCommentToConfession={addCommentToConfession}
@@ -326,6 +336,7 @@ const Confession = (props) => {
         userComment={userComment}
         setUserComment={setUserComment}
         isCommenting={isCommenting}
+        reactToConfession={reactToConfession}
         {...props}
       />
     </>
