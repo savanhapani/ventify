@@ -5,10 +5,11 @@ const useToastMessage = () => {
   const colorSchemes = {
     success: "purple",
     error: "red",
-    warning: "yellow",
+    warning: "orange",
   };
 
   const showToastMessage = (title, description, status) => {
+    toast.closeAll();
     toast({
       title: title,
       description: description,
