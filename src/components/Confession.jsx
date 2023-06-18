@@ -197,24 +197,60 @@ const Confession = (props) => {
     getConfessions();
   };
 
+  const userAlreadyReacted = (type) => {
+    let reactionArray;
+    reactionArray = localStorage.getItem(type);
+    reactionArray = JSON.parse(reactionArray);
+
+    if (reactionArray && reactionArray.includes(id)) {
+      showToastMessage(
+        "Already Reacted",
+        "You have already reacted to this confession",
+        "warning"
+      );
+
+      return true;
+    }
+
+    if (reactionArray) {
+      reactionArray.push(id);
+    } else {
+      reactionArray = [];
+      reactionArray.push(id);
+    }
+
+    localStorage.setItem(type, JSON.stringify(reactionArray));
+
+    return false;
+  };
+
   const reactToConfession = async (type) => {
     const confessionRef = doc(db, "confessions", id);
 
     switch (type) {
       case "like":
-        await updateDoc(confessionRef, {
-          "reactions.like": increment(1),
-        });
+        if (!userAlreadyReacted(type)) {
+          await updateDoc(confessionRef, {
+            "reactions.like": increment(1),
+          });
+        }
+
         break;
       case "funny":
-        await updateDoc(confessionRef, {
-          "reactions.funny": increment(1),
-        });
+        if (!userAlreadyReacted(type)) {
+          await updateDoc(confessionRef, {
+            "reactions.funny": increment(1),
+          });
+        }
+
         break;
       case "shock":
-        await updateDoc(confessionRef, {
-          "reactions.shock": increment(1),
-        });
+        if (!userAlreadyReacted(type)) {
+          await updateDoc(confessionRef, {
+            "reactions.shock": increment(1),
+          });
+        }
+
         break;
     }
 
