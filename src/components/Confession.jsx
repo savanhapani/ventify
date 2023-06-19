@@ -197,18 +197,12 @@ const Confession = (props) => {
     getConfessions();
   };
 
-  const userAlreadyReacted = (type) => {
+  const userAlreadyReacted = () => {
     let reactionArray;
-    reactionArray = localStorage.getItem(type);
+    reactionArray = localStorage.getItem("reactionList");
     reactionArray = JSON.parse(reactionArray);
 
     if (reactionArray && reactionArray.includes(id)) {
-      showToastMessage(
-        "Already Reacted",
-        "You have already reacted to this confession",
-        "warning"
-      );
-
       return true;
     }
 
@@ -219,7 +213,7 @@ const Confession = (props) => {
       reactionArray.push(id);
     }
 
-    localStorage.setItem(type, JSON.stringify(reactionArray));
+    localStorage.setItem("reactionList", JSON.stringify(reactionArray));
 
     return false;
   };
@@ -227,29 +221,33 @@ const Confession = (props) => {
   const reactToConfession = async (type) => {
     const confessionRef = doc(db, "confessions", id);
 
+    if (userAlreadyReacted()) {
+      showToastMessage(
+        "Already Reacted",
+        "You have already reacted to this confession",
+        "warning"
+      );
+
+      return;
+    }
+
     switch (type) {
       case "like":
-        if (!userAlreadyReacted(type)) {
-          await updateDoc(confessionRef, {
-            "reactions.like": increment(1),
-          });
-        }
+        await updateDoc(confessionRef, {
+          "reactions.like": increment(1),
+        });
 
         break;
       case "funny":
-        if (!userAlreadyReacted(type)) {
-          await updateDoc(confessionRef, {
-            "reactions.funny": increment(1),
-          });
-        }
+        await updateDoc(confessionRef, {
+          "reactions.funny": increment(1),
+        });
 
         break;
       case "shock":
-        if (!userAlreadyReacted(type)) {
-          await updateDoc(confessionRef, {
-            "reactions.shock": increment(1),
-          });
-        }
+        await updateDoc(confessionRef, {
+          "reactions.shock": increment(1),
+        });
 
         break;
     }
