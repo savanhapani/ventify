@@ -16,7 +16,7 @@ import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
 import ReportConfess from "../components/ReportConfess";
 import useToastMessage from "../hooks/useToastMessage";
-import { collection, addDoc, db } from "../firebase/firebase";
+//import { collection, addDoc, db } from "../firebase/firebase";
 
 const Header = (props) => {
   const { onOpen } = props;
