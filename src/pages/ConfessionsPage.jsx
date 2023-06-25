@@ -482,6 +482,31 @@ const ConfessionsPage = () => {
       });
   };
 
+  const addCommentToConfession = async (
+    setIsCommenting,
+    id,
+    userComment,
+    resetComment
+  ) => {
+    setIsCommenting(true);
+    const confessionRef = doc(db, "confessions", id);
+
+    const userCommentObj = {
+      batchYear: loggedInBatchYear,
+      comment: userComment,
+      timeStamp: new Date(),
+    };
+
+    await updateDoc(confessionRef, {
+      comments: arrayUnion(userCommentObj),
+    });
+
+    resetComment();
+    setIsCommenting(false);
+    showToastMessage("Successful", "Comment added successfully!", "success");
+    getConfessions();
+  };
+
   const filteredConfessions = confessions.filter(
     (item) =>
       (selectedCategories.length === 0 ||
@@ -541,6 +566,7 @@ const ConfessionsPage = () => {
                 setConfessionToBeReport={setConfessionToBeReport}
                 getConfessions={getConfessions}
                 loggedInBatchYear={loggedInBatchYear}
+                addCommentToConfession={addCommentToConfession}
               />
             ))}
           </Flex>

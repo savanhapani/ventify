@@ -72,6 +72,9 @@ export const AddComment = (props) => {
     userComment,
     isCommenting,
     loggedInBatchYear,
+    setIsCommenting,
+    id,
+    resetComment,
   } = props;
 
   return (
@@ -79,7 +82,12 @@ export const AddComment = (props) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          addCommentToConfession();
+          addCommentToConfession(
+            setIsCommenting,
+            id,
+            userComment,
+            resetComment
+          );
         }}
       >
         <InputGroup size="md" alignItems="center">
@@ -120,7 +128,14 @@ export const AddComment = (props) => {
               variant="ghost"
               isDisabled={!userComment}
               isLoading={isCommenting}
-              onClick={addCommentToConfession}
+              onClick={() =>
+                addCommentToConfession(
+                  setIsCommenting,
+                  id,
+                  userComment,
+                  resetComment
+                )
+              }
             />
           </InputRightAddon>
         </InputGroup>
@@ -162,6 +177,7 @@ const Confession = (props) => {
     setConfessionToBeReport,
     getConfessions,
     loggedInBatchYear,
+    addCommentToConfession,
   } = props;
 
   const visibleComments = comments?.slice(0, ALLOWED_VISIBLE_COMMENTS);
@@ -182,26 +198,6 @@ const Confession = (props) => {
 
   const resetComment = () => {
     setUserComment("");
-  };
-
-  const addCommentToConfession = async () => {
-    setIsCommenting(true);
-    const confessionRef = doc(db, "confessions", id);
-
-    const userCommentObj = {
-      batchYear: loggedInBatchYear,
-      comment: userComment,
-      timeStamp: new Date(),
-    };
-
-    await updateDoc(confessionRef, {
-      comments: arrayUnion(userCommentObj),
-    });
-
-    resetComment();
-    setIsCommenting(false);
-    showToastMessage("Successful", "Comment added successfully!", "success");
-    getConfessions();
   };
 
   const userAlreadyReacted = () => {
@@ -351,6 +347,9 @@ const Confession = (props) => {
             userComment={userComment}
             isCommenting={isCommenting}
             loggedInBatchYear={loggedInBatchYear}
+            setIsCommenting={setIsCommenting}
+            id={id}
+            resetComment={resetComment}
           />
 
           {totalComments > 0 && (
@@ -387,6 +386,9 @@ const Confession = (props) => {
         setUserComment={setUserComment}
         isCommenting={isCommenting}
         reactToConfession={reactToConfession}
+        setIsCommenting={setIsCommenting}
+        id={id}
+        resetComment={resetComment}
         {...props}
       />
     </>
