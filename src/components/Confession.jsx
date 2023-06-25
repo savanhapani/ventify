@@ -42,6 +42,8 @@ import {
   increment,
 } from "../firebase/firebase";
 import useToastMessage from "../hooks/useToastMessage";
+import ConfessionText from "./ConfessionText";
+import Poll from "./Poll";
 
 const COMMENT_CHAR_LIMIT = 280;
 const ALLOWED_VISIBLE_COMMENTS = 3;
@@ -142,11 +144,16 @@ const Confession = (props) => {
   const {
     id,
     confession,
+    question,
+    type,
+    choices,
+    totalVotes,
     category,
     batchYear,
     isVisibleToBatchOnly,
     commentIsDisabled,
     timeStamp,
+    expiryDate,
     comments,
     reactions,
     onDeleteConfessOpen,
@@ -266,7 +273,7 @@ const Confession = (props) => {
       >
         {isVisibleToBatchOnly && (
           <Badge colorScheme="purple" variant="subtle" textAlign="center">
-            only your batch can see this confession
+            only your batch can see this {type}
           </Badge>
         )}
 
@@ -319,7 +326,16 @@ const Confession = (props) => {
         </CardHeader>
 
         <CardBody>
-          <Text fontSize="lg">{confession}</Text>
+          {type === "confession" ? (
+            <ConfessionText confession={confession} />
+          ) : (
+            <Poll
+              question={question}
+              choices={choices}
+              totalVotes={totalVotes}
+              expiryDate={expiryDate}
+            />
+          )}
         </CardBody>
 
         <CardFooter flexDirection="column">

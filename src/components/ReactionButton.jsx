@@ -18,7 +18,7 @@ const ReactionButton = (props) => {
         rightIcon={icon}
         variant="ghost"
         aria-label={title}
-        size="md"
+        size="lg"
         onClick={() => reactToConfession(title)}
         colorScheme="blackAlpha"
         _hover={{
