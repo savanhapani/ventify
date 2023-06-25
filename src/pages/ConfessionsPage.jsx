@@ -39,6 +39,7 @@ import {
   sendPasswordResetEmail,
   signOut,
   auth,
+  increment,
 } from "../firebase/firebase";
 import color from "../styles/colors";
 import { FaUser } from "react-icons/fa";
@@ -507,6 +508,64 @@ const ConfessionsPage = () => {
     getConfessions();
   };
 
+  const userAlreadyReacted = (id) => {
+    let reactionArray;
+    reactionArray = localStorage.getItem("reactionList");
+    reactionArray = JSON.parse(reactionArray);
+
+    if (reactionArray && reactionArray.includes(id)) {
+      return true;
+    }
+
+    if (reactionArray) {
+      reactionArray.push(id);
+    } else {
+      reactionArray = [];
+      reactionArray.push(id);
+    }
+
+    localStorage.setItem("reactionList", JSON.stringify(reactionArray));
+
+    return false;
+  };
+
+  const reactToConfession = async (type, id) => {
+    const confessionRef = doc(db, "confessions", id);
+
+    if (userAlreadyReacted(id)) {
+      showToastMessage(
+        "Already Reacted",
+        "You have already reacted to this confession",
+        "warning"
+      );
+
+      return;
+    }
+
+    switch (type) {
+      case "like":
+        await updateDoc(confessionRef, {
+          "reactions.like": increment(1),
+        });
+
+        break;
+      case "funny":
+        await updateDoc(confessionRef, {
+          "reactions.funny": increment(1),
+        });
+
+        break;
+      case "shock":
+        await updateDoc(confessionRef, {
+          "reactions.shock": increment(1),
+        });
+
+        break;
+    }
+
+    getConfessions();
+  };
+
   const filteredConfessions = confessions.filter(
     (item) =>
       (selectedCategories.length === 0 ||
@@ -567,6 +626,7 @@ const ConfessionsPage = () => {
                 getConfessions={getConfessions}
                 loggedInBatchYear={loggedInBatchYear}
                 addCommentToConfession={addCommentToConfession}
+                reactToConfession={reactToConfession}
               />
             ))}
           </Flex>

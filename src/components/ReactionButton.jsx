@@ -2,7 +2,7 @@ import { Tooltip, Button } from "@chakra-ui/react";
 import color from "../styles/colors";
 
 const ReactionButton = (props) => {
-  const { title, icon, reactToConfession, reactionCount } = props;
+  const { id, title, icon, reactToConfession, reactionCount } = props;
   return (
     <Tooltip
       hasArrow
@@ -19,7 +19,7 @@ const ReactionButton = (props) => {
         variant="ghost"
         aria-label={title}
         size="lg"
-        onClick={() => reactToConfession(title)}
+        onClick={() => reactToConfession(title, id)}
         colorScheme="blackAlpha"
         _hover={{
           color: color.primary,
