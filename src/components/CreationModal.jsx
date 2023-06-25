@@ -7,12 +7,10 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  Textarea,
   Select,
   Box,
   Stack,
   FormControl,
-  FormHelperText,
   Switch,
   FormLabel,
 } from "@chakra-ui/react";
@@ -20,15 +18,18 @@ import { confessCategories } from "../assets/data/data";
 import color from "../styles/colors";
 import { useRef, useContext } from "react";
 import { VentifyContext } from "../context/VentifyContextProvider";
+import CreateConfession from "./CreateConfession";
+import CreatePoll from "./CreatePoll";
 
-const CONFESSION_CHAR_LIMIT = 280;
-
-const CreateConfess = (props) => {
+const CreationModal = (props) => {
   const { loggedInBatchYear } = useContext(VentifyContext);
   const {
     isCreateConfessOpen,
     createConfession,
+    createPoll,
+    creationModalType,
     handleCategoryChange,
+    handlePollDurationChange,
     handleIsVisibleToBatchOnlyChange,
     handleCommentIsDisabledChange,
     confession,
@@ -38,8 +39,28 @@ const CreateConfess = (props) => {
     commentIsDisabled,
     isConfessing,
     resetConfession,
+    pollQuestion,
+    pollDuration,
+    setPollQuestion,
+    pollChoices,
+    handlePollChoices,
   } = props;
   const initialRef = useRef(null);
+
+  const creationBtnConfig = {
+    confession: {
+      isDisabled: !confession,
+      loadingText: "Confessing",
+      btnText: "confess",
+      onClick: createConfession,
+    },
+    poll: {
+      isDisabled: !pollQuestion,
+      loadingText: "Creating poll",
+      btnText: "create poll",
+      onClick: createPoll,
+    },
+  };
 
   return (
     <Modal
@@ -56,29 +77,33 @@ const CreateConfess = (props) => {
         <ModalCloseButton />
         <ModalBody>
           <Box>
-            <FormControl>
-              <Textarea
-                placeholder="Write your confession here..."
-                focusBorderColor={color.primary}
-                variant="outline"
-                size="md"
-                rows="5"
-                maxLength={CONFESSION_CHAR_LIMIT}
-                resize="none"
-                ref={initialRef}
-                onChange={(e) => setConfession(e.target.value)}
-                value={confession}
+            {creationModalType === "confession" ? (
+              <CreateConfession
+                initialRef={initialRef}
+                setConfession={setConfession}
+                confession={confession}
               />
-              <FormHelperText>
-                {confession.length}/{CONFESSION_CHAR_LIMIT}
-              </FormHelperText>
-            </FormControl>
+            ) : (
+              <CreatePoll
+                initialRef={initialRef}
+                pollQuestion={pollQuestion}
+                setPollQuestion={setPollQuestion}
+                pollDuration={pollDuration}
+                pollChoices={pollChoices}
+                handlePollChoices={handlePollChoices}
+                handlePollDurationChange={handlePollDurationChange}
+              />
+            )}
           </Box>
 
-          <Box marginTop="20px">
+          <FormControl marginTop="20px">
+            <FormLabel textTransform="capitalize" htmlFor="confessCategory">
+              category
+            </FormLabel>
             <Select
               focusBorderColor={color.primary}
               variant="filled"
+              id="confessCategory"
               textTransform="capitalize"
               onChange={handleCategoryChange}
               value={confessionCategory}
@@ -89,11 +114,11 @@ const CreateConfess = (props) => {
                 </option>
               ))}
             </Select>
-          </Box>
+          </FormControl>
 
           <Box marginTop="20px">
             <FormControl>
-              <FormLabel htmlFor="isVisibleToBatchOnly">
+              <FormLabel htmlFor="isVisibleToBatchOnly" width="fit-content">
                 Visible to your batch only
               </FormLabel>
               <Switch
@@ -103,7 +128,11 @@ const CreateConfess = (props) => {
                 isChecked={isVisibleToBatchOnly}
               />
 
-              <FormLabel htmlFor="commentIsDisabled" marginTop="10px">
+              <FormLabel
+                htmlFor="commentIsDisabled"
+                marginTop="10px"
+                width="fit-content"
+              >
                 Disable comments
               </FormLabel>
               <Switch
@@ -132,12 +161,12 @@ const CreateConfess = (props) => {
               variant="solid"
               colorScheme="purple"
               textTransform="capitalize"
-              onClick={createConfession}
-              isDisabled={!confession}
+              onClick={creationBtnConfig[creationModalType].onClick}
+              isDisabled={creationBtnConfig[creationModalType].isDisabled}
               isLoading={isConfessing}
-              loadingText="Confessing"
+              loadingText={creationBtnConfig[creationModalType].loadingText}
             >
-              confess
+              {creationBtnConfig[creationModalType].btnText}
             </Button>
           </Stack>
         </ModalFooter>
@@ -146,4 +175,4 @@ const CreateConfess = (props) => {
   );
 };
 
-export default CreateConfess;
+export default CreationModal;

@@ -53,6 +53,10 @@ const confessCategories = [
     id: "11",
     title: "food",
   },
+  {
+    id: "12",
+    title: "other",
+  },
 ];
 
 const communityGuidelines = [
@@ -127,6 +131,33 @@ const availableReactions = [
   },
 ];
 
+const availablePollDurations = [
+  {
+    id: "1",
+    title: "24 hour",
+    value: 1,
+  },
+  {
+    id: "2",
+    title: "3 days",
+    value: 3,
+  },
+  {
+    id: "3",
+    title: "5 days",
+    value: 5,
+  },
+  {
+    id: "4",
+    title: "1 week",
+    value: 7,
+  },
+];
+
+const CONFESSION_CHAR_LIMIT = 280;
+const POLL_QUESTION_CHAR_LIMIT = CONFESSION_CHAR_LIMIT;
+const CHOICE_CHAR_LIMIT = 25;
+
 const howItWorks = [
   {
     id: "1",
@@ -160,6 +191,7 @@ const howItWorks = [
       "Our platform ensures the complete anonymity of confessions, safeguarding individual identities throughout the process. Our commitment to privacy extends to our backend systems, as we refrain from storing or accessing any user-specific information. Confessions are attributed solely to the respective batch numbers, preserving anonymity while providing a sense of collective representation.",
   },
 ];
+
 export {
   confessCategories,
   howItWorks,
@@ -167,4 +199,8 @@ export {
   availableBatches,
   confessionsSortingOptions,
   communityGuidelines,
+  availablePollDurations,
+  CONFESSION_CHAR_LIMIT,
+  POLL_QUESTION_CHAR_LIMIT,
+  CHOICE_CHAR_LIMIT,
 };

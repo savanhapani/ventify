@@ -16,6 +16,7 @@ import color from "../styles/colors";
 import Comment from "./Comment";
 import { AddComment, ReactionsToConfession } from "./Confession";
 import moment from "moment";
+import ConfessionText from "./ConfessionText";
 
 function ConfessionModal(props) {
   const {
@@ -68,7 +69,7 @@ function ConfessionModal(props) {
 
           <ModalBody>
             <Box marginBottom="15px">
-              <Text fontSize="lg">{confession}</Text>
+              <ConfessionText confession={confession} />
             </Box>
 
             <ReactionsToConfession

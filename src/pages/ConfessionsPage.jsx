@@ -15,10 +15,10 @@ import {
   IconButton,
   Icon,
 } from "@chakra-ui/react";
-import { confessCategories } from "../assets/data/data";
+import { availablePollDurations, confessCategories } from "../assets/data/data";
 import Confession from "../components/Confession";
 import { AddIcon, HamburgerIcon } from "@chakra-ui/icons";
-import CreateConfess from "../components/CreateConfess";
+import CreationModal from "../components/CreationModal";
 import { useState, useEffect, useContext } from "react";
 import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
@@ -43,6 +43,7 @@ import {
 import color from "../styles/colors";
 import { FaUser } from "react-icons/fa";
 import { TbLogout } from "react-icons/tb";
+import { MdOutlinePoll } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
@@ -51,8 +52,12 @@ import Logo from "../components/Logo";
 import PasswordResetDialog from "../components/PasswordResetDialog";
 
 const Header = (props) => {
-  const { onOpen, onAccountDrawerOpen, logout, onPasswordResetDialogOpen } =
-    props;
+  const {
+    onAccountDrawerOpen,
+    logout,
+    onPasswordResetDialogOpen,
+    openCreationModal,
+  } = props;
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
@@ -65,10 +70,22 @@ const Header = (props) => {
             size="md"
             colorScheme="purple"
             rightIcon={<AddIcon boxSize="13px" />}
-            onClick={onOpen}
-            marginRight="20px"
+            onClick={() => openCreationModal("confession")}
+            marginRight="15px"
           >
             confess
+          </Button>
+
+          <Button
+            textTransform="capitalize"
+            variant="outline"
+            size="md"
+            colorScheme="purple"
+            rightIcon={<MdOutlinePoll size="18px" />}
+            marginRight="15px"
+            onClick={() => openCreationModal("poll")}
+          >
+            poll
           </Button>
 
           <Menu>
@@ -175,11 +192,20 @@ const ConfessionsPage = () => {
   const [showBatchExclusiveConfessions, setShowBatchExclusiveConfessions] =
     useState(false);
 
+  const [creationModalType, setCreationModalType] = useState("confession");
+
   const navigate = useNavigate();
 
   const { loggedInBatchYear } = useContext(VentifyContext);
 
   const [passwordIsResetting, setPasswordIsResetting] = useState(false);
+
+  const [pollQuestion, setPollQuestion] = useState("");
+  const [pollChoices, setPollChoices] = useState(["", ""]);
+
+  const [pollDuration, setPollDuration] = useState(
+    availablePollDurations[0].value
+  );
 
   const {
     isOpen: isCreateConfessOpen,
@@ -217,11 +243,23 @@ const ConfessionsPage = () => {
     setIsVisibleToBatchOnly(false);
     setCommentIsDisabled(false);
     setIsConfessing(false);
+    setPollQuestion("");
+    setPollChoices(["", ""]);
+    setPollDuration(availablePollDurations[0].value);
     onCreateConfessClose();
+  };
+
+  const openCreationModal = (type) => {
+    setCreationModalType(type);
+    onCreateConfessOpen();
   };
 
   const handleCategoryChange = (event) => {
     setConfessionCategory(event.target.value);
+  };
+
+  const handlePollDurationChange = (event) => {
+    setPollDuration(event.target.value);
   };
 
   const handleIsVisibleToBatchOnlyChange = (event) => {
@@ -232,29 +270,24 @@ const ConfessionsPage = () => {
     setCommentIsDisabled(event.target.checked);
   };
 
-  const createConfession = async () => {
-    setIsConfessing(true);
+  const handlePollChoices = (index, value) => {
+    const newChoices = [...pollChoices];
+    newChoices[index] = value;
 
-    const confessionObj = {
-      confession: confession,
-      category: confessionCategory,
-      batchYear: Number(loggedInBatchYear),
-      isVisibleToBatchOnly: isVisibleToBatchOnly,
-      commentIsDisabled: commentIsDisabled,
-      timeStamp: new Date(),
-      comments: [],
-      reactions: {
-        like: 0,
-        funny: 0,
-        shock: 0,
-      },
-      reports: [],
-    };
+    if (index === newChoices.length - 1 && index < 4 && value !== "") {
+      newChoices.push("");
+    }
+
+    setPollChoices(newChoices);
+  };
+
+  const addToFirestore = async (creationObj) => {
+    setIsConfessing(true);
 
     try {
       const confessionRef = await addDoc(
         collection(db, "confessions"),
-        confessionObj
+        creationObj
       );
       const deletionCode = confessionRef.id;
       navigator.clipboard.writeText(deletionCode);
@@ -270,6 +303,63 @@ const ConfessionsPage = () => {
     resetConfession();
 
     getConfessions();
+  };
+
+  const createConfession = () => {
+    const confessionObj = {
+      confession: confession,
+      type: creationModalType,
+      category: confessionCategory,
+      batchYear: Number(loggedInBatchYear),
+      isVisibleToBatchOnly: isVisibleToBatchOnly,
+      commentIsDisabled: commentIsDisabled,
+      timeStamp: new Date(),
+      comments: [],
+      reactions: {
+        like: 0,
+        funny: 0,
+        shock: 0,
+      },
+      reports: [],
+    };
+    addToFirestore(confessionObj);
+  };
+
+  const createPoll = () => {
+    let currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + pollDuration);
+
+    const structuredPollChoices = [];
+    pollChoices.forEach((item) => {
+      if (item) {
+        structuredPollChoices.push({
+          title: item,
+          votes: 0,
+        });
+      }
+    });
+
+    const pollObj = {
+      question: pollQuestion,
+      type: creationModalType,
+      choices: structuredPollChoices,
+      category: confessionCategory,
+      batchYear: Number(loggedInBatchYear),
+      isVisibleToBatchOnly: isVisibleToBatchOnly,
+      commentIsDisabled: commentIsDisabled,
+      timeStamp: new Date(),
+      expiryDate: new Date(currentDate),
+      totalVotes: 0,
+      comments: [],
+      reactions: {
+        like: 0,
+        funny: 0,
+        shock: 0,
+      },
+      reports: [],
+    };
+
+    addToFirestore(pollObj);
   };
 
   const deleteConfession = async (confessionDeletionCode) => {
@@ -408,10 +498,11 @@ const ConfessionsPage = () => {
   return (
     <Box overflow="hidden" height="100vh">
       <Header
-        onOpen={onCreateConfessOpen}
+        onCreateConfessOpen={onCreateConfessOpen}
         onAccountDrawerOpen={onAccountDrawerOpen}
         onPasswordResetDialogOpen={onPasswordResetDialogOpen}
         logout={logout}
+        openCreationModal={openCreationModal}
       />
       <Flex>
         <FilterBar
@@ -455,15 +546,23 @@ const ConfessionsPage = () => {
           </Flex>
         </Box>
       </Flex>
-      <CreateConfess
+      <CreationModal
         isCreateConfessOpen={isCreateConfessOpen}
         createConfession={createConfession}
+        createPoll={createPoll}
+        creationModalType={creationModalType}
         handleCategoryChange={handleCategoryChange}
+        handlePollDurationChange={handlePollDurationChange}
         handleIsVisibleToBatchOnlyChange={handleIsVisibleToBatchOnlyChange}
         handleCommentIsDisabledChange={handleCommentIsDisabledChange}
         confession={confession}
         setConfession={setConfession}
+        pollQuestion={pollQuestion}
+        pollChoices={pollChoices}
+        handlePollChoices={handlePollChoices}
+        setPollQuestion={setPollQuestion}
         confessionCategory={confessionCategory}
+        pollDuration={pollDuration}
         isVisibleToBatchOnly={isVisibleToBatchOnly}
         commentIsDisabled={commentIsDisabled}
         isConfessing={isConfessing}
