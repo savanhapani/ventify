@@ -54,7 +54,15 @@ function ConfessionModal(props) {
         <ModalContent>
           <ModalHeader>
             <Flex alignItems="center" justifyContent="space-between">
-              <Tag size="lg" variant="solid" backgroundColor={color.primary}>
+              <Tag
+                size="lg"
+                variant="solid"
+                backgroundColor={
+                  loggedInBatchYear == batchYear
+                    ? color.primary
+                    : color.contrast
+                }
+              >
                 {batchYear}
               </Tag>
 
