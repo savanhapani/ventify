@@ -623,7 +623,6 @@ const ConfessionsPage = () => {
                 setConfessionToBeDelete={setConfessionToBeDelete}
                 onReportConfessOpen={onReportConfessOpen}
                 setConfessionToBeReport={setConfessionToBeReport}
-                getConfessions={getConfessions}
                 loggedInBatchYear={loggedInBatchYear}
                 addCommentToConfession={addCommentToConfession}
                 reactToConfession={reactToConfession}

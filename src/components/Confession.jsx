@@ -21,11 +21,9 @@ import { HamburgerIcon, DeleteIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
 import Comment from "./Comment";
 import { useState } from "react";
-
 import ConfessionModal from "./ConfessionModal";
 import ReactionsToConfession from "./ReactionsToConfession";
 import moment from "moment";
-import useToastMessage from "../hooks/useToastMessage";
 import ConfessionText from "./ConfessionText";
 import Poll from "./Poll";
 import AddComment from "./AddComment";
@@ -41,8 +39,6 @@ const Confession = (props) => {
     onOpen: onConfessionModalOpen,
     onClose: onConfessionModalClose,
   } = useDisclosure();
-
-  const { showToastMessage } = useToastMessage();
 
   const {
     id,
@@ -63,7 +59,6 @@ const Confession = (props) => {
     setConfessionToBeDelete,
     onReportConfessOpen,
     setConfessionToBeReport,
-    getConfessions,
     loggedInBatchYear,
     addCommentToConfession,
     reactToConfession,
