@@ -24,7 +24,11 @@ const Poll = (props) => {
     <>
       <Text fontSize="lg">{question}</Text>
 
-      <Skeleton isLoaded={!isVoting} tColor="purple.100" endColor="purple.500">
+      <Skeleton
+        isLoaded={!isVoting}
+        startColor="purple.100"
+        endColor="purple.500"
+      >
         <RadioGroup onChange={(choice) => voteToPoll(id, choice, setIsVoting)}>
           <Stack spacing={3} marginTop="15px">
             {choices?.map((choice, index) => (

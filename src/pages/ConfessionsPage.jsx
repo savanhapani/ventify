@@ -14,8 +14,16 @@ import {
   MenuDivider,
   IconButton,
   Icon,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
 } from "@chakra-ui/react";
-import { availablePollDurations, confessCategories } from "../assets/data/data";
+import {
+  availablePollDurations,
+  confessCategories,
+  availableTabs,
+} from "../assets/data/data";
 import Confession from "../components/Confession";
 import { AddIcon, HamburgerIcon } from "@chakra-ui/icons";
 import CreationModal from "../components/CreationModal";
@@ -52,6 +60,7 @@ import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import PasswordResetDialog from "../components/PasswordResetDialog";
+import TabView from "../components/TabView";
 
 const Header = (props) => {
   const {
@@ -658,30 +667,38 @@ const ConfessionsPage = () => {
             selectedBatches={selectedBatches}
           />
 
-          <Flex
-            wrap="wrap"
-            gap="5"
-            justifyContent="center"
-            overflow="auto"
-            maxHeight="800px"
-            paddingTop="30px"
-            paddingBottom="300px"
-          >
-            {filteredConfessions.map((item) => (
-              <Confession
-                {...item}
-                key={item.id}
-                onDeleteConfessOpen={onDeleteConfessOpen}
-                setConfessionToBeDelete={setConfessionToBeDelete}
-                onReportConfessOpen={onReportConfessOpen}
-                setConfessionToBeReport={setConfessionToBeReport}
-                loggedInBatchYear={loggedInBatchYear}
-                addCommentToConfession={addCommentToConfession}
-                reactToConfession={reactToConfession}
-                voteToPoll={voteToPoll}
-              />
-            ))}
-          </Flex>
+          <Tabs variant="solid-rounded" colorScheme="purple" marginTop="20px">
+            <TabList justifyContent="center">
+              {availableTabs.map((tab) => (
+                <Tab key={tab.id}>{tab.title}</Tab>
+              ))}
+            </TabList>
+
+            <TabPanels>
+              {availableTabs.map((tab) => (
+                <TabView key={tab.id}>
+                  {filteredConfessions
+                    .filter(
+                      (item) => tab.value === "all" || item.type === tab.value
+                    )
+                    .map((item) => (
+                      <Confession
+                        {...item}
+                        key={item.id}
+                        onDeleteConfessOpen={onDeleteConfessOpen}
+                        setConfessionToBeDelete={setConfessionToBeDelete}
+                        onReportConfessOpen={onReportConfessOpen}
+                        setConfessionToBeReport={setConfessionToBeReport}
+                        loggedInBatchYear={loggedInBatchYear}
+                        addCommentToConfession={addCommentToConfession}
+                        reactToConfession={reactToConfession}
+                        voteToPoll={voteToPoll}
+                      />
+                    ))}
+                </TabView>
+              ))}
+            </TabPanels>
+          </Tabs>
         </Box>
       </Flex>
       <CreationModal

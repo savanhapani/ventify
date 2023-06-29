@@ -159,6 +159,24 @@ const POLL_QUESTION_CHAR_LIMIT = CONFESSION_CHAR_LIMIT;
 const COMMENT_CHAR_LIMIT = CONFESSION_CHAR_LIMIT;
 const CHOICE_CHAR_LIMIT = 25;
 
+const availableTabs = [
+  {
+    id: "1",
+    title: "All",
+    value: "all",
+  },
+  {
+    id: "2",
+    title: "Confessions",
+    value: "confession",
+  },
+  {
+    id: "3",
+    title: "Polls",
+    value: "poll",
+  },
+];
+
 const howItWorks = [
   {
     id: "1",
@@ -205,4 +223,5 @@ export {
   POLL_QUESTION_CHAR_LIMIT,
   CHOICE_CHAR_LIMIT,
   COMMENT_CHAR_LIMIT,
+  availableTabs,
 };
