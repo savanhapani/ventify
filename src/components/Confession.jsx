@@ -62,6 +62,7 @@ const Confession = (props) => {
     loggedInBatchYear,
     addCommentToConfession,
     reactToConfession,
+    voteToPoll,
   } = props;
 
   const visibleComments = comments?.slice(0, ALLOWED_VISIBLE_COMMENTS);
@@ -152,10 +153,12 @@ const Confession = (props) => {
             <ConfessionText confession={confession} />
           ) : (
             <Poll
+              id={id}
               question={question}
               choices={choices}
               totalVotes={totalVotes}
               expiryDate={expiryDate}
+              voteToPoll={voteToPoll}
             />
           )}
         </CardBody>
