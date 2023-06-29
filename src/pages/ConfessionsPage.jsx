@@ -40,6 +40,7 @@ import {
   signOut,
   auth,
   increment,
+  getDoc,
 } from "../firebase/firebase";
 import color from "../styles/colors";
 import { FaUser } from "react-icons/fa";
@@ -508,6 +509,57 @@ const ConfessionsPage = () => {
     getConfessions();
   };
 
+  const userAlreadyVoted = (id) => {
+    let voteArray;
+    voteArray = localStorage.getItem("voteList");
+    voteArray = JSON.parse(voteArray);
+
+    if (voteArray && voteArray.includes(id)) {
+      return true;
+    }
+
+    if (voteArray) {
+      voteArray.push(id);
+    } else {
+      voteArray = [];
+      voteArray.push(id);
+    }
+
+    localStorage.setItem("voteList", JSON.stringify(voteArray));
+
+    return false;
+  };
+
+  const voteToPoll = async (id, choice, setIsVoting) => {
+    if (userAlreadyVoted(id)) {
+      showToastMessage(
+        "Already Voted",
+        "You have already voted to this poll",
+        "warning"
+      );
+
+      return;
+    }
+
+    setIsVoting(true);
+
+    const confessionRef = doc(db, "confessions", id);
+
+    const documentSnapshot = await getDoc(confessionRef);
+    const choices = documentSnapshot.get("choices");
+    let totalVotes = documentSnapshot.get("totalVotes");
+
+    const choiceIndex = choices.findIndex((item) => item.title === choice);
+
+    choices[choiceIndex].votes += 1;
+    totalVotes += 1;
+
+    await updateDoc(confessionRef, { choices, totalVotes });
+    setIsVoting(false);
+
+    getConfessions();
+  };
+
   const userAlreadyReacted = (id) => {
     let reactionArray;
     reactionArray = localStorage.getItem("reactionList");
@@ -530,8 +582,6 @@ const ConfessionsPage = () => {
   };
 
   const reactToConfession = async (type, id) => {
-    const confessionRef = doc(db, "confessions", id);
-
     if (userAlreadyReacted(id)) {
       showToastMessage(
         "Already Reacted",
@@ -541,6 +591,8 @@ const ConfessionsPage = () => {
 
       return;
     }
+
+    const confessionRef = doc(db, "confessions", id);
 
     switch (type) {
       case "like":
@@ -626,6 +678,7 @@ const ConfessionsPage = () => {
                 loggedInBatchYear={loggedInBatchYear}
                 addCommentToConfession={addCommentToConfession}
                 reactToConfession={reactToConfession}
+                voteToPoll={voteToPoll}
               />
             ))}
           </Flex>
