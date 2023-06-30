@@ -1,4 +1,4 @@
-import { Text, Stack, Flex, RadioGroup, Skeleton } from "@chakra-ui/react";
+import { Text, Stack, Flex, Skeleton } from "@chakra-ui/react";
 import VoteBar from "./VoteBar";
 import moment from "moment";
 import { useState, useEffect } from "react";
@@ -9,16 +9,15 @@ const Poll = (props) => {
   const [isVoting, setIsVoting] = useState(false);
 
   const findChoiceWithMaxVotes = () => {
-    const { title } =
-      choices?.reduce((prev, current) =>
-        current.votes > prev.votes ? current : prev
-      ) || "";
+    const { title } = choices.reduce((prev, current) =>
+      current.votes > prev.votes ? current : prev
+    );
     setChoiceWithMaxVotes(title);
   };
 
   useEffect(() => {
     findChoiceWithMaxVotes();
-  }, []);
+  }, [totalVotes]);
 
   return (
     <>
@@ -29,19 +28,20 @@ const Poll = (props) => {
         startColor="purple.100"
         endColor="purple.500"
       >
-        <RadioGroup onChange={(choice) => voteToPoll(id, choice, setIsVoting)}>
-          <Stack spacing={3} marginTop="15px">
-            {choices?.map((choice, index) => (
-              <VoteBar
-                key={index}
-                {...choice}
-                totalVotes={totalVotes}
-                choiceWithMaxVotes={choiceWithMaxVotes}
-                isVoting={isVoting}
-              />
-            ))}
-          </Stack>
-        </RadioGroup>
+        <Stack spacing={3} marginTop="15px">
+          {choices?.map((choice, index) => (
+            <VoteBar
+              key={index}
+              {...choice}
+              totalVotes={totalVotes}
+              choiceWithMaxVotes={choiceWithMaxVotes}
+              isVoting={isVoting}
+              voteToPoll={voteToPoll}
+              setIsVoting={setIsVoting}
+              id={id}
+            />
+          ))}
+        </Stack>
       </Skeleton>
 
       <Flex marginTop="15px" alignItems="center" justifyContent="space-between">
