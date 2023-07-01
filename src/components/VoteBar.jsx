@@ -30,36 +30,37 @@ const VoteBar = (props) => {
   }
 
   return (
-    <Button
-      variant="outline"
-      textTransform="capitalize"
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      position="relative"
-      paddingLeft={percentage > 0 && "0"}
-      onClick={() => voteToPoll(id, title, setIsVoting)}
-    >
-      <Text
-        fontSize="sm"
-        position="absolute"
-        zIndex="2"
-        fontWeight={choiceWithHighestVotes ? "semibold" : "normal"}
-        marginLeft={percentage > 0 && "15px"}
-      >
-        {title}
-      </Text>
-
-      <Progress
-        value={percentage}
-        colorScheme={choiceWithHighestVotes ? "purple" : "blackAlpha"}
-        height="100%"
+    <Box display="flex" alignItems="center" justifyContent="space-between">
+      <Button
+        variant="outline"
+        textTransform="capitalize"
         width="70%"
-        backgroundColor="transparent"
-        opacity="0.8"
-        borderTopLeftRadius="5px"
-        borderBottomLeftRadius="5px"
-      />
+        position="relative"
+        justifyContent="flex-start"
+        padding="0"
+        onClick={() => voteToPoll(id, title, setIsVoting)}
+      >
+        <Text
+          fontSize="sm"
+          position="absolute"
+          zIndex="2"
+          fontWeight={choiceWithHighestVotes ? "semibold" : "normal"}
+          marginLeft="15px"
+        >
+          {title}
+        </Text>
+
+        <Progress
+          value={percentage}
+          colorScheme={choiceWithHighestVotes ? "purple" : "gray"}
+          height="100%"
+          width="100%"
+          backgroundColor="transparent"
+          opacity="0.8"
+          borderTopLeftRadius="5px"
+          borderBottomLeftRadius="5px"
+        />
+      </Button>
 
       <Text
         fontSize="sm"
@@ -67,7 +68,7 @@ const VoteBar = (props) => {
       >
         {percentage}%
       </Text>
-    </Button>
+    </Box>
   );
 };
 
