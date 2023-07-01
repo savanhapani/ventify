@@ -10,6 +10,7 @@ import {
   Tag,
   Heading,
   Text,
+  Stack,
 } from "@chakra-ui/react";
 
 import color from "../styles/colors";
@@ -120,22 +121,23 @@ function ConfessionModal(props) {
               resetComment={resetComment}
             />
 
-            <Box
+            <Stack
+              spacing={2}
+              marginTop="20px"
               paddingBottom="10px"
               width="100%"
               paddingRight="15px"
               overflowY={{ base: "", sm: "auto" }}
-              marginTop="20px"
-              maxHeight={{ base: "", sm: "40vh" }}
+              maxHeight={{ base: "", sm: "30vh" }}
             >
-              {comments?.map((item, index) => (
+              {comments?.map((item) => (
                 <Comment
                   {...item}
-                  key={index}
+                  key={item.id}
                   loggedInBatchYear={loggedInBatchYear}
                 />
               ))}
-            </Box>
+            </Stack>
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -29,9 +29,9 @@ const Poll = (props) => {
         endColor="purple.500"
       >
         <Stack spacing={3} marginTop="15px">
-          {choices?.map((choice, index) => (
+          {choices?.map((choice) => (
             <VoteBar
-              key={index}
+              key={choice.id}
               {...choice}
               totalVotes={totalVotes}
               choiceWithMaxVotes={choiceWithMaxVotes}

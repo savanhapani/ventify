@@ -4,7 +4,7 @@ import moment from "moment";
 const Comment = (props) => {
   const { batchYear, comment, timeStamp, loggedInBatchYear } = props;
   return (
-    <Box marginTop="5px" padding="5px 0">
+    <>
       <Flex alignItems="flex-start" justifyContent="space-between">
         <Tag
           size="md"
@@ -26,7 +26,7 @@ const Comment = (props) => {
       >
         {moment(timeStamp?.toDate()).fromNow()}
       </Text>
-    </Box>
+    </>
   );
 };
 

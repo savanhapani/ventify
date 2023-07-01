@@ -61,6 +61,7 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import PasswordResetDialog from "../components/PasswordResetDialog";
 import TabView from "../components/TabView";
+import { v4 as uuidv4 } from "uuid";
 
 const Header = (props) => {
   const {
@@ -344,6 +345,7 @@ const ConfessionsPage = () => {
     pollChoices.forEach((item) => {
       if (item) {
         structuredPollChoices.push({
+          id: uuidv4(),
           title: item,
           votes: 0,
         });
@@ -503,6 +505,7 @@ const ConfessionsPage = () => {
     const confessionRef = doc(db, "confessions", id);
 
     const userCommentObj = {
+      id: uuidv4(),
       batchYear: loggedInBatchYear,
       comment: userComment,
       timeStamp: new Date(),
