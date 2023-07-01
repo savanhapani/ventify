@@ -16,6 +16,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Stack,
 } from "@chakra-ui/react";
 import { HamburgerIcon, DeleteIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
@@ -183,11 +184,11 @@ const Confession = (props) => {
           />
 
           {totalComments > 0 && (
-            <Box marginTop="10px">
-              {visibleComments.map((item, index) => (
+            <Stack spacing={2} marginTop="15px">
+              {visibleComments.map((item) => (
                 <Comment
                   {...item}
-                  key={index}
+                  key={item.id}
                   loggedInBatchYear={loggedInBatchYear}
                 />
               ))}
@@ -200,11 +201,12 @@ const Confession = (props) => {
                   size="sm"
                   marginTop="15px"
                   onClick={onConfessionModalOpen}
+                  justifyContent="flex-start"
                 >
                   view all {totalComments} comments
                 </Button>
               )}
-            </Box>
+            </Stack>
           )}
         </CardFooter>
       </Card>
