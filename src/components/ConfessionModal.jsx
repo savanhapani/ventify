@@ -18,6 +18,7 @@ import AddComment from "./AddComment";
 import ReactionsToConfession from "./ReactionsToConfession";
 import moment from "moment";
 import ConfessionText from "./ConfessionText";
+import Poll from "./Poll";
 
 function ConfessionModal(props) {
   const {
@@ -25,6 +26,13 @@ function ConfessionModal(props) {
     onConfessionModalClose,
     addCommentToConfession,
     confession,
+    type,
+    id,
+    question,
+    choices,
+    totalVotes,
+    expiryDate,
+    voteToPoll,
     batchYear,
     category,
     timeStamp,
@@ -37,7 +45,6 @@ function ConfessionModal(props) {
     loggedInBatchYear,
     reactToConfession,
     setIsCommenting,
-    id,
     resetComment,
   } = props;
 
@@ -81,7 +88,18 @@ function ConfessionModal(props) {
 
           <ModalBody>
             <Box marginBottom="15px">
-              <ConfessionText confession={confession} />
+              {type === "confession" ? (
+                <ConfessionText confession={confession} />
+              ) : (
+                <Poll
+                  id={id}
+                  question={question}
+                  choices={choices}
+                  totalVotes={totalVotes}
+                  expiryDate={expiryDate}
+                  voteToPoll={voteToPoll}
+                />
+              )}
             </Box>
 
             <ReactionsToConfession

@@ -211,13 +211,11 @@ const Confession = (props) => {
       <ConfessionModal
         isConfessionModalOpen={isConfessionModalOpen}
         onConfessionModalClose={onConfessionModalClose}
-        addCommentToConfession={addCommentToConfession}
         userComment={userComment}
         setUserComment={setUserComment}
         isCommenting={isCommenting}
         reactToConfession={reactToConfession}
         setIsCommenting={setIsCommenting}
-        id={id}
         resetComment={resetComment}
         {...props}
       />
