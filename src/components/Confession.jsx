@@ -28,8 +28,7 @@ import moment from "moment";
 import ConfessionText from "./ConfessionText";
 import Poll from "./Poll";
 import AddComment from "./AddComment";
-
-const ALLOWED_VISIBLE_COMMENTS = 3;
+import { ALLOWED_VISIBLE_COMMENTS } from "../assets/data/data";
 
 const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
