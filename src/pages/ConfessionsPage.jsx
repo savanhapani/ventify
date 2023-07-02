@@ -338,6 +338,24 @@ const ConfessionsPage = () => {
   };
 
   const createPoll = () => {
+    let nonEmptyChoices = 0;
+
+    pollChoices.forEach((choice) => {
+      if (choice.trim()) {
+        nonEmptyChoices++;
+      }
+    });
+
+    if (nonEmptyChoices < 2) {
+      showToastMessage(
+        "Error",
+        "Pleaase enter at least two choices",
+        "warning"
+      );
+
+      return;
+    }
+
     let currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + pollDuration);
 
@@ -346,7 +364,7 @@ const ConfessionsPage = () => {
       if (item) {
         structuredPollChoices.push({
           id: uuidv4(),
-          title: item,
+          title: item.trim(),
           votes: 0,
         });
       }
