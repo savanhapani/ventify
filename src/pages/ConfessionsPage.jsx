@@ -361,7 +361,7 @@ const ConfessionsPage = () => {
 
     const structuredPollChoices = [];
     pollChoices.forEach((item) => {
-      if (item) {
+      if (item.trim()) {
         structuredPollChoices.push({
           id: uuidv4(),
           title: item.trim(),
