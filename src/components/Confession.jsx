@@ -71,13 +71,16 @@ const Confession = (props) => {
   const openDeleteConfessionDialog = () => {
     setConfessionToBeDelete({
       id: id,
-      title: confession,
+      title: type === "confession" ? confession : question,
     });
     onDeleteConfessOpen();
   };
 
   const openReportConfessionDialog = () => {
-    setConfessionToBeReport({ id: id, title: confession });
+    setConfessionToBeReport({
+      id: id,
+      title: type === "confession" ? confession : question,
+    });
     onReportConfessOpen();
   };
 
