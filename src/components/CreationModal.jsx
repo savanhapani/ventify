@@ -152,7 +152,7 @@ const CreationModal = (props) => {
               variant="outline"
               textTransform="capitalize"
               onClick={resetConfession}
-              mr={3}
+              marginRight="10px"
             >
               Cancel
             </Button>
