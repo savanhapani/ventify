@@ -17,6 +17,7 @@ import {
   MenuList,
   MenuItem,
   Stack,
+  ScaleFade,
 } from "@chakra-ui/react";
 import { HamburgerIcon, DeleteIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
@@ -90,7 +91,7 @@ const Confession = (props) => {
   };
 
   return (
-    <>
+    <ScaleFade initialScale={0.9} in={true}>
       <Card
         width="400px"
         colorScheme="blackAlpha"
@@ -255,7 +256,7 @@ const Confession = (props) => {
         resetComment={resetComment}
         {...props}
       />
-    </>
+    </ScaleFade>
   );
 };
 
