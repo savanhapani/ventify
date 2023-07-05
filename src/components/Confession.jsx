@@ -29,7 +29,6 @@ import ConfessionText from "./ConfessionText";
 import Poll from "./Poll";
 import AddComment from "./AddComment";
 import { ALLOWED_VISIBLE_COMMENTS } from "../assets/data/data";
-import { CategoryScale } from "chart.js";
 
 const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
