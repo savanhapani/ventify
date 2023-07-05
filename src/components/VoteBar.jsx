@@ -1,5 +1,4 @@
-import { Text, Box, Flex, Radio, Progress, Button } from "@chakra-ui/react";
-import color from "../styles/colors";
+import { Text, Box, Progress, Button } from "@chakra-ui/react";
 
 const VoteBar = (props) => {
   const {
@@ -9,6 +8,7 @@ const VoteBar = (props) => {
     choiceWithMaxVotes,
     voteToPoll,
     setIsVoting,
+    isVoting,
     id,
   } = props;
 
@@ -59,6 +59,7 @@ const VoteBar = (props) => {
           opacity="0.8"
           borderTopLeftRadius="5px"
           borderBottomLeftRadius="5px"
+          isIndeterminate={isVoting}
         />
       </Button>
 
