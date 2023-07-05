@@ -29,6 +29,7 @@ import ConfessionText from "./ConfessionText";
 import Poll from "./Poll";
 import AddComment from "./AddComment";
 import { ALLOWED_VISIBLE_COMMENTS } from "../assets/data/data";
+import { CategoryScale } from "chart.js";
 
 const Confession = (props) => {
   const [userComment, setUserComment] = useState("");
@@ -63,6 +64,7 @@ const Confession = (props) => {
     addCommentToConfession,
     reactToConfession,
     voteToPoll,
+    viewDetailedPollStats,
   } = props;
 
   const visibleComments = comments?.slice(0, ALLOWED_VISIBLE_COMMENTS);
@@ -155,14 +157,45 @@ const Confession = (props) => {
           {type === "confession" ? (
             <ConfessionText confession={confession} />
           ) : (
-            <Poll
-              id={id}
-              question={question}
-              choices={choices}
-              totalVotes={totalVotes}
-              expiryDate={expiryDate}
-              voteToPoll={voteToPoll}
-            />
+            <>
+              <Poll
+                id={id}
+                question={question}
+                choices={choices}
+                totalVotes={totalVotes}
+                expiryDate={expiryDate}
+                category={category}
+                batchYear={batchYear}
+                timeStamp={timeStamp}
+                voteToPoll={voteToPoll}
+                viewDetailedPollStats={viewDetailedPollStats}
+              />
+
+              {totalVotes > 0 && !isVisibleToBatchOnly && (
+                <Button
+                  colorScheme="purple"
+                  variant="link"
+                  textTransform="capitalize"
+                  size="sm"
+                  marginTop="15px"
+                  justifyContent="flex-start"
+                  onClick={() =>
+                    viewDetailedPollStats(
+                      id,
+                      question,
+                      choices,
+                      totalVotes,
+                      expiryDate,
+                      category,
+                      batchYear,
+                      timeStamp
+                    )
+                  }
+                >
+                  view detailed poll stats
+                </Button>
+              )}
+            </>
           )}
         </CardBody>
 

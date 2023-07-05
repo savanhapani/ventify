@@ -1,4 +1,4 @@
-import { Text, Stack, Flex, Skeleton } from "@chakra-ui/react";
+import { Text, Stack, Flex } from "@chakra-ui/react";
 import VoteBar from "./VoteBar";
 import moment from "moment";
 import { useState, useEffect } from "react";
@@ -23,26 +23,20 @@ const Poll = (props) => {
     <>
       <Text fontSize="lg">{question}</Text>
 
-      <Skeleton
-        isLoaded={!isVoting}
-        startColor="purple.100"
-        endColor="purple.500"
-      >
-        <Stack spacing={3} marginTop="15px">
-          {choices?.map((choice) => (
-            <VoteBar
-              key={choice.id}
-              {...choice}
-              totalVotes={totalVotes}
-              choiceWithMaxVotes={choiceWithMaxVotes}
-              isVoting={isVoting}
-              voteToPoll={voteToPoll}
-              setIsVoting={setIsVoting}
-              id={id}
-            />
-          ))}
-        </Stack>
-      </Skeleton>
+      <Stack spacing={3} marginTop="15px">
+        {choices?.map((choice) => (
+          <VoteBar
+            key={choice.id}
+            {...choice}
+            totalVotes={totalVotes}
+            choiceWithMaxVotes={choiceWithMaxVotes}
+            isVoting={isVoting}
+            voteToPoll={voteToPoll}
+            setIsVoting={setIsVoting}
+            id={id}
+          />
+        ))}
+      </Stack>
 
       <Flex marginTop="15px" alignItems="center" justifyContent="space-between">
         <Text fontSize="sm" color="blackAlpha.700">

@@ -62,6 +62,7 @@ import Logo from "../components/Logo";
 import PasswordResetDialog from "../components/PasswordResetDialog";
 import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
+import VoteStatsModal from "../components/VoteStatsModal";
 
 const Header = (props) => {
   const {
@@ -219,6 +220,8 @@ const ConfessionsPage = () => {
     availablePollDurations[0].value
   );
 
+  const [selectedPoll, setSelectedPoll] = useState({});
+
   const {
     isOpen: isCreateConfessOpen,
     onOpen: onCreateConfessOpen,
@@ -247,6 +250,12 @@ const ConfessionsPage = () => {
     isOpen: isPasswordResetDialogOpen,
     onOpen: onPasswordResetDialogOpen,
     onClose: onPasswordResetDialogClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isVoteStatsModalOpen,
+    onOpen: onVoteStatsModalOpen,
+    onClose: onVoteStatsModalClose,
   } = useDisclosure();
 
   const resetConfession = () => {
@@ -366,6 +375,7 @@ const ConfessionsPage = () => {
           id: uuidv4(),
           title: item.trim(),
           votes: 0,
+          votesByBatches: {},
         });
       }
     });
@@ -584,6 +594,19 @@ const ConfessionsPage = () => {
     choices[choiceIndex].votes += 1;
     totalVotes += 1;
 
+    if (choices[choiceIndex].votesByBatches.hasOwnProperty(loggedInBatchYear)) {
+      choices[choiceIndex].votesByBatches = {
+        ...choices[choiceIndex].votesByBatches,
+        [loggedInBatchYear]:
+          choices[choiceIndex].votesByBatches[loggedInBatchYear] + 1,
+      };
+    } else {
+      choices[choiceIndex].votesByBatches = {
+        ...choices[choiceIndex].votesByBatches,
+        [loggedInBatchYear]: 1,
+      };
+    }
+
     await updateDoc(confessionRef, { choices, totalVotes });
     setIsVoting(false);
 
@@ -646,6 +669,29 @@ const ConfessionsPage = () => {
     }
 
     getConfessions();
+  };
+
+  const viewDetailedPollStats = (
+    id,
+    question,
+    choices,
+    totalVotes,
+    expiryDate,
+    category,
+    batchYear,
+    timeStamp
+  ) => {
+    setSelectedPoll({
+      id: id,
+      question: question,
+      choices: choices,
+      totalVotes: totalVotes,
+      expiryDate: expiryDate,
+      category: category,
+      batchYear: batchYear,
+      timeStamp: timeStamp,
+    });
+    onVoteStatsModalOpen();
   };
 
   const filteredConfessions = confessions.filter(
@@ -714,6 +760,8 @@ const ConfessionsPage = () => {
                         addCommentToConfession={addCommentToConfession}
                         reactToConfession={reactToConfession}
                         voteToPoll={voteToPoll}
+                        onVoteStatsModalOpen={onVoteStatsModalOpen}
+                        viewDetailedPollStats={viewDetailedPollStats}
                       />
                     ))}
                 </TabView>
@@ -767,6 +815,11 @@ const ConfessionsPage = () => {
         onPasswordResetDialogClose={onPasswordResetDialogClose}
         passwordIsResetting={passwordIsResetting}
         resetPassword={resetPassword}
+      />
+      <VoteStatsModal
+        isVoteStatsModalOpen={isVoteStatsModalOpen}
+        onVoteStatsModalClose={onVoteStatsModalClose}
+        selectedPoll={selectedPoll}
       />
     </Box>
   );
