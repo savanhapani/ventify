@@ -4,6 +4,8 @@ import { Doughnut } from "react-chartjs-2";
 const PollDoughnut = (props) => {
   const { title, votes, votesByBatches } = props;
 
+  if (votes === 0) return null;
+
   const convertToChartDataset = (originalObject) => {
     const labels = Object.keys(originalObject);
     const data = Object.values(originalObject);
