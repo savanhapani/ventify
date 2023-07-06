@@ -7,6 +7,7 @@ const VoteBar = (props) => {
     totalVotes,
     choiceWithMaxVotes,
     voteToPoll,
+    expiryDate,
     setIsVoting,
     isVoting,
     id,
@@ -22,7 +23,7 @@ const VoteBar = (props) => {
         colorScheme="purple"
         variant="outline"
         textTransform="capitalize"
-        onClick={() => voteToPoll(id, title, setIsVoting)}
+        onClick={() => voteToPoll(id, title, setIsVoting, expiryDate)}
       >
         {title}
       </Button>
@@ -38,7 +39,7 @@ const VoteBar = (props) => {
         position="relative"
         justifyContent="flex-start"
         padding="0"
-        onClick={() => voteToPoll(id, title, setIsVoting)}
+        onClick={() => voteToPoll(id, title, setIsVoting, expiryDate)}
       >
         <Text
           fontSize="sm"

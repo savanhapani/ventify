@@ -280,7 +280,7 @@ const ConfessionsPage = () => {
   };
 
   const handlePollDurationChange = (event) => {
-    setPollDuration(event.target.value);
+    setPollDuration(Number(event.target.value));
   };
 
   const handleIsVisibleToBatchOnlyChange = (event) => {
@@ -570,11 +570,23 @@ const ConfessionsPage = () => {
     return false;
   };
 
-  const voteToPoll = async (id, choice, setIsVoting) => {
+  const pollIsExpired = (expiryDate) => {
+    const currentDate = new Date();
+
+    return expiryDate.toDate() < currentDate;
+  };
+
+  const voteToPoll = async (id, choice, setIsVoting, expiryDate) => {
+    if (pollIsExpired(expiryDate)) {
+      showToastMessage("Expired", "Poll is expired.", "warning");
+
+      return;
+    }
+
     if (userAlreadyVoted(id)) {
       showToastMessage(
         "Already Voted",
-        "You have already voted to this poll",
+        "You have already voted to this poll.",
         "warning"
       );
 
