@@ -63,6 +63,7 @@ import PasswordResetDialog from "../components/PasswordResetDialog";
 import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
 import VoteStatsModal from "../components/VoteStatsModal";
+import LoadindSpinner from "../components/LoadingSpinner";
 
 const Header = (props) => {
   const {
@@ -746,40 +747,46 @@ const ConfessionsPage = () => {
             selectedBatches={selectedBatches}
           />
 
-          <Tabs variant="solid-rounded" colorScheme="purple" marginTop="20px">
-            <TabList justifyContent="center">
-              {availableTabs.map((tab) => (
-                <Tab key={tab.id}>{tab.title}</Tab>
-              ))}
-            </TabList>
+          {confessions.length > 0 ? (
+            <Tabs variant="solid-rounded" colorScheme="purple" marginTop="20px">
+              <TabList justifyContent="center">
+                {availableTabs.map((tab) => (
+                  <Tab key={tab.id}>{tab.title}</Tab>
+                ))}
+              </TabList>
 
-            <TabPanels>
-              {availableTabs.map((tab) => (
-                <TabView key={tab.id}>
-                  {filteredConfessions
-                    .filter(
-                      (item) => tab.value === "all" || item.type === tab.value
-                    )
-                    .map((item) => (
-                      <Confession
-                        {...item}
-                        key={item.id}
-                        onDeleteConfessOpen={onDeleteConfessOpen}
-                        setConfessionToBeDelete={setConfessionToBeDelete}
-                        onReportConfessOpen={onReportConfessOpen}
-                        setConfessionToBeReport={setConfessionToBeReport}
-                        loggedInBatchYear={loggedInBatchYear}
-                        addCommentToConfession={addCommentToConfession}
-                        reactToConfession={reactToConfession}
-                        voteToPoll={voteToPoll}
-                        onVoteStatsModalOpen={onVoteStatsModalOpen}
-                        viewDetailedPollStats={viewDetailedPollStats}
-                      />
-                    ))}
-                </TabView>
-              ))}
-            </TabPanels>
-          </Tabs>
+              <TabPanels>
+                {availableTabs.map((tab) => (
+                  <TabView key={tab.id}>
+                    {filteredConfessions
+                      .filter(
+                        (item) => tab.value === "all" || item.type === tab.value
+                      )
+                      .map((item) => (
+                        <Confession
+                          {...item}
+                          key={item.id}
+                          onDeleteConfessOpen={onDeleteConfessOpen}
+                          setConfessionToBeDelete={setConfessionToBeDelete}
+                          onReportConfessOpen={onReportConfessOpen}
+                          setConfessionToBeReport={setConfessionToBeReport}
+                          loggedInBatchYear={loggedInBatchYear}
+                          addCommentToConfession={addCommentToConfession}
+                          reactToConfession={reactToConfession}
+                          voteToPoll={voteToPoll}
+                          onVoteStatsModalOpen={onVoteStatsModalOpen}
+                          viewDetailedPollStats={viewDetailedPollStats}
+                        />
+                      ))}
+                  </TabView>
+                ))}
+              </TabPanels>
+            </Tabs>
+          ) : (
+            <Flex height="100%" justifyContent="center">
+              <LoadindSpinner text="Getting your confessions" />
+            </Flex>
+          )}
         </Box>
       </Flex>
       <CreationModal
