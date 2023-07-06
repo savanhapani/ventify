@@ -747,7 +747,7 @@ const ConfessionsPage = () => {
             selectedBatches={selectedBatches}
           />
 
-          {confessions.length <= 0 ? (
+          {confessions.length > 0 ? (
             <Tabs variant="solid-rounded" colorScheme="purple" marginTop="20px">
               <TabList justifyContent="center">
                 {availableTabs.map((tab) => (
