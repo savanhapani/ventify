@@ -55,6 +55,14 @@ const confessCategories = [
   },
   {
     id: "12",
+    title: "classroom",
+  },
+  {
+    id: "13",
+    title: "hostel",
+  },
+  {
+    id: "14",
     title: "other",
   },
 ];
