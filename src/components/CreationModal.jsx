@@ -20,6 +20,7 @@ import { useRef, useContext } from "react";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import CreateConfession from "./CreateConfession";
 import CreatePoll from "./CreatePoll";
+import LoadindSpinner from "./LoadingSpinner";
 
 const CreationModal = (props) => {
   const { loggedInBatchYear } = useContext(VentifyContext);
@@ -146,29 +147,33 @@ const CreationModal = (props) => {
         </ModalBody>
 
         <ModalFooter>
-          <Stack direction="row">
-            <Button
-              colorScheme="red"
-              variant="outline"
-              textTransform="capitalize"
-              onClick={resetConfession}
-              marginRight="10px"
-            >
-              Cancel
-            </Button>
+          {isConfessing ? (
+            <LoadindSpinner
+              text={creationBtnConfig[creationModalType].loadingText}
+            />
+          ) : (
+            <Stack direction="row">
+              <Button
+                colorScheme="red"
+                variant="outline"
+                textTransform="capitalize"
+                onClick={resetConfession}
+                marginRight="10px"
+              >
+                Cancel
+              </Button>
 
-            <Button
-              variant="solid"
-              colorScheme="purple"
-              textTransform="capitalize"
-              onClick={creationBtnConfig[creationModalType].onClick}
-              isDisabled={creationBtnConfig[creationModalType].isDisabled}
-              isLoading={isConfessing}
-              loadingText={creationBtnConfig[creationModalType].loadingText}
-            >
-              {creationBtnConfig[creationModalType].btnText}
-            </Button>
-          </Stack>
+              <Button
+                variant="solid"
+                colorScheme="purple"
+                textTransform="capitalize"
+                onClick={creationBtnConfig[creationModalType].onClick}
+                isDisabled={creationBtnConfig[creationModalType].isDisabled}
+              >
+                {creationBtnConfig[creationModalType].btnText}
+              </Button>
+            </Stack>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>
