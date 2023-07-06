@@ -2,6 +2,7 @@ import { Text, Stack, Flex } from "@chakra-ui/react";
 import VoteBar from "./VoteBar";
 import moment from "moment";
 import { useState, useEffect } from "react";
+import color from "../styles/colors";
 
 const Poll = (props) => {
   const { id, question, choices, totalVotes, expiryDate, voteToPoll } = props;
@@ -14,6 +15,9 @@ const Poll = (props) => {
     );
     setChoiceWithMaxVotes(title);
   };
+
+  const currentDate = new Date();
+  const pollIsExpired = expiryDate.toDate() < currentDate;
 
   useEffect(() => {
     findChoiceWithMaxVotes();
@@ -32,6 +36,7 @@ const Poll = (props) => {
             choiceWithMaxVotes={choiceWithMaxVotes}
             isVoting={isVoting}
             voteToPoll={voteToPoll}
+            expiryDate={expiryDate}
             setIsVoting={setIsVoting}
             id={id}
           />
@@ -44,8 +49,13 @@ const Poll = (props) => {
           {totalVotes > 1 ? "votes" : "vote"}
         </Text>
 
-        <Text fontSize="sm" color="blackAlpha.700">
-          expires {moment(expiryDate.toDate()).fromNow()}
+        <Text
+          fontSize="sm"
+          color={pollIsExpired ? color.contrast : "blackAlpha.700"}
+        >
+          {pollIsExpired
+            ? "expired"
+            : `expires ${moment(expiryDate.toDate()).fromNow()}`}
         </Text>
       </Flex>
     </>
