@@ -51,7 +51,7 @@ const AddComment = (props) => {
             placeholder={
               commentIsDisabled
                 ? "User has disabled the comments"
-                : "Add a comment..."
+                : `Add a comment as ${loggedInBatchYear}`
             }
             variant="flushed"
             isDisabled={commentIsDisabled}
