@@ -64,6 +64,7 @@ import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
 import VoteStatsModal from "../components/VoteStatsModal";
 import LoadindSpinner from "../components/LoadingSpinner";
+import { getConfessions } from "../helpers/posts/confessionHelpers";
 
 const Header = (props) => {
   const {
@@ -324,7 +325,7 @@ const ConfessionsPage = () => {
     }
     resetConfession();
 
-    getConfessions();
+    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
   };
 
   const createConfession = () => {
@@ -425,7 +426,7 @@ const ConfessionsPage = () => {
       "success"
     );
     setConfessionToBeDelete({});
-    getConfessions();
+    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
   };
 
   const reportConfession = async (confessionId, reasonToReport) => {
@@ -448,25 +449,6 @@ const ConfessionsPage = () => {
     }
 
     setConfessionToBeReport({});
-  };
-
-  const getConfessions = async () => {
-    const confessionsRef = collection(db, "confessions");
-
-    const confessionsQuery = query(
-      confessionsRef,
-      or(
-        where("isVisibleToBatchOnly", "==", false),
-        where("batchYear", "==", Number(loggedInBatchYear))
-      )
-    );
-
-    const querySnapshot = await getDocs(confessionsQuery);
-    const confessionsData = [];
-    querySnapshot.forEach((doc) => {
-      confessionsData.push({ id: doc.id, ...doc.data() });
-    });
-    setConfessions(confessionsData);
   };
 
   const handleCategorySelection = (selectedCategory) => {
@@ -547,7 +529,7 @@ const ConfessionsPage = () => {
     resetComment();
     setIsCommenting(false);
     showToastMessage("Successful", "Comment added successfully!", "success");
-    getConfessions();
+    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
   };
 
   const userAlreadyVoted = (id) => {
@@ -623,7 +605,7 @@ const ConfessionsPage = () => {
     await updateDoc(confessionRef, { choices, totalVotes });
     setIsVoting(false);
 
-    getConfessions();
+    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
   };
 
   const userAlreadyReacted = (id) => {
@@ -681,7 +663,7 @@ const ConfessionsPage = () => {
         break;
     }
 
-    getConfessions();
+    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
   };
 
   const viewDetailedPollStats = (
@@ -717,7 +699,7 @@ const ConfessionsPage = () => {
   );
 
   useEffect(() => {
-    getConfessions();
+    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
   }, []);
 
   return (
