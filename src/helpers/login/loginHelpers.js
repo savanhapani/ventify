@@ -4,8 +4,8 @@ import {
   sendEmailVerification,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-} from "../firebase/firebase";
-import { INVALID_ROLL_NUMBER, EMAIL_NOT_VERIFIED } from "../errors/errors";
+} from "../../firebase/firebase";
+import { INVALID_ROLL_NUMBER, EMAIL_NOT_VERIFIED } from "../../errors/errors";
 
 const resetUserInputs = (setStudentRollNo, setPassword) => {
   setStudentRollNo("");
