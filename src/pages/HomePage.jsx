@@ -9,10 +9,6 @@ import {
   Text,
   Button,
   Highlight,
-  Card,
-  CardBody,
-  Stack,
-  VStack,
   Divider,
   Flex,
   Link,
@@ -21,21 +17,16 @@ import {
 
 import hero from "../assets/hero.svg";
 import github from "../assets/github.png";
-import { howItWorks } from "../assets/data/data";
 import color from "../styles/colors";
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
 import useToastMessage from "../hooks/useToastMessage";
-import {
-  auth,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signOut,
-  signInWithEmailAndPassword,
-} from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import Logo from "../components/Logo";
+import HowItWorks from "../components/HowItWorks";
+import { login, registerUser } from "../helpers/loginHelpers";
 
 const Header = () => {
   return (
@@ -68,62 +59,6 @@ const Header = () => {
   );
 };
 
-const HowItWork = (props) => {
-  const { title, description, image } = props;
-  return (
-    <Center>
-      <Card
-        direction={{ base: "column", sm: "row" }}
-        overflow="hidden"
-        variant="filled"
-        padding="30px 70px"
-        marginTop="50px"
-        width="70vw"
-      >
-        <Image
-          objectFit="contain"
-          src={image}
-          alt="ventify"
-          width="150px"
-          aspectRatio="1"
-        />
-
-        <Stack marginLeft="25px">
-          <CardBody>
-            <Heading size="md" textTransform="capitalize">
-              {title}
-            </Heading>
-
-            <Text py="2">{description}</Text>
-          </CardBody>
-        </Stack>
-      </Card>
-    </Center>
-  );
-};
-
-const HowItWorks = () => {
-  return (
-    <VStack margin="200px 0">
-      <Heading
-        as="h2"
-        size="2xl"
-        textTransform="capitalize"
-        textAlign="center"
-        marginBottom="50px"
-      >
-        how it works
-      </Heading>
-
-      <VStack>
-        {howItWorks.map((item) => (
-          <HowItWork {...item} key={item.id} />
-        ))}
-      </VStack>
-    </VStack>
-  );
-};
-
 const HomePage = () => {
   const [studentRollNo, setStudentRollNo] = useState("");
   const [password, setPassword] = useState("");
@@ -141,83 +76,6 @@ const HomePage = () => {
 
   const userIsLoggedIn = auth.currentUser;
 
-  const resetUserInputs = () => {
-    setStudentRollNo("");
-    setPassword("");
-  };
-
-  const logout = async () => {
-    await signOut(auth);
-  };
-
-  const sendEmailVerificationLink = async (userEmail) => {
-    try {
-      await sendEmailVerification(auth.currentUser);
-      showToastMessage(
-        "Link Sent",
-        `We have sent you the email verification link at ${userEmail}. Please check your inbox.`,
-        "success"
-      );
-    } catch (error) {
-      showToastMessage("Error", error.message, "error");
-    }
-  };
-
-  const registerUser = async () => {
-    setIsRegisteringUser(true);
-    const userEmail = `${studentRollNo}@daiict.ac.in`;
-
-    try {
-      await createUserWithEmailAndPassword(auth, userEmail, password);
-      await sendEmailVerificationLink(userEmail);
-      logout();
-      setLoginUiIsVisible(true);
-      setIsRegisteringUser(false);
-      resetUserInputs();
-    } catch (error) {
-      showToastMessage("Error", error.message, "error");
-      setIsRegisteringUser(false);
-      resetUserInputs();
-    }
-  };
-
-  const login = async () => {
-    setIsLoginInUser(true);
-    const userEmail = `${studentRollNo}@daiict.ac.in`;
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        userEmail,
-        password
-      );
-      const user = userCredential.user;
-      const emailIsVerified = user.emailVerified;
-
-      if (
-        !emailIsVerified &&
-        import.meta.env.VITE_TESTING_ENVIRONMENT == "prod"
-      ) {
-        logout();
-        showToastMessage("Error", "Please verify your email first!!", "error");
-        setIsLoginInUser(false);
-        resetUserInputs();
-
-        return;
-      }
-      const currentbatchYear = Number(studentRollNo.toString().substring(0, 4));
-      setLoggedInBatchYear(currentbatchYear);
-      localStorage.setItem("loggedInBatchYear", currentbatchYear);
-
-      navigate("/confessions", { replace: true });
-      setIsLoginInUser(false);
-      resetUserInputs();
-    } catch (error) {
-      showToastMessage("Error", error.message, "error");
-      setIsLoginInUser(false);
-      resetUserInputs();
-    }
-  };
   return (
     <Box>
       <Header />
@@ -316,7 +174,30 @@ const HomePage = () => {
                     textTransform="capitalize"
                     isDisabled={!studentRollNo || !password}
                     size="md"
-                    onClick={loginUiIsVisible ? login : registerUser}
+                    onClick={
+                      loginUiIsVisible
+                        ? () =>
+                            login(
+                              setIsLoginInUser,
+                              password,
+                              setLoggedInBatchYear,
+                              showToastMessage,
+                              navigate,
+                              setStudentRollNo,
+                              setPassword,
+                              studentRollNo
+                            )
+                        : () =>
+                            registerUser(
+                              setIsRegisteringUser,
+                              password,
+                              setLoginUiIsVisible,
+                              showToastMessage,
+                              setStudentRollNo,
+                              setPassword,
+                              studentRollNo
+                            )
+                    }
                     isLoading={
                       loginUiIsVisible ? isLoginInUser : isRegisteringUser
                     }
