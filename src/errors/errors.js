@@ -1,6 +1,17 @@
-const INVALID_ROLL_NUMBER = "Invalid Roll Number";
-const EMAIL_NOT_VERIFIED = "Invalid Roll Number";
+const INVALID_ROLL_NUMBER = "Invalid Roll Number.";
+const EMAIL_NOT_VERIFIED = "Email is nor verified.";
+const INVALID_CREDENTIALS = "Invalid Credentials.";
+const EMAIL_ALREADY_IN_USE =
+  "Sorry, this email is already associated with an existing account.";
+const WEAK_PASSWORD = "The provided password is too weak.";
 
 const CONFESSIONS_FETCH_ERROR = "Error occurred while fetching confessions!! ";
 
-export { INVALID_ROLL_NUMBER, EMAIL_NOT_VERIFIED, CONFESSIONS_FETCH_ERROR };
+export {
+  INVALID_ROLL_NUMBER,
+  EMAIL_NOT_VERIFIED,
+  INVALID_CREDENTIALS,
+  CONFESSIONS_FETCH_ERROR,
+  EMAIL_ALREADY_IN_USE,
+  WEAK_PASSWORD,
+};

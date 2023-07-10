@@ -168,6 +168,8 @@ const COMMENT_CHAR_LIMIT = CONFESSION_CHAR_LIMIT;
 const CHOICE_CHAR_LIMIT = 25;
 const ALLOWED_VISIBLE_COMMENTS = 3;
 
+const EMAIL_DOMAIN = "@daiict.ac.in";
+
 const availableTabs = [
   {
     id: "1",
@@ -234,4 +236,5 @@ export {
   COMMENT_CHAR_LIMIT,
   ALLOWED_VISIBLE_COMMENTS,
   availableTabs,
+  EMAIL_DOMAIN,
 };
