@@ -26,7 +26,7 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import Logo from "../components/Logo";
 import HowItWorks from "../components/HowItWorks";
-import { login, registerUser } from "../helpers/loginHelpers";
+import { login, registerUser } from "../helpers/login/loginHelpers";
 
 const Header = () => {
   return (

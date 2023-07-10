@@ -4,8 +4,16 @@ import {
   sendEmailVerification,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-} from "../firebase/firebase";
-import { INVALID_ROLL_NUMBER, EMAIL_NOT_VERIFIED } from "../errors/errors";
+} from "../../firebase/firebase";
+import {
+  INVALID_ROLL_NUMBER,
+  EMAIL_NOT_VERIFIED,
+  INVALID_CREDENTIALS,
+  EMAIL_ALREADY_IN_USE,
+  WEAK_PASSWORD,
+} from "../../errors/errors";
+
+import { EMAIL_DOMAIN } from "../../assets/data/data";
 
 const resetUserInputs = (setStudentRollNo, setPassword) => {
   setStudentRollNo("");
@@ -30,13 +38,12 @@ const sendEmailVerificationLink = async (userEmail, showToastMessage) => {
 };
 
 const constructEmail = (studentRollNo) => {
-  const emailDomain = "@daiict.ac.in";
-
-  return studentRollNo + emailDomain;
+  return studentRollNo + EMAIL_DOMAIN;
 };
 
 const getCurrentBatchYear = (studentRollNo) => {
-  return Number(studentRollNo.toString().substring(0, 4));
+  const firstFourDigit = Number(studentRollNo.toString().substring(0, 4));
+  return firstFourDigit;
 };
 
 const rollNumberIsValid = (studentRollNo) => {
@@ -44,6 +51,24 @@ const rollNumberIsValid = (studentRollNo) => {
   const currentbatchYear = getCurrentBatchYear(studentRollNo);
 
   return studentRollNo.length === 9 && currentbatchYear <= currentYear;
+};
+
+const getErrorMessageFromCode = (error) => {
+  switch (error.code) {
+    case "auth/email-already-in-use":
+      return EMAIL_ALREADY_IN_USE;
+
+    case "auth/weak-password":
+      return WEAK_PASSWORD;
+
+    case "auth/user-not-found":
+    case "auth/wrong-password":
+    case "auth/invalid-credential":
+      return INVALID_CREDENTIALS;
+
+    default:
+      return error.message;
+  }
 };
 
 const registerUser = async (
@@ -65,10 +90,13 @@ const registerUser = async (
 
     await createUserWithEmailAndPassword(auth, userEmail, password);
     await sendEmailVerificationLink(userEmail, showToastMessage);
+
     logout();
+
     setLoginUiIsVisible(true);
   } catch (error) {
-    showToastMessage("Error", error.message, "error");
+    const errorMessage = getErrorMessageFromCode(error);
+    showToastMessage("Error", errorMessage, "error");
   } finally {
     setIsRegisteringUser(false);
     resetUserInputs(setStudentRollNo, setPassword);
@@ -98,6 +126,7 @@ const login = async (
       userEmail,
       password
     );
+
     const user = userCredential.user;
     const emailIsVerified = user.emailVerified;
 
@@ -107,6 +136,7 @@ const login = async (
     ) {
       throw new Error(EMAIL_NOT_VERIFIED);
     }
+
     const currentbatchYear = getCurrentBatchYear(studentRollNo);
     setLoggedInBatchYear(currentbatchYear);
     localStorage.setItem("loggedInBatchYear", currentbatchYear);
@@ -114,7 +144,9 @@ const login = async (
     navigate("/confessions", { replace: true });
   } catch (error) {
     logout();
-    showToastMessage("Error", error.message, "error");
+
+    const errorMessage = getErrorMessageFromCode(error);
+    showToastMessage("Error", errorMessage, "error");
   } finally {
     setIsLoginInUser(false);
     resetUserInputs(setStudentRollNo, setPassword);
