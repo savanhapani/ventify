@@ -2,7 +2,6 @@ import { Text, Stack, Flex } from "@chakra-ui/react";
 import VoteBar from "./VoteBar";
 import moment from "moment";
 import { useState, useEffect } from "react";
-import color from "../styles/colors";
 
 const Poll = (props) => {
   const { id, question, choices, totalVotes, expiryDate, voteToPoll } = props;
@@ -49,10 +48,7 @@ const Poll = (props) => {
           {totalVotes > 1 ? "votes" : "vote"}
         </Text>
 
-        <Text
-          fontSize="sm"
-          color={pollIsExpired ? color.contrast : "blackAlpha.700"}
-        >
+        <Text fontSize="sm" color="blackAlpha.700">
           {pollIsExpired
             ? "expired"
             : `expires ${moment(expiryDate.toDate()).fromNow()}`}

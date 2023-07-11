@@ -1,19 +1,7 @@
 import {
   Flex,
   Box,
-  Button,
   useDisclosure,
-  Divider,
-  Text,
-  Heading,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuGroup,
-  MenuDivider,
-  IconButton,
-  Icon,
   Tabs,
   TabList,
   TabPanels,
@@ -25,7 +13,6 @@ import {
   availableTabs,
 } from "../assets/data/data";
 import Confession from "../components/Confession";
-import { AddIcon, HamburgerIcon } from "@chakra-ui/icons";
 import CreationModal from "../components/CreationModal";
 import { useState, useEffect, useContext } from "react";
 import FilterBar from "../components/FilterBar";
@@ -36,10 +23,6 @@ import {
   collection,
   addDoc,
   db,
-  getDocs,
-  query,
-  where,
-  or,
   deleteDoc,
   doc,
   updateDoc,
@@ -50,142 +33,18 @@ import {
   increment,
   getDoc,
 } from "../firebase/firebase";
-import color from "../styles/colors";
-import { FaUser } from "react-icons/fa";
-import { TbLogout } from "react-icons/tb";
-import { MdOutlinePoll } from "react-icons/md";
-import { RiLockPasswordFill } from "react-icons/ri";
+
 import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
-import Logo from "../components/Logo";
 import PasswordResetDialog from "../components/PasswordResetDialog";
 import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
 import VoteStatsModal from "../components/VoteStatsModal";
 import LoadindSpinner from "../components/LoadingSpinner";
 import { getConfessions } from "../helpers/posts/confessionHelpers";
-
-const Header = (props) => {
-  const {
-    onAccountDrawerOpen,
-    logout,
-    onPasswordResetDialogOpen,
-    openCreationModal,
-  } = props;
-  return (
-    <>
-      <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
-        <Logo />
-
-        <Flex>
-          <Button
-            textTransform="capitalize"
-            variant="solid"
-            size="md"
-            colorScheme="purple"
-            rightIcon={<AddIcon boxSize="13px" />}
-            onClick={() => openCreationModal("confession")}
-            marginRight="15px"
-          >
-            confess
-          </Button>
-
-          <Button
-            textTransform="capitalize"
-            variant="outline"
-            size="md"
-            colorScheme="purple"
-            rightIcon={<MdOutlinePoll size="18px" />}
-            marginRight="15px"
-            onClick={() => openCreationModal("poll")}
-          >
-            poll
-          </Button>
-
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label="Menu"
-              icon={<HamburgerIcon />}
-              variant="outline"
-              colorScheme="gray"
-              size="md"
-            />
-
-            <MenuList>
-              <MenuGroup title="Profile">
-                <MenuItem
-                  onClick={onAccountDrawerOpen}
-                  icon={<Icon as={FaUser} />}
-                >
-                  My Account
-                </MenuItem>
-              </MenuGroup>
-              <MenuDivider />
-              <MenuGroup title="Help">
-                <MenuItem
-                  onClick={onPasswordResetDialogOpen}
-                  icon={<Icon as={RiLockPasswordFill} />}
-                >
-                  Reset Password
-                </MenuItem>
-                <MenuItem
-                  color="red"
-                  onClick={logout}
-                  icon={<Icon as={TbLogout} />}
-                >
-                  Logout
-                </MenuItem>
-              </MenuGroup>
-            </MenuList>
-          </Menu>
-        </Flex>
-      </Flex>
-      <Divider orientation="horizontal" />
-    </>
-  );
-};
-
-const AppliedFiltersHeading = (props) => {
-  const { selectedCategories, selectedBatches } = props;
-
-  if (selectedCategories.length === 0 && selectedBatches.length === 0) {
-    return;
-  }
-
-  return (
-    <Heading
-      fontSize="21px"
-      paddingTop="15px"
-      paddingBottom="30px"
-      fontWeight="400"
-      textAlign="center"
-      marginRight="50px"
-      as="h2"
-    >
-      We are displaying confessions
-      {selectedCategories.length > 0 && " categorized under "}
-      <Text
-        as="span"
-        color={color.primary}
-        fontWeight="600"
-        textTransform="capitalize"
-      >
-        {selectedCategories.join(", ")}
-      </Text>
-      {selectedBatches.length > 0 && " from the batches "}
-      <Text
-        as="span"
-        color={color.primary}
-        fontWeight="600"
-        textTransform="capitalize"
-      >
-        {[...selectedBatches].sort((a, b) => a - b).join(", ")}
-      </Text>
-    </Heading>
-  );
-};
+import ProtectedHeader from "../components/ProtectedHeader";
+import AppliedFiltersHeading from "../components/AppliedFiltersHeading";
 
 const ConfessionsPage = () => {
   const [confession, setConfession] = useState("");
@@ -704,7 +563,7 @@ const ConfessionsPage = () => {
 
   return (
     <Box overflow="hidden" height="100vh">
-      <Header
+      <ProtectedHeader
         onCreateConfessOpen={onCreateConfessOpen}
         onAccountDrawerOpen={onAccountDrawerOpen}
         onPasswordResetDialogOpen={onPasswordResetDialogOpen}
