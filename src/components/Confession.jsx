@@ -22,7 +22,6 @@ import {
 import { HamburgerIcon, DeleteIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import color from "../styles/colors";
 import Comment from "./Comment";
-import { useState } from "react";
 import ConfessionModal from "./ConfessionModal";
 import ReactionsToConfession from "./ReactionsToConfession";
 import moment from "moment";
@@ -32,9 +31,6 @@ import AddComment from "./AddComment";
 import { ALLOWED_VISIBLE_COMMENTS } from "../assets/data/data";
 
 const Confession = (props) => {
-  const [userComment, setUserComment] = useState("");
-  const [isCommenting, setIsCommenting] = useState(false);
-
   const {
     isOpen: isConfessionModalOpen,
     onOpen: onConfessionModalOpen,
@@ -84,10 +80,6 @@ const Confession = (props) => {
       title: type === "confession" ? confession : question,
     });
     onReportConfessOpen();
-  };
-
-  const resetComment = () => {
-    setUserComment("");
   };
 
   return (
@@ -209,13 +201,8 @@ const Confession = (props) => {
           <AddComment
             addCommentToConfession={addCommentToConfession}
             commentIsDisabled={commentIsDisabled}
-            setUserComment={setUserComment}
-            userComment={userComment}
-            isCommenting={isCommenting}
             loggedInBatchYear={loggedInBatchYear}
-            setIsCommenting={setIsCommenting}
             id={id}
-            resetComment={resetComment}
           />
 
           {totalComments > 0 && (
@@ -248,12 +235,7 @@ const Confession = (props) => {
       <ConfessionModal
         isConfessionModalOpen={isConfessionModalOpen}
         onConfessionModalClose={onConfessionModalClose}
-        userComment={userComment}
-        setUserComment={setUserComment}
-        isCommenting={isCommenting}
         reactToConfession={reactToConfession}
-        setIsCommenting={setIsCommenting}
-        resetComment={resetComment}
         {...props}
       />
     </ScaleFade>

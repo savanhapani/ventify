@@ -40,13 +40,8 @@ function ConfessionModal(props) {
     comments,
     reactions,
     commentIsDisabled,
-    userComment,
-    setUserComment,
-    isCommenting,
     loggedInBatchYear,
     reactToConfession,
-    setIsCommenting,
-    resetComment,
   } = props;
 
   return (
@@ -112,13 +107,8 @@ function ConfessionModal(props) {
             <AddComment
               addCommentToConfession={addCommentToConfession}
               commentIsDisabled={commentIsDisabled}
-              setUserComment={setUserComment}
-              userComment={userComment}
-              isCommenting={isCommenting}
               loggedInBatchYear={loggedInBatchYear}
-              setIsCommenting={setIsCommenting}
               id={id}
-              resetComment={resetComment}
             />
 
             <Stack
