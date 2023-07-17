@@ -10,7 +10,6 @@ import {
 import { availableTabs } from "../assets/data/data";
 import Confession from "../components/Confession";
 import CreationModal from "../components/CreationModal";
-import ConfessionModal from "../components/ConfessionModal";
 import { useState, useEffect, useContext } from "react";
 import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
