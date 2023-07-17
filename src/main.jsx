@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import ConfessionsPage from "./pages/ConfessionsPage";
 import { VentifyContextProvider } from "./context/VentifyContextProvider";
+import HelpPage from "./pages/HelpPage";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/confessions",
     element: <ConfessionsPage />,
+  },
+  {
+    path: "/help",
+    element: <HelpPage />,
   },
 ]);
 

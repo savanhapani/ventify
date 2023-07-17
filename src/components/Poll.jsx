@@ -16,7 +16,7 @@ const Poll = (props) => {
   };
 
   const currentDate = new Date();
-  const pollIsExpired = expiryDate.toDate() < currentDate;
+  const pollIsExpired = expiryDate?.toDate() < currentDate;
 
   useEffect(() => {
     findChoiceWithMaxVotes();
@@ -51,7 +51,7 @@ const Poll = (props) => {
         <Text fontSize="sm" color="blackAlpha.700">
           {pollIsExpired
             ? "expired"
-            : `expires ${moment(expiryDate.toDate()).fromNow()}`}
+            : `expires ${moment(expiryDate?.toDate()).fromNow()}`}
         </Text>
       </Flex>
     </>
