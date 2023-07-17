@@ -9,14 +9,11 @@ import {
   Text,
   Button,
   Highlight,
-  Divider,
   Flex,
-  Link,
   InputRightElement,
 } from "@chakra-ui/react";
 
 import hero from "../assets/hero.svg";
-import github from "../assets/github.png";
 import color from "../styles/colors";
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
@@ -24,40 +21,9 @@ import useToastMessage from "../hooks/useToastMessage";
 import { auth } from "../firebase/firebase";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { VentifyContext } from "../context/VentifyContextProvider";
-import Logo from "../components/Logo";
 import HowItWorks from "../components/HowItWorks";
 import { login, registerUser } from "../helpers/login/loginHelpers";
-
-const Header = () => {
-  return (
-    <>
-      <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
-        <Logo />
-
-        <Link href="https://github.com/BrijenMakwana/ventify" isExternal>
-          <Flex
-            alignItems="center"
-            backgroundColor="blackAlpha.100"
-            padding="5px 10px"
-            borderRadius="30px"
-          >
-            <Image
-              objectFit="contain"
-              src={github}
-              alt="git"
-              width="35px"
-              aspectRatio="1"
-            />
-            <Text textTransform="capitalize" marginLeft="10px" fontSize="sm">
-              view code
-            </Text>
-          </Flex>
-        </Link>
-      </Flex>
-      <Divider orientation="horizontal" />
-    </>
-  );
-};
+import PublicHeader from "../components/PublicHeader";
 
 const HomePage = () => {
   const [studentRollNo, setStudentRollNo] = useState("");
@@ -78,7 +44,7 @@ const HomePage = () => {
 
   return (
     <Box>
-      <Header />
+      <PublicHeader />
 
       <Center marginTop="40px">
         <Heading

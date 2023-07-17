@@ -11,19 +11,18 @@ import {
 import color from "../styles/colors";
 import { COMMENT_CHAR_LIMIT } from "../assets/data/data";
 import { ChatIcon } from "@chakra-ui/icons";
+import { useState } from "react";
 
 const AddComment = (props) => {
-  const {
-    addCommentToConfession,
-    commentIsDisabled,
-    setUserComment,
-    userComment,
-    isCommenting,
-    loggedInBatchYear,
-    setIsCommenting,
-    id,
-    resetComment,
-  } = props;
+  const [userComment, setUserComment] = useState("");
+  const [isCommenting, setIsCommenting] = useState(false);
+
+  const { addCommentToConfession, commentIsDisabled, loggedInBatchYear, id } =
+    props;
+
+  const resetComment = () => {
+    setUserComment("");
+  };
 
   return (
     <Box marginTop="10px">

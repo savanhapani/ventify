@@ -19,7 +19,7 @@ const CreatePoll = (props) => {
     pollQuestion,
     setPollQuestion,
     pollDuration,
-    handlePollDurationChange,
+    setPollDuration,
     pollChoices,
     handlePollChoices,
   } = props;
@@ -62,7 +62,7 @@ const CreatePoll = (props) => {
           variant="filled"
           textTransform="capitalize"
           id="pollDuration"
-          onChange={handlePollDurationChange}
+          onChange={(event) => setPollDuration(Number(event.target.value))}
           value={pollDuration}
         >
           {availablePollDurations.map((item) => (

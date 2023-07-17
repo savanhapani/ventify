@@ -7,21 +7,16 @@ import {
   TabPanels,
   Tab,
 } from "@chakra-ui/react";
-import {
-  availablePollDurations,
-  confessCategories,
-  availableTabs,
-} from "../assets/data/data";
+import { availableTabs } from "../assets/data/data";
 import Confession from "../components/Confession";
 import CreationModal from "../components/CreationModal";
+import ConfessionModal from "../components/ConfessionModal";
 import { useState, useEffect, useContext } from "react";
 import FilterBar from "../components/FilterBar";
 import DeleteConfess from "../components/DeleteConfess";
 import ReportConfess from "../components/ReportConfess";
 import useToastMessage from "../hooks/useToastMessage";
 import {
-  collection,
-  addDoc,
   db,
   deleteDoc,
   doc,
@@ -32,6 +27,11 @@ import {
   auth,
   increment,
   getDoc,
+  collection,
+  query,
+  or,
+  where,
+  getDocs,
 } from "../firebase/firebase";
 
 import AccountDrawer from "../components/AccountDrawer";
@@ -42,19 +42,11 @@ import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
 import VoteStatsModal from "../components/VoteStatsModal";
 import LoadindSpinner from "../components/LoadingSpinner";
-import { getConfessions } from "../helpers/posts/confessionHelpers";
 import ProtectedHeader from "../components/ProtectedHeader";
 import AppliedFiltersHeading from "../components/AppliedFiltersHeading";
+import { CONFESSIONS_FETCH_ERROR } from "../errors/errors";
 
 const ConfessionsPage = () => {
-  const [confession, setConfession] = useState("");
-  const [confessionCategory, setConfessionCategory] = useState(
-    confessCategories[0].title
-  );
-  const [isVisibleToBatchOnly, setIsVisibleToBatchOnly] = useState(false);
-  const [commentIsDisabled, setCommentIsDisabled] = useState(false);
-
-  const [isConfessing, setIsConfessing] = useState(false);
   const { showToastMessage } = useToastMessage();
   const [confessionToBeDelete, setConfessionToBeDelete] = useState({});
   const [confessionToBeReport, setConfessionToBeReport] = useState({});
@@ -73,13 +65,6 @@ const ConfessionsPage = () => {
   const { loggedInBatchYear } = useContext(VentifyContext);
 
   const [passwordIsResetting, setPasswordIsResetting] = useState(false);
-
-  const [pollQuestion, setPollQuestion] = useState("");
-  const [pollChoices, setPollChoices] = useState(["", ""]);
-
-  const [pollDuration, setPollDuration] = useState(
-    availablePollDurations[0].value
-  );
 
   const [selectedPoll, setSelectedPoll] = useState({});
 
@@ -119,149 +104,32 @@ const ConfessionsPage = () => {
     onClose: onVoteStatsModalClose,
   } = useDisclosure();
 
-  const resetConfession = () => {
-    setConfession("");
-    setConfessionCategory(confessCategories[0].title);
-    setIsVisibleToBatchOnly(false);
-    setCommentIsDisabled(false);
-    setIsConfessing(false);
-    setPollQuestion("");
-    setPollChoices(["", ""]);
-    setPollDuration(availablePollDurations[0].value);
-    onCreateConfessClose();
+  const getConfessions = async () => {
+    try {
+      const confessionsRef = collection(db, "confessions");
+
+      const confessionsQuery = query(
+        confessionsRef,
+        or(
+          where("isVisibleToBatchOnly", "==", false),
+          where("batchYear", "==", Number(loggedInBatchYear))
+        )
+      );
+
+      const querySnapshot = await getDocs(confessionsQuery);
+      const confessionsData = [];
+      querySnapshot.forEach((doc) => {
+        confessionsData.push({ id: doc.id, ...doc.data() });
+      });
+      setConfessions(confessionsData);
+    } catch (error) {
+      showToastMessage("Error", CONFESSIONS_FETCH_ERROR, "error");
+    }
   };
 
   const openCreationModal = (type) => {
     setCreationModalType(type);
     onCreateConfessOpen();
-  };
-
-  const handleCategoryChange = (event) => {
-    setConfessionCategory(event.target.value);
-  };
-
-  const handlePollDurationChange = (event) => {
-    setPollDuration(Number(event.target.value));
-  };
-
-  const handleIsVisibleToBatchOnlyChange = (event) => {
-    setIsVisibleToBatchOnly(event.target.checked);
-  };
-
-  const handleCommentIsDisabledChange = (event) => {
-    setCommentIsDisabled(event.target.checked);
-  };
-
-  const handlePollChoices = (index, value) => {
-    const newChoices = [...pollChoices];
-    newChoices[index] = value;
-
-    if (index === newChoices.length - 1 && index < 4 && value !== "") {
-      newChoices.push("");
-    }
-
-    setPollChoices(newChoices);
-  };
-
-  const addToFirestore = async (creationObj) => {
-    setIsConfessing(true);
-
-    try {
-      const confessionRef = await addDoc(
-        collection(db, "confessions"),
-        creationObj
-      );
-      const deletionCode = confessionRef.id;
-      navigator.clipboard.writeText(deletionCode);
-
-      showToastMessage(
-        "Congratulations",
-        `You have confessed succesfully!! The deletion code for this confession is ${deletionCode} and copied to clipboard.`,
-        "success"
-      );
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-    resetConfession();
-
-    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
-  };
-
-  const createConfession = () => {
-    const confessionObj = {
-      confession: confession,
-      type: creationModalType,
-      category: confessionCategory,
-      batchYear: Number(loggedInBatchYear),
-      isVisibleToBatchOnly: isVisibleToBatchOnly,
-      commentIsDisabled: commentIsDisabled,
-      timeStamp: new Date(),
-      comments: [],
-      reactions: {
-        like: 0,
-        funny: 0,
-        shock: 0,
-      },
-      reports: [],
-    };
-    addToFirestore(confessionObj);
-  };
-
-  const createPoll = () => {
-    let nonEmptyChoices = 0;
-
-    pollChoices.forEach((choice) => {
-      if (choice.trim()) {
-        nonEmptyChoices++;
-      }
-    });
-
-    if (nonEmptyChoices < 2) {
-      showToastMessage(
-        "Error",
-        "Pleaase enter at least two choices",
-        "warning"
-      );
-
-      return;
-    }
-
-    let currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + pollDuration);
-
-    const structuredPollChoices = [];
-    pollChoices.forEach((item) => {
-      if (item.trim()) {
-        structuredPollChoices.push({
-          id: uuidv4(),
-          title: item.trim(),
-          votes: 0,
-          votesByBatches: {},
-        });
-      }
-    });
-
-    const pollObj = {
-      question: pollQuestion,
-      type: creationModalType,
-      choices: structuredPollChoices,
-      category: confessionCategory,
-      batchYear: Number(loggedInBatchYear),
-      isVisibleToBatchOnly: isVisibleToBatchOnly,
-      commentIsDisabled: commentIsDisabled,
-      timeStamp: new Date(),
-      expiryDate: new Date(currentDate),
-      totalVotes: 0,
-      comments: [],
-      reactions: {
-        like: 0,
-        funny: 0,
-        shock: 0,
-      },
-      reports: [],
-    };
-
-    addToFirestore(pollObj);
   };
 
   const deleteConfession = async (confessionDeletionCode) => {
@@ -285,7 +153,7 @@ const ConfessionsPage = () => {
       "success"
     );
     setConfessionToBeDelete({});
-    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
+    getConfessions();
   };
 
   const reportConfession = async (confessionId, reasonToReport) => {
@@ -388,7 +256,7 @@ const ConfessionsPage = () => {
     resetComment();
     setIsCommenting(false);
     showToastMessage("Successful", "Comment added successfully!", "success");
-    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
+    getConfessions();
   };
 
   const userAlreadyVoted = (id) => {
@@ -464,7 +332,7 @@ const ConfessionsPage = () => {
     await updateDoc(confessionRef, { choices, totalVotes });
     setIsVoting(false);
 
-    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
+    getConfessions();
   };
 
   const userAlreadyReacted = (id) => {
@@ -522,7 +390,7 @@ const ConfessionsPage = () => {
         break;
     }
 
-    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
+    getConfessions();
   };
 
   const viewDetailedPollStats = (
@@ -558,7 +426,7 @@ const ConfessionsPage = () => {
   );
 
   useEffect(() => {
-    getConfessions(loggedInBatchYear, setConfessions, showToastMessage);
+    getConfessions();
   }, []);
 
   return (
@@ -632,26 +500,11 @@ const ConfessionsPage = () => {
       </Flex>
       <CreationModal
         isCreateConfessOpen={isCreateConfessOpen}
-        createConfession={createConfession}
-        createPoll={createPoll}
         creationModalType={creationModalType}
-        handleCategoryChange={handleCategoryChange}
-        handlePollDurationChange={handlePollDurationChange}
-        handleIsVisibleToBatchOnlyChange={handleIsVisibleToBatchOnlyChange}
-        handleCommentIsDisabledChange={handleCommentIsDisabledChange}
-        confession={confession}
-        setConfession={setConfession}
-        pollQuestion={pollQuestion}
-        pollChoices={pollChoices}
-        handlePollChoices={handlePollChoices}
-        setPollQuestion={setPollQuestion}
-        confessionCategory={confessionCategory}
-        pollDuration={pollDuration}
-        isVisibleToBatchOnly={isVisibleToBatchOnly}
-        commentIsDisabled={commentIsDisabled}
-        isConfessing={isConfessing}
-        resetConfession={resetConfession}
+        onCreateConfessClose={onCreateConfessClose}
+        getConfessions={getConfessions}
       />
+
       <DeleteConfess
         isDeleteConfessOpen={isDeleteConfessOpen}
         onDeleteConfessClose={onDeleteConfessClose}
