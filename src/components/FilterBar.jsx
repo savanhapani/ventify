@@ -56,7 +56,7 @@ export default function FilterBar(props) {
             Clear all filters
           </Button>
         )}
-        <Accordion defaultIndex={[0]} allowMultiple>
+        <Accordion defaultIndex={[0]}>
           <AccordionItem>
             <h3>
               <Tooltip
