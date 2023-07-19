@@ -7,13 +7,13 @@ import {
   TabPanels,
   Tab,
 } from "@chakra-ui/react";
+import React from "react";
 import { availableTabs } from "../assets/data/data";
 import Confession from "../components/Confession";
-import CreationModal from "../components/CreationModal";
+
 import { useState, useEffect, useContext } from "react";
 import FilterBar from "../components/FilterBar";
-import DeleteConfess from "../components/DeleteConfess";
-import ReportConfess from "../components/ReportConfess";
+
 import useToastMessage from "../hooks/useToastMessage";
 import {
   db,
@@ -33,17 +33,25 @@ import {
   getDocs,
 } from "../firebase/firebase";
 
-import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
-import PasswordResetDialog from "../components/PasswordResetDialog";
 import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
-import VoteStatsModal from "../components/VoteStatsModal";
+
+const CreationModal = React.lazy(() => import("../components/CreationModal"));
+const AccountDrawer = React.lazy(() => import("../components/AccountDrawer"));
+const PasswordResetDialog = React.lazy(() =>
+  import("../components/PasswordResetDialog")
+);
+const VoteStatsModal = React.lazy(() => import("../components/VoteStatsModal"));
+const DeleteConfess = React.lazy(() => import("../components/DeleteConfess"));
+const ReportConfess = React.lazy(() => import("../components/ReportConfess"));
+
 import LoadindSpinner from "../components/LoadingSpinner";
 import ProtectedHeader from "../components/ProtectedHeader";
 import AppliedFiltersHeading from "../components/AppliedFiltersHeading";
 import { CONFESSIONS_FETCH_ERROR } from "../errors/errors";
+import { Suspense } from "react";
 
 const ConfessionsPage = () => {
   const { showToastMessage } = useToastMessage();
@@ -243,7 +251,7 @@ const ConfessionsPage = () => {
 
     const userCommentObj = {
       id: uuidv4(),
-      batchYear: loggedInBatchYear,
+      batchYear: Number(loggedInBatchYear),
       comment: userComment,
       timeStamp: new Date(),
     };
@@ -429,111 +437,119 @@ const ConfessionsPage = () => {
   }, []);
 
   return (
-    <Box overflow="hidden" height="100vh">
-      <ProtectedHeader
-        onCreateConfessOpen={onCreateConfessOpen}
-        onAccountDrawerOpen={onAccountDrawerOpen}
-        onPasswordResetDialogOpen={onPasswordResetDialogOpen}
-        logout={logout}
-        openCreationModal={openCreationModal}
-      />
-      <Flex>
-        <FilterBar
-          handleCategorySelection={handleCategorySelection}
-          selectedCategories={selectedCategories}
-          handleBatchSelection={handleBatchSelection}
-          selectedBatches={selectedBatches}
-          toggleShowBatchExclusiveConfessions={
-            toggleShowBatchExclusiveConfessions
-          }
-          showBatchExclusiveConfessions={showBatchExclusiveConfessions}
-          clearAllFilters={clearAllFilters}
+    <>
+      <Box overflow="hidden" height="100vh">
+        <ProtectedHeader
+          onCreateConfessOpen={onCreateConfessOpen}
+          onAccountDrawerOpen={onAccountDrawerOpen}
+          onPasswordResetDialogOpen={onPasswordResetDialogOpen}
+          logout={logout}
+          openCreationModal={openCreationModal}
         />
-        <Box flex="1" paddingLeft="30px">
-          <AppliedFiltersHeading
+        <Flex>
+          <FilterBar
+            handleCategorySelection={handleCategorySelection}
             selectedCategories={selectedCategories}
+            handleBatchSelection={handleBatchSelection}
             selectedBatches={selectedBatches}
+            toggleShowBatchExclusiveConfessions={
+              toggleShowBatchExclusiveConfessions
+            }
+            showBatchExclusiveConfessions={showBatchExclusiveConfessions}
+            clearAllFilters={clearAllFilters}
           />
+          <Box flex="1" paddingLeft="30px">
+            <AppliedFiltersHeading
+              selectedCategories={selectedCategories}
+              selectedBatches={selectedBatches}
+            />
 
-          {confessions.length > 0 ? (
-            <Tabs variant="solid-rounded" colorScheme="purple" marginTop="20px">
-              <TabList justifyContent="center">
-                {availableTabs.map((tab) => (
-                  <Tab key={tab.id}>{tab.title}</Tab>
-                ))}
-              </TabList>
+            {confessions.length > 0 ? (
+              <Tabs
+                variant="solid-rounded"
+                colorScheme="purple"
+                marginTop="20px"
+              >
+                <TabList justifyContent="center">
+                  {availableTabs.map((tab) => (
+                    <Tab key={tab.id}>{tab.title}</Tab>
+                  ))}
+                </TabList>
 
-              <TabPanels>
-                {availableTabs.map((tab) => (
-                  <TabView key={tab.id}>
-                    {filteredConfessions
-                      .filter(
-                        (item) => tab.value === "all" || item.type === tab.value
-                      )
-                      .map((item) => (
-                        <Confession
-                          {...item}
-                          key={item.id}
-                          onDeleteConfessOpen={onDeleteConfessOpen}
-                          setConfessionToBeDelete={setConfessionToBeDelete}
-                          onReportConfessOpen={onReportConfessOpen}
-                          setConfessionToBeReport={setConfessionToBeReport}
-                          loggedInBatchYear={loggedInBatchYear}
-                          addCommentToConfession={addCommentToConfession}
-                          reactToConfession={reactToConfession}
-                          voteToPoll={voteToPoll}
-                          onVoteStatsModalOpen={onVoteStatsModalOpen}
-                          viewDetailedPollStats={viewDetailedPollStats}
-                        />
-                      ))}
-                  </TabView>
-                ))}
-              </TabPanels>
-            </Tabs>
-          ) : (
-            <Flex height="100%" justifyContent="center">
-              <LoadindSpinner text="Getting your confessions" />
-            </Flex>
-          )}
-        </Box>
-      </Flex>
-      <CreationModal
-        isCreateConfessOpen={isCreateConfessOpen}
-        creationModalType={creationModalType}
-        onCreateConfessClose={onCreateConfessClose}
-        getConfessions={getConfessions}
-      />
+                <TabPanels>
+                  {availableTabs.map((tab) => (
+                    <TabView key={tab.id}>
+                      {filteredConfessions
+                        .filter(
+                          (item) =>
+                            tab.value === "all" || item.type === tab.value
+                        )
+                        .map((item) => (
+                          <Confession
+                            {...item}
+                            key={item.id}
+                            onDeleteConfessOpen={onDeleteConfessOpen}
+                            setConfessionToBeDelete={setConfessionToBeDelete}
+                            onReportConfessOpen={onReportConfessOpen}
+                            setConfessionToBeReport={setConfessionToBeReport}
+                            loggedInBatchYear={loggedInBatchYear}
+                            addCommentToConfession={addCommentToConfession}
+                            reactToConfession={reactToConfession}
+                            voteToPoll={voteToPoll}
+                            onVoteStatsModalOpen={onVoteStatsModalOpen}
+                            viewDetailedPollStats={viewDetailedPollStats}
+                          />
+                        ))}
+                    </TabView>
+                  ))}
+                </TabPanels>
+              </Tabs>
+            ) : (
+              <Flex height="100%" justifyContent="center">
+                <LoadindSpinner text="Getting your confessions" />
+              </Flex>
+            )}
+          </Box>
+        </Flex>
+      </Box>
+      <Suspense fallback={<LoadindSpinner text="Loading..." />}>
+        <CreationModal
+          isCreateConfessOpen={isCreateConfessOpen}
+          creationModalType={creationModalType}
+          onCreateConfessClose={onCreateConfessClose}
+          getConfessions={getConfessions}
+        />
+        <DeleteConfess
+          isDeleteConfessOpen={isDeleteConfessOpen}
+          onDeleteConfessClose={onDeleteConfessClose}
+          confessionToBeDelete={confessionToBeDelete}
+          deleteConfession={deleteConfession}
+        />
 
-      <DeleteConfess
-        isDeleteConfessOpen={isDeleteConfessOpen}
-        onDeleteConfessClose={onDeleteConfessClose}
-        confessionToBeDelete={confessionToBeDelete}
-        deleteConfession={deleteConfession}
-      />
-
-      <ReportConfess
-        isReportConfessOpen={isReportConfessOpen}
-        onReportConfessClose={onReportConfessClose}
-        confessionToBeReport={confessionToBeReport}
-        reportConfession={reportConfession}
-      />
-      <AccountDrawer
-        isAccountDrawerOpen={isAccountDrawerOpen}
-        onAccountDrawerClose={onAccountDrawerClose}
-        logout={logout}
-      />
-      <PasswordResetDialog
-        isPasswordResetDialogOpen={isPasswordResetDialogOpen}
-        onPasswordResetDialogClose={onPasswordResetDialogClose}
-        passwordIsResetting={passwordIsResetting}
-        resetPassword={resetPassword}
-      />
-      <VoteStatsModal
-        isVoteStatsModalOpen={isVoteStatsModalOpen}
-        onVoteStatsModalClose={onVoteStatsModalClose}
-        selectedPoll={selectedPoll}
-      />
-    </Box>
+        <ReportConfess
+          isReportConfessOpen={isReportConfessOpen}
+          onReportConfessClose={onReportConfessClose}
+          confessionToBeReport={confessionToBeReport}
+          reportConfession={reportConfession}
+        />
+        <AccountDrawer
+          isAccountDrawerOpen={isAccountDrawerOpen}
+          onAccountDrawerClose={onAccountDrawerClose}
+          logout={logout}
+        />
+        <PasswordResetDialog
+          isPasswordResetDialogOpen={isPasswordResetDialogOpen}
+          onPasswordResetDialogClose={onPasswordResetDialogClose}
+          passwordIsResetting={passwordIsResetting}
+          resetPassword={resetPassword}
+        />
+        <VoteStatsModal
+          isVoteStatsModalOpen={isVoteStatsModalOpen}
+          onVoteStatsModalClose={onVoteStatsModalClose}
+          selectedPoll={selectedPoll}
+        />
+      </Suspense>
+    </>
   );
 };
 
