@@ -429,74 +429,81 @@ const ConfessionsPage = () => {
   }, []);
 
   return (
-    <Box overflow="hidden" height="100vh">
-      <ProtectedHeader
-        onCreateConfessOpen={onCreateConfessOpen}
-        onAccountDrawerOpen={onAccountDrawerOpen}
-        onPasswordResetDialogOpen={onPasswordResetDialogOpen}
-        logout={logout}
-        openCreationModal={openCreationModal}
-      />
-      <Flex>
-        <FilterBar
-          handleCategorySelection={handleCategorySelection}
-          selectedCategories={selectedCategories}
-          handleBatchSelection={handleBatchSelection}
-          selectedBatches={selectedBatches}
-          toggleShowBatchExclusiveConfessions={
-            toggleShowBatchExclusiveConfessions
-          }
-          showBatchExclusiveConfessions={showBatchExclusiveConfessions}
-          clearAllFilters={clearAllFilters}
+    <>
+      <Box overflow="hidden" height="100vh">
+        <ProtectedHeader
+          onCreateConfessOpen={onCreateConfessOpen}
+          onAccountDrawerOpen={onAccountDrawerOpen}
+          onPasswordResetDialogOpen={onPasswordResetDialogOpen}
+          logout={logout}
+          openCreationModal={openCreationModal}
         />
-        <Box flex="1" paddingLeft="30px">
-          <AppliedFiltersHeading
+        <Flex>
+          <FilterBar
+            handleCategorySelection={handleCategorySelection}
             selectedCategories={selectedCategories}
+            handleBatchSelection={handleBatchSelection}
             selectedBatches={selectedBatches}
+            toggleShowBatchExclusiveConfessions={
+              toggleShowBatchExclusiveConfessions
+            }
+            showBatchExclusiveConfessions={showBatchExclusiveConfessions}
+            clearAllFilters={clearAllFilters}
           />
+          <Box flex="1" paddingLeft="30px">
+            <AppliedFiltersHeading
+              selectedCategories={selectedCategories}
+              selectedBatches={selectedBatches}
+            />
 
-          {confessions.length > 0 ? (
-            <Tabs variant="solid-rounded" colorScheme="purple" marginTop="20px">
-              <TabList justifyContent="center">
-                {availableTabs.map((tab) => (
-                  <Tab key={tab.id}>{tab.title}</Tab>
-                ))}
-              </TabList>
+            {confessions.length > 0 ? (
+              <Tabs
+                variant="solid-rounded"
+                colorScheme="purple"
+                marginTop="20px"
+              >
+                <TabList justifyContent="center">
+                  {availableTabs.map((tab) => (
+                    <Tab key={tab.id}>{tab.title}</Tab>
+                  ))}
+                </TabList>
 
-              <TabPanels>
-                {availableTabs.map((tab) => (
-                  <TabView key={tab.id}>
-                    {filteredConfessions
-                      .filter(
-                        (item) => tab.value === "all" || item.type === tab.value
-                      )
-                      .map((item) => (
-                        <Confession
-                          {...item}
-                          key={item.id}
-                          onDeleteConfessOpen={onDeleteConfessOpen}
-                          setConfessionToBeDelete={setConfessionToBeDelete}
-                          onReportConfessOpen={onReportConfessOpen}
-                          setConfessionToBeReport={setConfessionToBeReport}
-                          loggedInBatchYear={loggedInBatchYear}
-                          addCommentToConfession={addCommentToConfession}
-                          reactToConfession={reactToConfession}
-                          voteToPoll={voteToPoll}
-                          onVoteStatsModalOpen={onVoteStatsModalOpen}
-                          viewDetailedPollStats={viewDetailedPollStats}
-                        />
-                      ))}
-                  </TabView>
-                ))}
-              </TabPanels>
-            </Tabs>
-          ) : (
-            <Flex height="100%" justifyContent="center">
-              <LoadindSpinner text="Getting your confessions" />
-            </Flex>
-          )}
-        </Box>
-      </Flex>
+                <TabPanels>
+                  {availableTabs.map((tab) => (
+                    <TabView key={tab.id}>
+                      {filteredConfessions
+                        .filter(
+                          (item) =>
+                            tab.value === "all" || item.type === tab.value
+                        )
+                        .map((item) => (
+                          <Confession
+                            {...item}
+                            key={item.id}
+                            onDeleteConfessOpen={onDeleteConfessOpen}
+                            setConfessionToBeDelete={setConfessionToBeDelete}
+                            onReportConfessOpen={onReportConfessOpen}
+                            setConfessionToBeReport={setConfessionToBeReport}
+                            loggedInBatchYear={loggedInBatchYear}
+                            addCommentToConfession={addCommentToConfession}
+                            reactToConfession={reactToConfession}
+                            voteToPoll={voteToPoll}
+                            onVoteStatsModalOpen={onVoteStatsModalOpen}
+                            viewDetailedPollStats={viewDetailedPollStats}
+                          />
+                        ))}
+                    </TabView>
+                  ))}
+                </TabPanels>
+              </Tabs>
+            ) : (
+              <Flex height="100%" justifyContent="center">
+                <LoadindSpinner text="Getting your confessions" />
+              </Flex>
+            )}
+          </Box>
+        </Flex>
+      </Box>
       <CreationModal
         isCreateConfessOpen={isCreateConfessOpen}
         creationModalType={creationModalType}
@@ -533,7 +540,7 @@ const ConfessionsPage = () => {
         onVoteStatsModalClose={onVoteStatsModalClose}
         selectedPoll={selectedPoll}
       />
-    </Box>
+    </>
   );
 };
 
