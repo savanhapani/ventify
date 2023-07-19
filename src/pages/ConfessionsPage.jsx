@@ -243,7 +243,7 @@ const ConfessionsPage = () => {
 
     const userCommentObj = {
       id: uuidv4(),
-      batchYear: loggedInBatchYear,
+      batchYear: Number(loggedInBatchYear),
       comment: userComment,
       timeStamp: new Date(),
     };
