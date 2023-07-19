@@ -141,48 +141,48 @@ const CreationModal = (props) => {
         if (choice.trim()) {
           nonEmptyChoices++;
         }
-
-        if (nonEmptyChoices < 2) {
-          throw new Error(MINIMUM_POLL_CHOICES);
-        }
-
-        let currentDate = new Date();
-        currentDate.setDate(currentDate.getDate() + pollDuration);
-
-        const structuredPollChoices = [];
-        pollChoices.forEach((item) => {
-          if (item.trim()) {
-            structuredPollChoices.push({
-              id: uuidv4(),
-              title: item.trim(),
-              votes: 0,
-              votesByBatches: {},
-            });
-          }
-        });
-
-        const pollObj = {
-          question: pollQuestion,
-          type: creationModalType,
-          choices: structuredPollChoices,
-          category: confessionCategory,
-          batchYear: Number(loggedInBatchYear),
-          isVisibleToBatchOnly: isVisibleToBatchOnly,
-          commentIsDisabled: commentIsDisabled,
-          timeStamp: new Date(),
-          expiryDate: new Date(currentDate),
-          totalVotes: 0,
-          comments: [],
-          reactions: {
-            like: 0,
-            funny: 0,
-            shock: 0,
-          },
-          reports: [],
-        };
-
-        addToFirestore(pollObj);
       });
+
+      if (nonEmptyChoices < 2) {
+        throw new Error(MINIMUM_POLL_CHOICES);
+      }
+
+      let currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + pollDuration);
+
+      const structuredPollChoices = [];
+      pollChoices.forEach((item) => {
+        if (item.trim()) {
+          structuredPollChoices.push({
+            id: uuidv4(),
+            title: item.trim(),
+            votes: 0,
+            votesByBatches: {},
+          });
+        }
+      });
+
+      const pollObj = {
+        question: pollQuestion,
+        type: creationModalType,
+        choices: structuredPollChoices,
+        category: confessionCategory,
+        batchYear: Number(loggedInBatchYear),
+        isVisibleToBatchOnly: isVisibleToBatchOnly,
+        commentIsDisabled: commentIsDisabled,
+        timeStamp: new Date(),
+        expiryDate: new Date(currentDate),
+        totalVotes: 0,
+        comments: [],
+        reactions: {
+          like: 0,
+          funny: 0,
+          shock: 0,
+        },
+        reports: [],
+      };
+
+      addToFirestore(pollObj);
     } catch (error) {
       showToastMessage("Error", error.message, "warning");
     }
