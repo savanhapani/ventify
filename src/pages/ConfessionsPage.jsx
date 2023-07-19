@@ -7,13 +7,13 @@ import {
   TabPanels,
   Tab,
 } from "@chakra-ui/react";
+import React from "react";
 import { availableTabs } from "../assets/data/data";
 import Confession from "../components/Confession";
-import CreationModal from "../components/CreationModal";
+
 import { useState, useEffect, useContext } from "react";
 import FilterBar from "../components/FilterBar";
-import DeleteConfess from "../components/DeleteConfess";
-import ReportConfess from "../components/ReportConfess";
+
 import useToastMessage from "../hooks/useToastMessage";
 import {
   db,
@@ -33,17 +33,25 @@ import {
   getDocs,
 } from "../firebase/firebase";
 
-import AccountDrawer from "../components/AccountDrawer";
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
-import PasswordResetDialog from "../components/PasswordResetDialog";
 import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
-import VoteStatsModal from "../components/VoteStatsModal";
+
+const CreationModal = React.lazy(() => import("../components/CreationModal"));
+const AccountDrawer = React.lazy(() => import("../components/AccountDrawer"));
+const PasswordResetDialog = React.lazy(() =>
+  import("../components/PasswordResetDialog")
+);
+const VoteStatsModal = React.lazy(() => import("../components/VoteStatsModal"));
+const DeleteConfess = React.lazy(() => import("../components/DeleteConfess"));
+const ReportConfess = React.lazy(() => import("../components/ReportConfess"));
+
 import LoadindSpinner from "../components/LoadingSpinner";
 import ProtectedHeader from "../components/ProtectedHeader";
 import AppliedFiltersHeading from "../components/AppliedFiltersHeading";
 import { CONFESSIONS_FETCH_ERROR } from "../errors/errors";
+import { Suspense } from "react";
 
 const ConfessionsPage = () => {
   const { showToastMessage } = useToastMessage();
@@ -504,42 +512,43 @@ const ConfessionsPage = () => {
           </Box>
         </Flex>
       </Box>
-      <CreationModal
-        isCreateConfessOpen={isCreateConfessOpen}
-        creationModalType={creationModalType}
-        onCreateConfessClose={onCreateConfessClose}
-        getConfessions={getConfessions}
-      />
+      <Suspense fallback={<LoadindSpinner text="Loading..." />}>
+        <CreationModal
+          isCreateConfessOpen={isCreateConfessOpen}
+          creationModalType={creationModalType}
+          onCreateConfessClose={onCreateConfessClose}
+          getConfessions={getConfessions}
+        />
+        <DeleteConfess
+          isDeleteConfessOpen={isDeleteConfessOpen}
+          onDeleteConfessClose={onDeleteConfessClose}
+          confessionToBeDelete={confessionToBeDelete}
+          deleteConfession={deleteConfession}
+        />
 
-      <DeleteConfess
-        isDeleteConfessOpen={isDeleteConfessOpen}
-        onDeleteConfessClose={onDeleteConfessClose}
-        confessionToBeDelete={confessionToBeDelete}
-        deleteConfession={deleteConfession}
-      />
-
-      <ReportConfess
-        isReportConfessOpen={isReportConfessOpen}
-        onReportConfessClose={onReportConfessClose}
-        confessionToBeReport={confessionToBeReport}
-        reportConfession={reportConfession}
-      />
-      <AccountDrawer
-        isAccountDrawerOpen={isAccountDrawerOpen}
-        onAccountDrawerClose={onAccountDrawerClose}
-        logout={logout}
-      />
-      <PasswordResetDialog
-        isPasswordResetDialogOpen={isPasswordResetDialogOpen}
-        onPasswordResetDialogClose={onPasswordResetDialogClose}
-        passwordIsResetting={passwordIsResetting}
-        resetPassword={resetPassword}
-      />
-      <VoteStatsModal
-        isVoteStatsModalOpen={isVoteStatsModalOpen}
-        onVoteStatsModalClose={onVoteStatsModalClose}
-        selectedPoll={selectedPoll}
-      />
+        <ReportConfess
+          isReportConfessOpen={isReportConfessOpen}
+          onReportConfessClose={onReportConfessClose}
+          confessionToBeReport={confessionToBeReport}
+          reportConfession={reportConfession}
+        />
+        <AccountDrawer
+          isAccountDrawerOpen={isAccountDrawerOpen}
+          onAccountDrawerClose={onAccountDrawerClose}
+          logout={logout}
+        />
+        <PasswordResetDialog
+          isPasswordResetDialogOpen={isPasswordResetDialogOpen}
+          onPasswordResetDialogClose={onPasswordResetDialogClose}
+          passwordIsResetting={passwordIsResetting}
+          resetPassword={resetPassword}
+        />
+        <VoteStatsModal
+          isVoteStatsModalOpen={isVoteStatsModalOpen}
+          onVoteStatsModalClose={onVoteStatsModalClose}
+          selectedPoll={selectedPoll}
+        />
+      </Suspense>
     </>
   );
 };
