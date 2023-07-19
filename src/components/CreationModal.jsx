@@ -14,7 +14,11 @@ import {
   Switch,
   FormLabel,
 } from "@chakra-ui/react";
-import { confessCategories, availablePollDurations } from "../assets/data/data";
+import {
+  confessCategories,
+  availablePollDurations,
+  NUMBER_OF_CHOICES_IN_POLL,
+} from "../assets/data/data";
 import color from "../styles/colors";
 import { useRef, useContext, useState } from "react";
 import { VentifyContext } from "../context/VentifyContextProvider";
@@ -24,6 +28,7 @@ import LoadindSpinner from "./LoadingSpinner";
 import useToastMessage from "../hooks/useToastMessage";
 import { db, addDoc, collection } from "../firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
+import { CONFESSION_ADD_ERROR, MINIMUM_POLL_CHOICES } from "../errors/errors";
 
 const CreationModal = (props) => {
   const [confession, setConfession] = useState("");
@@ -75,6 +80,7 @@ const CreationModal = (props) => {
         collection(db, "confessions"),
         creationObj
       );
+
       const deletionCode = confessionRef.id;
       navigator.clipboard.writeText(deletionCode);
 
@@ -83,12 +89,13 @@ const CreationModal = (props) => {
         `You have confessed succesfully!! The deletion code for this confession is ${deletionCode} and copied to clipboard.`,
         "success"
       );
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-    resetConfession();
 
-    getConfessions();
+      getConfessions();
+    } catch (e) {
+      showToastMessage("Error", CONFESSION_ADD_ERROR, "error");
+    } finally {
+      resetConfession();
+    }
   };
 
   const createConfession = () => {
@@ -115,7 +122,11 @@ const CreationModal = (props) => {
     const newChoices = [...pollChoices];
     newChoices[index] = value;
 
-    if (index === newChoices.length - 1 && index < 4 && value !== "") {
+    if (
+      index === newChoices.length - 1 &&
+      index < NUMBER_OF_CHOICES_IN_POLL - 1 &&
+      value !== ""
+    ) {
       newChoices.push("");
     }
 
@@ -123,60 +134,58 @@ const CreationModal = (props) => {
   };
 
   const createPoll = () => {
-    let nonEmptyChoices = 0;
+    try {
+      let nonEmptyChoices = 0;
 
-    pollChoices.forEach((choice) => {
-      if (choice.trim()) {
-        nonEmptyChoices++;
-      }
-    });
+      pollChoices.forEach((choice) => {
+        if (choice.trim()) {
+          nonEmptyChoices++;
+        }
 
-    if (nonEmptyChoices < 2) {
-      showToastMessage(
-        "Error",
-        "Pleaase enter at least two choices",
-        "warning"
-      );
+        if (nonEmptyChoices < 2) {
+          throw new Error(MINIMUM_POLL_CHOICES);
+        }
 
-      return;
-    }
+        let currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() + pollDuration);
 
-    let currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + pollDuration);
-
-    const structuredPollChoices = [];
-    pollChoices.forEach((item) => {
-      if (item.trim()) {
-        structuredPollChoices.push({
-          id: uuidv4(),
-          title: item.trim(),
-          votes: 0,
-          votesByBatches: {},
+        const structuredPollChoices = [];
+        pollChoices.forEach((item) => {
+          if (item.trim()) {
+            structuredPollChoices.push({
+              id: uuidv4(),
+              title: item.trim(),
+              votes: 0,
+              votesByBatches: {},
+            });
+          }
         });
-      }
-    });
 
-    const pollObj = {
-      question: pollQuestion,
-      type: creationModalType,
-      choices: structuredPollChoices,
-      category: confessionCategory,
-      batchYear: Number(loggedInBatchYear),
-      isVisibleToBatchOnly: isVisibleToBatchOnly,
-      commentIsDisabled: commentIsDisabled,
-      timeStamp: new Date(),
-      expiryDate: new Date(currentDate),
-      totalVotes: 0,
-      comments: [],
-      reactions: {
-        like: 0,
-        funny: 0,
-        shock: 0,
-      },
-      reports: [],
-    };
+        const pollObj = {
+          question: pollQuestion,
+          type: creationModalType,
+          choices: structuredPollChoices,
+          category: confessionCategory,
+          batchYear: Number(loggedInBatchYear),
+          isVisibleToBatchOnly: isVisibleToBatchOnly,
+          commentIsDisabled: commentIsDisabled,
+          timeStamp: new Date(),
+          expiryDate: new Date(currentDate),
+          totalVotes: 0,
+          comments: [],
+          reactions: {
+            like: 0,
+            funny: 0,
+            shock: 0,
+          },
+          reports: [],
+        };
 
-    addToFirestore(pollObj);
+        addToFirestore(pollObj);
+      });
+    } catch (error) {
+      showToastMessage("Error", error.message, "warning");
+    }
   };
 
   const creationBtnConfig = {
