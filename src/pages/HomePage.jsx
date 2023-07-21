@@ -84,7 +84,7 @@ const HomePage = () => {
                 rightIcon={<ArrowForwardIcon />}
                 onClick={() => navigate("/confessions")}
               >
-                alrady logged in
+                already logged in
               </Button>
             ) : (
               <>
