@@ -54,7 +54,6 @@ import {
   COMMENT_ADD_ERROR,
   CONFESSIONS_FETCH_ERROR,
   INCORRECT_DELETION_CODE,
-  PASSWORD_RESET_ERROR,
   REPORTING_ERROR,
 } from "../errors/errors";
 import { Suspense } from "react";
@@ -242,7 +241,7 @@ const ConfessionsPage = () => {
       );
       setPasswordIsResetting(false);
     } catch (error) {
-      showToastMessage("Error", PASSWORD_RESET_ERROR, "error");
+      showToastMessage("Error", error.messages, "error");
     } finally {
       setPasswordIsResetting(false);
     }
