@@ -3,43 +3,28 @@ import {
   Center,
   Heading,
   Image,
-  InputGroup,
-  InputRightAddon,
-  Input,
-  Text,
-  Button,
   Highlight,
   Flex,
-  InputRightElement,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
 } from "@chakra-ui/react";
 
 import hero from "../assets/hero.svg";
 import color from "../styles/colors";
-import { useNavigate } from "react-router";
-import { useState, useContext } from "react";
-import useToastMessage from "../hooks/useToastMessage";
+
 import { auth } from "../firebase/firebase";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { VentifyContext } from "../context/VentifyContextProvider";
+
 import HowItWorks from "../components/HowItWorks";
-import { login, registerUser } from "../helpers/login/loginHelpers";
+
 import PublicHeader from "../components/PublicHeader";
+import LoginUI from "../components/LoginUI";
+import { availableLoginTabs } from "../assets/data/data";
 
 const HomePage = () => {
-  const [studentRollNo, setStudentRollNo] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowpassword] = useState(false);
-
-  const [loginUiIsVisible, setLoginUiIsVisible] = useState(true);
-
-  const [isRegisteringUser, setIsRegisteringUser] = useState(false);
-  const [isLoginInUser, setIsLoginInUser] = useState(false);
-
-  const { setLoggedInBatchYear } = useContext(VentifyContext);
-
-  const { showToastMessage } = useToastMessage();
-  const navigate = useNavigate();
-
   const userIsLoggedIn = auth.currentUser;
 
   return (
@@ -74,121 +59,31 @@ const HomePage = () => {
         </Center>
 
         <Center flex="1">
-          <Box width="300px" padding="10px">
-            {userIsLoggedIn ? (
-              <Button
-                colorScheme="purple"
-                variant="solid"
-                textTransform="capitalize"
-                size="md"
-                rightIcon={<ArrowForwardIcon />}
-                onClick={() => navigate("/confessions")}
-              >
-                already logged in
-              </Button>
-            ) : (
-              <>
-                <Heading
-                  as="h2"
+          <Tabs variant="solid-rounded" colorScheme="purple" height="300px">
+            <TabList justifyContent="center">
+              {availableLoginTabs.map((tab) => (
+                <Tab
+                  _selected={{
+                    fontSize: "17px",
+                    bg: color.primary,
+                    color: "#fff",
+                  }}
+                  fontSize="13px"
                   textTransform="capitalize"
-                  fontSize="3xl"
-                  textAlign="center"
+                  key={tab.id}
                 >
-                  {loginUiIsVisible ? "login" : "register"}
-                </Heading>
-
-                <InputGroup size="md" marginTop="20px">
-                  <Input
-                    placeholder="e.g. 201812010"
-                    focusBorderColor={color.primary}
-                    variant="outline"
-                    type="number"
-                    autoFocus
-                    onChange={(e) => setStudentRollNo(e.target.value)}
-                    value={studentRollNo}
-                  />
-
-                  <InputRightAddon>
-                    <Text>@daiict.ac.in</Text>
-                  </InputRightAddon>
-                </InputGroup>
-
-                <InputGroup size="md" marginTop="20px">
-                  <Input
-                    pr="4.5rem"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter password"
-                    focusBorderColor={color.primary}
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                  />
-                  <InputRightElement width="4.5rem">
-                    <Button
-                      h="1.75rem"
-                      size="sm"
-                      onClick={() => setShowpassword(!showPassword)}
-                    >
-                      {showPassword ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-
-                <Box marginTop="20px" display="flex" flexDirection="column">
-                  <Button
-                    colorScheme="purple"
-                    variant="solid"
-                    textTransform="capitalize"
-                    isDisabled={!studentRollNo || !password}
-                    size="md"
-                    onClick={
-                      loginUiIsVisible
-                        ? () =>
-                            login(
-                              setIsLoginInUser,
-                              password,
-                              setLoggedInBatchYear,
-                              showToastMessage,
-                              navigate,
-                              setStudentRollNo,
-                              setPassword,
-                              studentRollNo
-                            )
-                        : () =>
-                            registerUser(
-                              setIsRegisteringUser,
-                              password,
-                              setLoginUiIsVisible,
-                              showToastMessage,
-                              setStudentRollNo,
-                              setPassword,
-                              studentRollNo
-                            )
-                    }
-                    isLoading={
-                      loginUiIsVisible ? isLoginInUser : isRegisteringUser
-                    }
-                    loadingText={
-                      loginUiIsVisible
-                        ? "please wait"
-                        : "sending verification link"
-                    }
-                  >
-                    {loginUiIsVisible ? "login" : "register"}
-                  </Button>
-
-                  <Button
-                    colorScheme="purple"
-                    variant="link"
-                    size="sm"
-                    marginTop="10px"
-                    onClick={() => setLoginUiIsVisible((prev) => !prev)}
-                  >
-                    {loginUiIsVisible ? "new here?" : "go back to login"}
-                  </Button>
-                </Box>
-              </>
-            )}
-          </Box>
+                  {tab.title}
+                </Tab>
+              ))}
+            </TabList>
+            <TabPanels>
+              {availableLoginTabs.map((tab) => (
+                <TabPanel key={tab.id}>
+                  <LoginUI type={tab.value} title={tab.title} />
+                </TabPanel>
+              ))}
+            </TabPanels>
+          </Tabs>
         </Center>
       </Flex>
 

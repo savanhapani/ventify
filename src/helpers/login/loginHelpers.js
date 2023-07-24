@@ -4,6 +4,7 @@ import {
   sendEmailVerification,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "../../firebase/firebase";
 import {
   INVALID_ROLL_NUMBER,
@@ -72,9 +73,8 @@ const getErrorMessageFromCode = (error) => {
 };
 
 const registerUser = async (
-  setIsRegisteringUser,
+  setIsProcessing,
   password,
-  setLoginUiIsVisible,
   showToastMessage,
   setStudentRollNo,
   setPassword,
@@ -85,26 +85,24 @@ const registerUser = async (
       throw new Error(INVALID_ROLL_NUMBER);
     }
 
-    setIsRegisteringUser(true);
+    setIsProcessing(true);
     const userEmail = constructEmail(studentRollNo);
 
     await createUserWithEmailAndPassword(auth, userEmail, password);
     await sendEmailVerificationLink(userEmail, showToastMessage);
 
     logout();
-
-    setLoginUiIsVisible(true);
   } catch (error) {
     const errorMessage = getErrorMessageFromCode(error);
     showToastMessage("Error", errorMessage, "error");
   } finally {
-    setIsRegisteringUser(false);
+    setIsProcessing(false);
     resetUserInputs(setStudentRollNo, setPassword);
   }
 };
 
 const login = async (
-  setIsLoginInUser,
+  setIsProcessing,
   password,
   setLoggedInBatchYear,
   showToastMessage,
@@ -118,7 +116,7 @@ const login = async (
       throw new Error(INVALID_ROLL_NUMBER);
     }
 
-    setIsLoginInUser(true);
+    setIsProcessing(true);
     const userEmail = constructEmail(studentRollNo);
 
     const userCredential = await signInWithEmailAndPassword(
@@ -148,9 +146,35 @@ const login = async (
     const errorMessage = getErrorMessageFromCode(error);
     showToastMessage("Error", errorMessage, "error");
   } finally {
-    setIsLoginInUser(false);
+    setIsProcessing(false);
     resetUserInputs(setStudentRollNo, setPassword);
   }
 };
 
-export { login, registerUser };
+const resetPassword = async (
+  setIsProcessing,
+  showToastMessage,
+  studentRollNo
+) => {
+  setIsProcessing(true);
+  const userEmail = constructEmail(studentRollNo);
+
+  try {
+    if (!rollNumberIsValid(studentRollNo)) {
+      throw new Error(INVALID_ROLL_NUMBER);
+    }
+    await sendPasswordResetEmail(auth, userEmail);
+    logout();
+    showToastMessage(
+      "Successful",
+      "Check your email to reset your password.",
+      "success"
+    );
+  } catch (error) {
+    showToastMessage("Error", error.message, "error");
+  } finally {
+    setIsProcessing(false);
+  }
+};
+
+export { login, registerUser, resetPassword };

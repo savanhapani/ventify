@@ -17,8 +17,6 @@ const INCORRECT_DELETION_CODE =
 const REPORTING_ERROR =
   "There was an error while reporting it. Please try again.";
 
-const PASSWORD_RESET_ERROR = "There was an error. Please try again.";
-
 const COMMENT_ADD_ERROR =
   "There was an error whiile commenting. Please try again.";
 
@@ -33,6 +31,5 @@ export {
   MINIMUM_POLL_CHOICES,
   INCORRECT_DELETION_CODE,
   REPORTING_ERROR,
-  PASSWORD_RESET_ERROR,
   COMMENT_ADD_ERROR,
 };

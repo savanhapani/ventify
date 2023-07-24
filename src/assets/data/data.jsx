@@ -190,6 +190,24 @@ const availableTabs = [
   },
 ];
 
+const availableLoginTabs = [
+  {
+    id: "1",
+    title: "login",
+    value: "login",
+  },
+  {
+    id: "2",
+    title: "register",
+    value: "register",
+  },
+  {
+    id: "3",
+    title: "forget password",
+    value: "forgetPassword",
+  },
+];
+
 const howItWorks = [
   {
     id: "1",
@@ -240,4 +258,5 @@ export {
   availableTabs,
   EMAIL_DOMAIN,
   NUMBER_OF_CHOICES_IN_POLL,
+  availableLoginTabs,
 };
