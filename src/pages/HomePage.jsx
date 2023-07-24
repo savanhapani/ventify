@@ -15,9 +15,6 @@ import {
 import hero from "../assets/hero.svg";
 import color from "../styles/colors";
 
-import { auth } from "../firebase/firebase";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-
 import HowItWorks from "../components/HowItWorks";
 
 import PublicHeader from "../components/PublicHeader";
@@ -25,8 +22,6 @@ import LoginUI from "../components/LoginUI";
 import { availableLoginTabs } from "../assets/data/data";
 
 const HomePage = () => {
-  const userIsLoggedIn = auth.currentUser;
-
   return (
     <Box>
       <PublicHeader />
