@@ -50,7 +50,13 @@ const ReportConfess = React.lazy(() => import("../components/ReportConfess"));
 import LoadindSpinner from "../components/LoadingSpinner";
 import ProtectedHeader from "../components/ProtectedHeader";
 import AppliedFiltersHeading from "../components/AppliedFiltersHeading";
-import { CONFESSIONS_FETCH_ERROR } from "../errors/errors";
+import {
+  COMMENT_ADD_ERROR,
+  CONFESSIONS_FETCH_ERROR,
+  INCORRECT_DELETION_CODE,
+  PASSWORD_RESET_ERROR,
+  REPORTING_ERROR,
+} from "../errors/errors";
 import { Suspense } from "react";
 
 const ConfessionsPage = () => {
@@ -140,49 +146,49 @@ const ConfessionsPage = () => {
   };
 
   const deleteConfession = async (confessionDeletionCode) => {
-    if (confessionDeletionCode != confessionToBeDelete.id) {
-      onDeleteConfessClose();
+    try {
+      if (confessionDeletionCode != confessionToBeDelete.id) {
+        throw new Error(INCORRECT_DELETION_CODE);
+      }
+
+      await deleteDoc(doc(db, "confessions", confessionDeletionCode));
+
       showToastMessage(
-        "Error",
-        "The deletion code you have entered is incorrect!!",
-        "warning"
+        "Deleted",
+        "Confession is successfully deleted.",
+        "success"
       );
+      getConfessions();
+    } catch (error) {
+      showToastMessage("Error", error.message, "error");
+    } finally {
+      onDeleteConfessClose();
+
       setConfessionToBeDelete({});
-      return;
     }
-    onDeleteConfessClose();
-
-    await deleteDoc(doc(db, "confessions", confessionDeletionCode));
-
-    showToastMessage(
-      "Deleted",
-      "Confession is successfully deleted",
-      "success"
-    );
-    setConfessionToBeDelete({});
-    getConfessions();
   };
 
   const reportConfession = async (confessionId, reasonToReport) => {
     const confessionRef = doc(db, "confessions", confessionId);
 
     const reportObj = {
-      batchYear: loggedInBatchYear,
+      batchYear: Number(loggedInBatchYear),
       reasonToReport: reasonToReport,
       timeStamp: new Date(),
     };
+
     try {
       await updateDoc(confessionRef, {
         reports: arrayUnion(reportObj),
       });
+
+      showToastMessage("Reported", "We will look into it.", "success");
+    } catch (error) {
+      showToastMessage("Error", REPORTING_ERROR, "error");
+    } finally {
       onReportConfessClose();
-
-      showToastMessage("Reported", "We will look into it!", "success");
-    } catch {
-      showToastMessage("Error", "Try again later!", "error");
+      setConfessionToBeReport({});
     }
-
-    setConfessionToBeReport({});
   };
 
   const handleCategorySelection = (selectedCategory) => {
@@ -220,24 +226,26 @@ const ConfessionsPage = () => {
     localStorage.removeItem("loggedInBatchYear");
     navigate("/", { replace: true });
 
-    showToastMessage("Successful", "You have logged out!!", "success");
+    showToastMessage("Logged out", "You have logged out.", "success");
   };
 
-  const resetPassword = () => {
+  const resetPassword = async () => {
     setPasswordIsResetting(true);
-    sendPasswordResetEmail(auth, auth.currentUser.email)
-      .then(() => {
-        logout();
-        showToastMessage(
-          "Successful",
-          "Check your email to reset your password.",
-          "success"
-        );
-        setPasswordIsResetting(false);
-      })
-      .catch((error) => {
-        setPasswordIsResetting(false);
-      });
+
+    try {
+      await sendPasswordResetEmail(auth, auth.currentUser.email);
+      logout();
+      showToastMessage(
+        "Successful",
+        "Check your email to reset your password.",
+        "success"
+      );
+      setPasswordIsResetting(false);
+    } catch (error) {
+      showToastMessage("Error", PASSWORD_RESET_ERROR, "error");
+    } finally {
+      setPasswordIsResetting(false);
+    }
   };
 
   const addCommentToConfession = async (
@@ -247,23 +255,28 @@ const ConfessionsPage = () => {
     resetComment
   ) => {
     setIsCommenting(true);
-    const confessionRef = doc(db, "confessions", id);
+    try {
+      const confessionRef = doc(db, "confessions", id);
 
-    const userCommentObj = {
-      id: uuidv4(),
-      batchYear: Number(loggedInBatchYear),
-      comment: userComment,
-      timeStamp: new Date(),
-    };
+      const userCommentObj = {
+        id: uuidv4(),
+        batchYear: Number(loggedInBatchYear),
+        comment: userComment,
+        timeStamp: new Date(),
+      };
 
-    await updateDoc(confessionRef, {
-      comments: arrayUnion(userCommentObj),
-    });
+      await updateDoc(confessionRef, {
+        comments: arrayUnion(userCommentObj),
+      });
 
-    resetComment();
-    setIsCommenting(false);
-    showToastMessage("Successful", "Comment added successfully!", "success");
-    getConfessions();
+      showToastMessage("Commented", "Comment added successfully.", "success");
+      getConfessions();
+    } catch (error) {
+      showToastMessage("Error", COMMENT_ADD_ERROR, "error");
+    } finally {
+      resetComment();
+      setIsCommenting(false);
+    }
   };
 
   const userAlreadyVoted = (id) => {

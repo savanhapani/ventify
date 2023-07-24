@@ -9,7 +9,18 @@ const CONFESSIONS_FETCH_ERROR = "Error occurred while fetching confessions. ";
 const CONFESSION_ADD_ERROR =
   "Error occurred while confessing, please try again ";
 
-const MINIMUM_POLL_CHOICES = "Pleaase enter at least two choices";
+const MINIMUM_POLL_CHOICES = "Please enter at least two choices";
+
+const INCORRECT_DELETION_CODE =
+  "The deletion code you have entered is incorrect.";
+
+const REPORTING_ERROR =
+  "There was an error while reporting it. Please try again.";
+
+const PASSWORD_RESET_ERROR = "There was an error. Please try again.";
+
+const COMMENT_ADD_ERROR =
+  "There was an error whiile commenting. Please try again.";
 
 export {
   INVALID_ROLL_NUMBER,
@@ -20,4 +31,8 @@ export {
   WEAK_PASSWORD,
   CONFESSION_ADD_ERROR,
   MINIMUM_POLL_CHOICES,
+  INCORRECT_DELETION_CODE,
+  REPORTING_ERROR,
+  PASSWORD_RESET_ERROR,
+  COMMENT_ADD_ERROR,
 };
