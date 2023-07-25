@@ -1,6 +1,7 @@
 import HomePage from "../pages/HomePage";
 import HelpPage from "../pages/HelpPage";
 import ConfessionsPage from "../pages/ConfessionsPage";
+import ErrorPage from "../pages/ErrorPage";
 
 const routes = [
   {
@@ -14,6 +15,10 @@ const routes = [
   {
     path: "/help",
     element: <HelpPage />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ];
 
