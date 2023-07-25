@@ -57,6 +57,7 @@ import {
   REPORTING_ERROR,
 } from "../errors/errors";
 import { Suspense } from "react";
+import { Navigate } from "react-router-dom";
 
 const ConfessionsPage = () => {
   const { showToastMessage } = useToastMessage();
@@ -447,6 +448,8 @@ const ConfessionsPage = () => {
   useEffect(() => {
     getConfessions();
   }, []);
+
+  if (!auth.currentUser) return <Navigate to="/" replace={true} />;
 
   return (
     <>
