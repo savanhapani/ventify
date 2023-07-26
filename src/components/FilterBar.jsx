@@ -3,8 +3,6 @@ import {
   CardBody,
   Button,
   Box,
-  Select,
-  Heading,
   FormControl,
   FormLabel,
   Switch,
@@ -15,11 +13,7 @@ import {
   AccordionIcon,
   Tooltip,
 } from "@chakra-ui/react";
-import {
-  confessCategories,
-  availableBatches,
-  confessionsSortingOptions,
-} from "../assets/data/data";
+import { confessCategories, availableBatches } from "../assets/data/data";
 import FilterTags from "./FilterTags";
 import color from "../styles/colors";
 import { CloseIcon } from "@chakra-ui/icons";
@@ -125,26 +119,6 @@ export default function FilterBar(props) {
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-
-        <Box marginTop="15px">
-          <Heading as="h3" textTransform="capitalize" fontSize="md">
-            sort by
-          </Heading>
-          <Select
-            placeholder="Select Here"
-            focusBorderColor={color.primary}
-            variant="filled"
-            textTransform="capitalize"
-            marginTop="15px"
-            size="md"
-          >
-            {confessionsSortingOptions.map((item) => (
-              <option value={item.title} key={item.id}>
-                {item.title}
-              </option>
-            ))}
-          </Select>
-        </Box>
 
         <Box marginTop="20px">
           <FormControl
