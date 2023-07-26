@@ -106,21 +106,6 @@ const availableBatches = [
   },
 ];
 
-const confessionsSortingOptions = [
-  {
-    id: "1",
-    title: "most liked",
-  },
-  {
-    id: "2",
-    title: "most commented",
-  },
-  {
-    id: "3",
-    title: "recently added",
-  },
-];
-
 const availableReactions = [
   {
     id: "1",
@@ -211,10 +196,10 @@ const availableLoginTabs = [
 const howItWorks = [
   {
     id: "1",
-    title: "Get Login Link",
+    title: "Create Account",
     image: mail,
     description:
-      "Gain access to an exclusive gateway by simply providing your DAIICT Roll number. Experience the convenience of receiving the login link directly in your email inbox, streamlining the process and ensuring seamless connectivity.",
+      "Welcome to the exclusive gateway for our college confession app! To get started, simply enter your DAIICT Roll number and password. Once you provide your valid credentials, we'll fetch your registered email address associated with the Roll number.",
   },
   {
     id: "2",
@@ -247,7 +232,6 @@ export {
   howItWorks,
   availableReactions,
   availableBatches,
-  confessionsSortingOptions,
   communityGuidelines,
   availablePollDurations,
   CONFESSION_CHAR_LIMIT,
