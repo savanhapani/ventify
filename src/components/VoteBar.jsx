@@ -17,7 +17,6 @@ const VoteBar = (props) => {
   const [percentage, setPercentage] = useState(0);
 
   useEffect(() => {
-    console.log("poll");
     setPercentage(totalVotes > 0 ? ((votes / totalVotes) * 100).toFixed(1) : 0);
   }, [totalVotes, votes]);
 
