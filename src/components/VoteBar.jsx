@@ -1,4 +1,5 @@
 import { Text, Box, Progress, Button } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 const VoteBar = (props) => {
   const {
@@ -13,9 +14,12 @@ const VoteBar = (props) => {
     id,
   } = props;
 
-  const percentage =
-    totalVotes > 0 ? ((votes / totalVotes) * 100).toFixed(1) : 0;
-  const choiceWithHighestVotes = choiceWithMaxVotes === title;
+  const [percentage, setPercentage] = useState(0);
+
+  useEffect(() => {
+    console.log("poll");
+    setPercentage(totalVotes > 0 ? ((votes / totalVotes) * 100).toFixed(1) : 0);
+  }, [totalVotes, votes]);
 
   if (totalVotes === 0) {
     return (
@@ -45,7 +49,7 @@ const VoteBar = (props) => {
           fontSize="sm"
           position="absolute"
           zIndex="2"
-          fontWeight={choiceWithHighestVotes ? "semibold" : "normal"}
+          fontWeight={choiceWithMaxVotes === title ? "semibold" : "normal"}
           marginLeft="15px"
         >
           {title}
@@ -53,7 +57,7 @@ const VoteBar = (props) => {
 
         <Progress
           value={percentage}
-          colorScheme={choiceWithHighestVotes ? "purple" : "gray"}
+          colorScheme={choiceWithMaxVotes === title ? "purple" : "gray"}
           height="100%"
           width="100%"
           backgroundColor="transparent"
@@ -66,7 +70,7 @@ const VoteBar = (props) => {
 
       <Text
         fontSize="sm"
-        fontWeight={choiceWithHighestVotes ? "bold" : "normal"}
+        fontWeight={choiceWithMaxVotes === title ? "bold" : "normal"}
       >
         {percentage}%
       </Text>
