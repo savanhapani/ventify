@@ -16,6 +16,7 @@ import { FaUser } from "react-icons/fa";
 import { TbLogout } from "react-icons/tb";
 import { MdOutlinePoll } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
+import { TfiAnnouncement } from "react-icons/tfi";
 import Logo from "./Logo";
 
 const ProtectedHeader = (props) => {
@@ -24,6 +25,7 @@ const ProtectedHeader = (props) => {
     logout,
     onPasswordResetDialogOpen,
     openCreationModal,
+    onCreateAnnouncementOpen,
   } = props;
   return (
     <>
@@ -53,6 +55,18 @@ const ProtectedHeader = (props) => {
             onClick={() => openCreationModal("poll")}
           >
             poll
+          </Button>
+
+          <Button
+            textTransform="capitalize"
+            variant="outline"
+            size="md"
+            colorScheme="purple"
+            rightIcon={<TfiAnnouncement size="18px" />}
+            marginRight="15px"
+            onClick={onCreateAnnouncementOpen}
+          >
+            announcement
           </Button>
 
           <Menu>
