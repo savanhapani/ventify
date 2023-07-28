@@ -7,7 +7,6 @@ import {
   TabPanels,
   Tab,
 } from "@chakra-ui/react";
-import React from "react";
 import { availableTabs } from "../assets/data/data";
 import Confession from "../components/Confession";
 
@@ -55,7 +54,7 @@ import {
   INCORRECT_DELETION_CODE,
   REPORTING_ERROR,
 } from "../errors/errors";
-import { Suspense } from "react";
+
 import ErrorPage from "./ErrorPage";
 import AnnouncementModal from "../components/AnnouncementModal";
 
@@ -533,47 +532,46 @@ const ConfessionsPage = () => {
           </Box>
         </Flex>
       </Box>
-      <Suspense fallback={<LoadindSpinner text="Loading..." />}>
-        <CreationModal
-          isCreateConfessOpen={isCreateConfessOpen}
-          creationModalType={creationModalType}
-          onCreateConfessClose={onCreateConfessClose}
-          getConfessions={getConfessions}
-        />
-        <DeleteConfess
-          isDeleteConfessOpen={isDeleteConfessOpen}
-          onDeleteConfessClose={onDeleteConfessClose}
-          confessionToBeDelete={confessionToBeDelete}
-          deleteConfession={deleteConfession}
-        />
 
-        <ReportConfess
-          isReportConfessOpen={isReportConfessOpen}
-          onReportConfessClose={onReportConfessClose}
-          confessionToBeReport={confessionToBeReport}
-          reportConfession={reportConfession}
-        />
-        <AccountDrawer
-          isAccountDrawerOpen={isAccountDrawerOpen}
-          onAccountDrawerClose={onAccountDrawerClose}
-          logout={logout}
-        />
-        <PasswordResetDialog
-          isPasswordResetDialogOpen={isPasswordResetDialogOpen}
-          onPasswordResetDialogClose={onPasswordResetDialogClose}
-          passwordIsResetting={passwordIsResetting}
-          resetPassword={resetPassword}
-        />
-        <VoteStatsModal
-          isVoteStatsModalOpen={isVoteStatsModalOpen}
-          onVoteStatsModalClose={onVoteStatsModalClose}
-          selectedPoll={selectedPoll}
-        />
-        <AnnouncementModal
-          isCreateAnnouncementOpen={isCreateAnnouncementOpen}
-          onCreateAnnouncementClose={onCreateAnnouncementClose}
-        />
-      </Suspense>
+      <CreationModal
+        isCreateConfessOpen={isCreateConfessOpen}
+        creationModalType={creationModalType}
+        onCreateConfessClose={onCreateConfessClose}
+        getConfessions={getConfessions}
+      />
+      <DeleteConfess
+        isDeleteConfessOpen={isDeleteConfessOpen}
+        onDeleteConfessClose={onDeleteConfessClose}
+        confessionToBeDelete={confessionToBeDelete}
+        deleteConfession={deleteConfession}
+      />
+
+      <ReportConfess
+        isReportConfessOpen={isReportConfessOpen}
+        onReportConfessClose={onReportConfessClose}
+        confessionToBeReport={confessionToBeReport}
+        reportConfession={reportConfession}
+      />
+      <AccountDrawer
+        isAccountDrawerOpen={isAccountDrawerOpen}
+        onAccountDrawerClose={onAccountDrawerClose}
+        logout={logout}
+      />
+      <PasswordResetDialog
+        isPasswordResetDialogOpen={isPasswordResetDialogOpen}
+        onPasswordResetDialogClose={onPasswordResetDialogClose}
+        passwordIsResetting={passwordIsResetting}
+        resetPassword={resetPassword}
+      />
+      <VoteStatsModal
+        isVoteStatsModalOpen={isVoteStatsModalOpen}
+        onVoteStatsModalClose={onVoteStatsModalClose}
+        selectedPoll={selectedPoll}
+      />
+      <AnnouncementModal
+        isCreateAnnouncementOpen={isCreateAnnouncementOpen}
+        onCreateAnnouncementClose={onCreateAnnouncementClose}
+      />
     </>
   );
 };
