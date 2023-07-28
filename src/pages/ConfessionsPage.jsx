@@ -57,7 +57,7 @@ import {
 } from "../errors/errors";
 import { Suspense } from "react";
 import ErrorPage from "./ErrorPage";
-import AnnouncementModal from "../components/AnnouncementModal.";
+import AnnouncementModal from "../components/AnnouncementModal";
 
 const ConfessionsPage = () => {
   const { showToastMessage } = useToastMessage();
