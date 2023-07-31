@@ -56,7 +56,6 @@ import {
 } from "../errors/errors";
 
 import ErrorPage from "./ErrorPage";
-import AnnouncementModal from "../components/AnnouncementModal";
 
 const ConfessionsPage = () => {
   const { showToastMessage } = useToastMessage();
@@ -84,12 +83,6 @@ const ConfessionsPage = () => {
     isOpen: isCreateConfessOpen,
     onOpen: onCreateConfessOpen,
     onClose: onCreateConfessClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isCreateAnnouncementOpen,
-    onOpen: onCreateAnnouncementOpen,
-    onClose: onCreateAnnouncementClose,
   } = useDisclosure();
 
   const {
@@ -464,7 +457,6 @@ const ConfessionsPage = () => {
           onPasswordResetDialogOpen={onPasswordResetDialogOpen}
           logout={logout}
           openCreationModal={openCreationModal}
-          onCreateAnnouncementOpen={onCreateAnnouncementOpen}
         />
         <Flex>
           <FilterBar
@@ -567,10 +559,6 @@ const ConfessionsPage = () => {
         isVoteStatsModalOpen={isVoteStatsModalOpen}
         onVoteStatsModalClose={onVoteStatsModalClose}
         selectedPoll={selectedPoll}
-      />
-      <AnnouncementModal
-        isCreateAnnouncementOpen={isCreateAnnouncementOpen}
-        onCreateAnnouncementClose={onCreateAnnouncementClose}
       />
     </>
   );
