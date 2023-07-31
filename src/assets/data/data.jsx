@@ -229,45 +229,6 @@ const howItWorks = [
   },
 ];
 
-const announcementCategories = [
-  {
-    id: "1",
-    title: "Campus Events",
-  },
-  {
-    id: "2",
-    title: "Study Groups",
-  },
-  {
-    id: "3",
-    title: "Lost & Found",
-  },
-  {
-    id: "4",
-    title: "Roommate Search",
-  },
-  {
-    id: "5",
-    title: "Jobs/Internships",
-  },
-  {
-    id: "6",
-    title: "Volunteer Opportunities",
-  },
-  {
-    id: "7",
-    title: "Clubs and Organizations",
-  },
-  {
-    id: "8",
-    title: "Academic Support",
-  },
-  {
-    id: "9",
-    title: "Health & Wellness",
-  },
-];
-
 export {
   confessCategories,
   howItWorks,
@@ -285,5 +246,4 @@ export {
   NUMBER_OF_CHOICES_IN_POLL,
   availableLoginTabs,
   ANNOUNCEMENT_CHAR_LIMIT,
-  announcementCategories,
 };
