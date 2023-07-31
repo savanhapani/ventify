@@ -34,7 +34,6 @@ import {
 
 import { VentifyContext } from "../context/VentifyContextProvider";
 import { useNavigate } from "react-router-dom";
-import TabView from "../components/TabView";
 import { v4 as uuidv4 } from "uuid";
 
 import CreationModal from "../components/CreationModal";
@@ -477,45 +476,32 @@ const ConfessionsPage = () => {
             />
 
             {confessions.length > 0 ? (
-              <Tabs
-                variant="solid-rounded"
-                colorScheme="purple"
-                marginTop="20px"
+              <Flex
+                wrap="wrap"
+                gap="5"
+                justifyContent="center"
+                overflow="auto"
+                maxHeight="800px"
+                paddingTop="30px"
+                paddingBottom="300px"
               >
-                <TabList justifyContent="center">
-                  {availableTabs.map((tab) => (
-                    <Tab key={tab.id}>{tab.title}</Tab>
-                  ))}
-                </TabList>
-
-                <TabPanels>
-                  {availableTabs.map((tab) => (
-                    <TabView key={tab.id}>
-                      {filteredConfessions
-                        .filter(
-                          (item) =>
-                            tab.value === "all" || item.type === tab.value
-                        )
-                        .map((item) => (
-                          <Confession
-                            {...item}
-                            key={item.id}
-                            onDeleteConfessOpen={onDeleteConfessOpen}
-                            setConfessionToBeDelete={setConfessionToBeDelete}
-                            onReportConfessOpen={onReportConfessOpen}
-                            setConfessionToBeReport={setConfessionToBeReport}
-                            loggedInBatchYear={loggedInBatchYear}
-                            addCommentToConfession={addCommentToConfession}
-                            reactToConfession={reactToConfession}
-                            voteToPoll={voteToPoll}
-                            onVoteStatsModalOpen={onVoteStatsModalOpen}
-                            viewDetailedPollStats={viewDetailedPollStats}
-                          />
-                        ))}
-                    </TabView>
-                  ))}
-                </TabPanels>
-              </Tabs>
+                {filteredConfessions.map((item) => (
+                  <Confession
+                    {...item}
+                    key={item.id}
+                    onDeleteConfessOpen={onDeleteConfessOpen}
+                    setConfessionToBeDelete={setConfessionToBeDelete}
+                    onReportConfessOpen={onReportConfessOpen}
+                    setConfessionToBeReport={setConfessionToBeReport}
+                    loggedInBatchYear={loggedInBatchYear}
+                    addCommentToConfession={addCommentToConfession}
+                    reactToConfession={reactToConfession}
+                    voteToPoll={voteToPoll}
+                    onVoteStatsModalOpen={onVoteStatsModalOpen}
+                    viewDetailedPollStats={viewDetailedPollStats}
+                  />
+                ))}
+              </Flex>
             ) : (
               <Flex height="100%" justifyContent="center">
                 <LoadindSpinner text="Getting your confessions" />
