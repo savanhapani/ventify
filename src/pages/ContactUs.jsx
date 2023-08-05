@@ -20,9 +20,11 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Form } from "react-router-dom";
 import React, { useState } from "react";
 import emailjs from '@emailjs/browser'
+import useToastMessage from "../hooks/useToastMessage";
 
 const Header = (props) => {
   const { onOpen } = props;
+  
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" padding="0 20px">
@@ -58,18 +60,59 @@ const ContactUsPage = ({ title, content, footer }) => {
     description: "",
   });
   const [formData, updateFormData] = React.useState(initialFormData);
-
+  const { showToastMessage } = useToastMessage();
+  const [emailError, setEmailError] = useState(null);
+  const [descriptionError, setDescriptionError] = useState(null);
   const handleChange = (e) => {
-    updateFormData({
+    console.log(e.target.name);
+ 
+  if(e.target.name === "email"){
+    if (!isValidEmail(e.target.value)) {
+      setEmailError('Please Enter Valid Email');
+      return;
+    }
+    else
+    {
+      setEmailError(null)
+    }
+  }
+  else if(e.target.name === "description")
+  {
+    if (e.target.value.length > 700) {
+      setDescriptionError('Description Should Be Less Than 700 Character');
+      return;
+    }
+    else
+    {
+      setDescriptionError(null)
+    }
+  
+  }
+ updateFormData({
       ...formData,
       [e.target.name]: e.target.value.trim(),
     });
+  
   };
-
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    emailjs.send('service_rwrefbp','template_nizf058',formData,'tm8pUKYzm93m_Ymgu')
+    if(emailError === null && descriptionError === null){
+    emailjs.send('service_rwrefbp','template_nizf058',formData,'tm8pUKYzm93m_Ymgu').then((result) => {
+      console.log(result.text);
+      showToastMessage(
+        "success",
+        "Your request has been sent successfully!!",
+        "success",
+        "purple"
+      );
+  }, (error) => {
+      console.log(error.text);
+  });
+  }
     // ... submit to API or something
   };
   return (
@@ -107,6 +150,7 @@ const ContactUsPage = ({ title, content, footer }) => {
                     onChange={handleChange}
                     focusBorderColor={color.primary}
                   />
+                  {emailError && <h2 style={{color: 'red'}}>{emailError}</h2>}
 
                   {/*  <FormHelperText>Enter Email Address</FormHelperText> */}
                 </FormControl>
@@ -140,7 +184,7 @@ const ContactUsPage = ({ title, content, footer }) => {
                     placeholder="Your question...."
                     onChange={handleChange}
                   />
-
+                {descriptionError && <h2 style={{color: 'red'}}>{descriptionError}</h2>}    
                   {/*  <FormHelperText>Enter Email Address</FormHelperText> */}
                 </FormControl>
                 <Flex justifyContent="center">
@@ -154,6 +198,7 @@ const ContactUsPage = ({ title, content, footer }) => {
                     width="80%"
                     mt="20px"
                     mb="20px"
+                    isDisabled={formData.email === "" || formData.description === ""}
                     onClick={handleSubmit}
                   >
                     Send Message
@@ -167,24 +212,5 @@ const ContactUsPage = ({ title, content, footer }) => {
     </Box>
   );
 };
-
-/*const createAction = async ({ request }) => {
-  const [inputField, setInputField] = useState({
-    first_name: "",
-    last_name: "",
-    gmail: "",
-  });
-  console.log(request);
-
-  /////////////////////////////////////////////////////////
-  const data = await request.formData();
-
-  const task = {
-    email: data.get("email"),
-    reason: data.get("reason"),
-    description: data.get("description"),
-  };
-  console.log(task);
-};*/
 
 export default ContactUsPage;
