@@ -19,6 +19,7 @@ import { contactUsReason } from "../assets/data/data";
 import { AddIcon } from "@chakra-ui/icons";
 import { Form } from "react-router-dom";
 import React, { useState } from "react";
+import emailjs from '@emailjs/browser'
 
 const Header = (props) => {
   const { onOpen } = props;
@@ -68,6 +69,7 @@ const ContactUsPage = ({ title, content, footer }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    emailjs.send('service_rwrefbp','template_nizf058',formData,'tm8pUKYzm93m_Ymgu')
     // ... submit to API or something
   };
   return (
@@ -152,7 +154,6 @@ const ContactUsPage = ({ title, content, footer }) => {
                     width="80%"
                     mt="20px"
                     mb="20px"
-                    borderRadius="20px"
                     onClick={handleSubmit}
                   >
                     Send Message
