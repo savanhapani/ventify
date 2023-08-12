@@ -33,6 +33,7 @@ import { ALLOWED_VISIBLE_COMMENTS } from "../assets/data/data";
 const Confession = (props) => {
   const {
     id,
+    hashtags,
     confession,
     question,
     type,
@@ -152,12 +153,13 @@ const Confession = (props) => {
 
           <CardBody>
             {type === "confession" ? (
-              <ConfessionText confession={confession} />
+              <ConfessionText confession={confession} hashtags={hashtags}/>
             ) : (
               <>
                 <Poll
                   id={id}
                   question={question}
+                  hashtags={hashtags}
                   choices={choices}
                   totalVotes={totalVotes}
                   expiryDate={expiryDate}
@@ -249,6 +251,7 @@ const Confession = (props) => {
         timeStamp={timeStamp}
         type={type}
         confession={confession}
+        hashtags={hashtags}
         question={question}
         choices={choices}
         totalVotes={totalVotes}

@@ -26,6 +26,7 @@ import { VentifyContext } from "../context/VentifyContextProvider";
 const ConfessionModal = (props) => {
   const {
     id,
+    hashtags, 
     isConfessionModalOpen,
     onConfessionModalClose,
     addCommentToConfession,
@@ -85,10 +86,11 @@ const ConfessionModal = (props) => {
         <ModalBody>
           <Box marginBottom="15px">
             {type === "confession" ? (
-              <ConfessionText confession={confession} />
+              <ConfessionText confession={confession} hashtags={hashtags}/>
             ) : (
               <Poll
                 id={id}
+                hashtags={hashtags}
                 question={question}
                 choices={choices}
                 totalVotes={totalVotes}
