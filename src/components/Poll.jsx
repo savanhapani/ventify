@@ -1,10 +1,11 @@
-import { Text, Stack, Flex } from "@chakra-ui/react";
+import { Text, Stack, Flex} from "@chakra-ui/react";
 import VoteBar from "./VoteBar";
 import moment from "moment";
 import { useState, useEffect } from "react";
+import ConfessionText from "./ConfessionText";
 
 const Poll = (props) => {
-  const { id, question, choices, totalVotes, expiryDate, voteToPoll } = props;
+  const { id, question, hashtags, choices, totalVotes, expiryDate, voteToPoll } = props;
   const [choiceWithMaxVotes, setChoiceWithMaxVotes] = useState("");
   const [isVoting, setIsVoting] = useState(false);
 
@@ -24,7 +25,7 @@ const Poll = (props) => {
 
   return (
     <>
-      <Text fontSize="lg">{question}</Text>
+   <ConfessionText confession={question} hashtags={hashtags}/> 
 
       <Stack spacing={3} marginTop="15px">
         {choices?.map((choice) => (

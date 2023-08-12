@@ -98,9 +98,16 @@ const CreationModal = (props) => {
     }
   };
 
-  const createConfession = () => {
+  const extractHashtags = (text) => {
+    const regex = /#\w+/g;
+    return text.match(regex) || [];
+  }
+ 
+
+ const createConfession = () => {
     const confessionObj = {
       confession: confession,
+      hashtags: extractHashtags(confession),
       type: creationModalType,
       category: confessionCategory,
       batchYear: Number(loggedInBatchYear),
@@ -164,6 +171,7 @@ const CreationModal = (props) => {
 
       const pollObj = {
         question: pollQuestion,
+        hashtags:extractHashtags(pollQuestion),
         type: creationModalType,
         choices: structuredPollChoices,
         category: confessionCategory,
