@@ -21,7 +21,7 @@ import { Form } from "react-router-dom";
 import React, { useState } from "react";
 import emailjs from '@emailjs/browser'
 import useToastMessage from "../hooks/useToastMessage";
-
+const DESCRIPTION_CHAR_LIMIT = 700;
 const Header = (props) => {
   const { onOpen } = props;
   
@@ -53,54 +53,26 @@ const Header = (props) => {
   );
 };
 
-const ContactUsPage = ({ title, content, footer }) => {
-  const initialFormData = Object.freeze({
-    email: "",
-    reason: "",
-    description: "",
-  });
-  const [formData, updateFormData] = React.useState(initialFormData);
+const ContactUsPage = () => {
+
   const { showToastMessage } = useToastMessage();
-  const [emailError, setEmailError] = useState(null);
-  const [descriptionError, setDescriptionError] = useState(null);
-  const handleChange = (e) => {
-    console.log(e.target.name);
- 
-  if(e.target.name === "email"){
-    if (!isValidEmail(e.target.value)) {
-      setEmailError('Please Enter Valid Email');
-      return;
-    }
-    else
-    {
-      setEmailError(null)
-    }
-  }
-  else if(e.target.name === "description")
-  {
-    if (e.target.value.length > 700) {
-      setDescriptionError('Description Should Be Less Than 700 Character');
-      return;
-    }
-    else
-    {
-      setDescriptionError(null)
-    }
-  
-  }
- updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value.trim(),
-    });
-  
-  };
+  const [email, setEmail] = useState("");
+  const [description, setDescription] = useState("");
+  const [reason, setReason] = useState("");  
+
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
   }
-  const handleSubmit = (e) => {
+  
+  const submitFormData = (e) => {
     e.preventDefault();
-    console.log(formData);
-    if(emailError === null && descriptionError === null){
+     let formData = {
+        email:email,
+        description:description,
+        reason:reason
+      }
+      console.log(formData)
+    if(isValidEmail(email)){
     emailjs.send('service_rwrefbp','template_nizf058',formData,'tm8pUKYzm93m_Ymgu').then((result) => {
       console.log(result.text);
       showToastMessage(
@@ -115,6 +87,7 @@ const ContactUsPage = ({ title, content, footer }) => {
   }
     // ... submit to API or something
   };
+ 
   return (
     <Box>
       <Header />
@@ -147,10 +120,11 @@ const ContactUsPage = ({ title, content, footer }) => {
                     type="text"
                     placeholder="Enter Email Address"
                     name="email"
-                    onChange={handleChange}
                     focusBorderColor={color.primary}
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
                   />
-                  {emailError && <h2 style={{color: 'red'}}>{emailError}</h2>}
+                  {!isValidEmail(email) && <h2 style={{color: 'red'}}>Please Enter Valid Email</h2>}
 
                   {/*  <FormHelperText>Enter Email Address</FormHelperText> */}
                 </FormControl>
@@ -165,7 +139,8 @@ const ContactUsPage = ({ title, content, footer }) => {
                       textTransform="capitalize"
                       marginTop="15px"
                       size="md"
-                      onChange={handleChange}
+                      onChange={(e) => setReason(e.target.value)}
+                      value={reason}
                     >
                       {contactUsReason.map((item) => (
                         <option value={item.reason} key={item.id}>
@@ -175,18 +150,23 @@ const ContactUsPage = ({ title, content, footer }) => {
                     </Select>
                   </Box>
                 </FormControl>
+                <Box>
                 <FormControl isRequired mb="10px" mt="10px">
                   <FormLabel>Your Question :</FormLabel>
                   <Textarea
                     type="text"
                     name="description"
                     focusBorderColor={color.primary}
+                    maxLength={700}
                     placeholder="Your question...."
-                    onChange={handleChange}
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
                   />
-                {descriptionError && <h2 style={{color: 'red'}}>{descriptionError}</h2>}    
-                  {/*  <FormHelperText>Enter Email Address</FormHelperText> */}
+                <FormHelperText>
+                {description.length}/{DESCRIPTION_CHAR_LIMIT}
+              </FormHelperText>
                 </FormControl>
+                </Box>
                 <Flex justifyContent="center">
                   <Button
                     type="submit"
@@ -198,8 +178,8 @@ const ContactUsPage = ({ title, content, footer }) => {
                     width="80%"
                     mt="20px"
                     mb="20px"
-                    isDisabled={formData.email === "" || formData.description === ""}
-                    onClick={handleSubmit}
+                    isDisabled={email === "" || description === ""}
+                    onClick={submitFormData}
                   >
                     Send Message
                   </Button>
