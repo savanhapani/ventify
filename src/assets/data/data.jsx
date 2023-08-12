@@ -228,7 +228,24 @@ const howItWorks = [
       "Our platform ensures the complete anonymity of confessions, safeguarding individual identities throughout the process. Our commitment to privacy extends to our backend systems, as we refrain from storing or accessing any user-specific information. Confessions are attributed solely to the respective batch numbers, preserving anonymity while providing a sense of collective representation.",
   },
 ];
-
+const contactUsReason = [
+  {
+    id: 1,
+    reason: "Reason for contact 1",
+  },
+  {
+    id: 2,
+    reason: "Reason for contact 2",
+  },
+  {
+    id: 3,
+    reason: "Reason for contact 3",
+  },
+  {
+    id: 4,
+    reason: "Reason for contact 4",
+  },
+];
 export {
   confessCategories,
   howItWorks,
@@ -246,4 +263,5 @@ export {
   NUMBER_OF_CHOICES_IN_POLL,
   availableLoginTabs,
   ANNOUNCEMENT_CHAR_LIMIT,
+  contactUsReason
 };
